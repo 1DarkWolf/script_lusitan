@@ -26,3 +26,7 @@ No servidor, outros recursos podem usar `exports['script_lusitan']:RegisterCallb
 ## Base de dados e cache
 
 As consultas passam por `server/database.lua`. Registe SQL fixo com `CJ.Database.Prepare(nome, sql)` e execute-o com `CJ.Database.Execute(nome, parametros)`. O cache em memória disponibiliza `Get`, `Set`, `GetOrSet`, `Remove` e `Clear`; a duração padrão recomendada está em `Config.CacheDefaultTtl`.
+
+## Registos
+
+`CJ.Log.Write(nível, mensagem)` escreve no console do servidor. Para Discord, preencha o webhook em `Config.Webhooks` e use `CJ.Log.Discord(canal, título, descrição, campos, cor)`; não é feita qualquer chamada externa quando o webhook estiver vazio.
