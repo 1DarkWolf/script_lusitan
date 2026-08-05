@@ -22,3 +22,7 @@ O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.
 ## API pública
 
 No servidor, outros recursos podem usar `exports['script_lusitan']:RegisterCallback(nome, handler)` para expor callbacks ao cliente. No cliente, use `exports['script_lusitan']:AwaitCallback(nome, ...)` ou `CallCallback(nome, callback, ...)`.
+
+## Base de dados e cache
+
+As consultas passam por `server/database.lua`. Registe SQL fixo com `CJ.Database.Prepare(nome, sql)` e execute-o com `CJ.Database.Execute(nome, parametros)`. O cache em memória disponibiliza `Get`, `Set`, `GetOrSet`, `Remove` e `Clear`; a duração padrão recomendada está em `Config.CacheDefaultTtl`.
