@@ -1,0 +1,2 @@
+-- Centro de Jogos
+-- A estrutura de base de dados será adicionada nas próximas entregas.
