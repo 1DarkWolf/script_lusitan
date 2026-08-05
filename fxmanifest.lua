@@ -13,7 +13,10 @@ shared_scripts {
     'shared/version.lua',
     'shared/constants.lua',
     'shared/utils.lua',
-    'shared/framework.lua'
+    'shared/framework.lua',
+    'shared/locales.lua',
+    'locales/pt.lua',
+    'locales/en.lua'
 }
 
 client_scripts {
