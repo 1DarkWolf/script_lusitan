@@ -20,11 +20,13 @@ shared_scripts {
 }
 
 client_scripts {
+    'client/callbacks.lua',
     'client/main.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+    'server/callbacks.lua',
     'server/main.lua'
 }
 
