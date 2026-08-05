@@ -38,6 +38,9 @@ Config.Company = {
         enabled = true,
         coords = vector3(-44.95, -1758.16, 29.42),
         distance = 1.5
+    },
+    Finance = {
+        maxTransaction = 50000
     }
 }
 

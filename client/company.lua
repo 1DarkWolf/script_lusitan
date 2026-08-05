@@ -92,6 +92,14 @@ local function addTargets()
                     label = 'Gestão da empresa',
                     canInteract = canOpenBossMenu,
                     action = openBossMenu
+                },
+                {
+                    icon = 'fas fa-wallet',
+                    label = 'Conta da empresa',
+                    canInteract = canOpenBossMenu,
+                    action = function()
+                        TriggerEvent('cj:client:openFinanceMenu')
+                    end
                 }
             },
             distance = Config.Company.BossMenu.distance

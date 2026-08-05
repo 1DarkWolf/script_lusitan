@@ -18,6 +18,34 @@ if IsDuplicityVersion() then
     end
 
     ---@param source number
+    ---@param moneyType? string
+    ---@return number
+    function CJ.Framework.GetMoney(source, moneyType)
+        local player = CJ.Framework.GetPlayer(source)
+        return player and player.PlayerData.money[moneyType or Config.MoneyType] or 0
+    end
+
+    ---@param source number
+    ---@param amount number
+    ---@param reason string
+    ---@param moneyType? string
+    ---@return boolean
+    function CJ.Framework.RemoveMoney(source, amount, reason, moneyType)
+        local player = CJ.Framework.GetPlayer(source)
+        return player and player.Functions.RemoveMoney(moneyType or Config.MoneyType, amount, reason) or false
+    end
+
+    ---@param source number
+    ---@param amount number
+    ---@param reason string
+    ---@param moneyType? string
+    ---@return boolean
+    function CJ.Framework.AddMoney(source, amount, reason, moneyType)
+        local player = CJ.Framework.GetPlayer(source)
+        return player and player.Functions.AddMoney(moneyType or Config.MoneyType, amount, reason) or false
+    end
+
+    ---@param source number
     ---@param message string
     ---@param notificationType? string
     ---@param duration? number

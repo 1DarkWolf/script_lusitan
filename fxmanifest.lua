@@ -22,6 +22,7 @@ shared_scripts {
 client_scripts {
     'client/callbacks.lua',
     'client/company.lua',
+    'client/finance.lua',
     'client/main.lua'
 }
 
@@ -31,6 +32,8 @@ server_scripts {
     'server/logs.lua',
     'server/security.lua',
     'server/callbacks.lua',
+    'server/company.lua',
+    'server/finance.lua',
     'server/main.lua'
 }
 

@@ -34,6 +34,10 @@ No servidor, outros recursos podem usar `exports['script_lusitan']:RegisterCallb
 
 As consultas passam por `server/database.lua`. Registe SQL fixo com `CJ.Database.Prepare(nome, sql)` e execute-o com `CJ.Database.Execute(nome, parametros)`. O cache em memória disponibiliza `Get`, `Set`, `GetOrSet`, `Remove` e `Clear`; a duração padrão recomendada está em `Config.CacheDefaultTtl`.
 
+## Conta da empresa
+
+Chefias do emprego configurado em `Config.CompanyJob` podem consultar o saldo, depositar e levantar dinheiro através do balcão de gestão. O servidor confirma o cargo, o valor, o saldo e o limite definido em `Config.Company.Finance.maxTransaction`, e guarda cada operação em `cj_transactions`.
+
 ## Registos
 
 `CJ.Log.Write(nível, mensagem)` escreve no console do servidor. Para Discord, preencha o webhook em `Config.Webhooks` e use `CJ.Log.Discord(canal, título, descrição, campos, cor)`; não é feita qualquer chamada externa quando o webhook estiver vazio.
