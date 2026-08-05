@@ -18,6 +18,10 @@ Recurso FiveM para QBCore, desenvolvido para gerir um centro de jogos.
 
 Consulte `tests/smoke-test.md` antes de começar a desenvolver ou instalar funcionalidades adicionais.
 
+## Empresa
+
+O NPC, o balcão, o blip e o horário são configurados em `Config.Company`. O Boss Menu só aparece a jogadores cujo cargo QBCore esteja marcado como `isboss`; se usar esta funcionalidade, inicie também `qb-management` antes deste recurso.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

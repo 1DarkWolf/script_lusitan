@@ -13,6 +13,34 @@ Config.UseOxLibNotifications = true
 Config.AutoPayLimit = 5000
 Config.CacheDefaultTtl = 60
 
+Config.Company = {
+    Npc = {
+        model = 'a_m_y_business_01',
+        coords = vector4(-47.23, -1758.67, 29.42, 50.0),
+        scenario = 'WORLD_HUMAN_CLIPBOARD'
+    },
+    Counter = {
+        coords = vector3(-47.23, -1758.67, 29.42),
+        distance = 2.0
+    },
+    Blip = {
+        enabled = true,
+        sprite = 500,
+        colour = 2,
+        scale = 0.75,
+        label = 'Centro de Jogos'
+    },
+    OpeningHours = {
+        open = 8,
+        close = 23
+    },
+    BossMenu = {
+        enabled = true,
+        coords = vector3(-44.95, -1758.16, 29.42),
+        distance = 1.5
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

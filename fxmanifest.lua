@@ -21,6 +21,7 @@ shared_scripts {
 
 client_scripts {
     'client/callbacks.lua',
+    'client/company.lua',
     'client/main.lua'
 }
 
@@ -46,6 +47,8 @@ files {
 dependencies {
     'qb-core',
     'qb-target',
+    'qb-menu',
+    'qb-input',
     'ox_lib',
     'oxmysql'
 }
