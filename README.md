@@ -11,9 +11,12 @@ Recurso FiveM para QBCore, desenvolvido para gerir um centro de jogos.
 
 ## Instalação
 
-1. Coloque esta pasta nos recursos do seu servidor FiveM.
-2. Garanta as dependências antes de `script_lusitan` no `server.cfg`.
-3. Adicione `ensure script_lusitan` ao `server.cfg`.
+1. Importe `sql.sql` na base de dados do servidor.
+2. Coloque esta pasta nos recursos do seu servidor FiveM.
+3. Garanta as dependências antes de `script_lusitan` no `server.cfg`.
+4. Adicione `ensure script_lusitan` ao `server.cfg`.
+
+Consulte `tests/smoke-test.md` antes de começar a desenvolver ou instalar funcionalidades adicionais.
 
 ## Idiomas
 
