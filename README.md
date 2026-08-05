@@ -30,3 +30,7 @@ As consultas passam por `server/database.lua`. Registe SQL fixo com `CJ.Database
 ## Registos
 
 `CJ.Log.Write(nível, mensagem)` escreve no console do servidor. Para Discord, preencha o webhook em `Config.Webhooks` e use `CJ.Log.Discord(canal, título, descrição, campos, cor)`; não é feita qualquer chamada externa quando o webhook estiver vazio.
+
+## Segurança
+
+Registe eventos cliente-servidor através de `CJ.Security.RegisterEvent(nome, handler)`. Cada pedido valida a origem, aplica o limite configurado em `Config.Security` e regista bloqueios. O `handler` recebe sempre o `source` validado como primeiro argumento.

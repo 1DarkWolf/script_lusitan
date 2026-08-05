@@ -13,6 +13,14 @@ Config.UseOxLibNotifications = true
 Config.AutoPayLimit = 5000
 Config.CacheDefaultTtl = 60
 
+Config.Security = {
+    DefaultRateLimit = {
+        maxAttempts = 5,
+        windowSeconds = 10
+    },
+    EventRateLimits = {}
+}
+
 Config.Webhooks = {
     purchases = '',
     jackpots = '',

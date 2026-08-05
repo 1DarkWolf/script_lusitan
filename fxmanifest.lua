@@ -28,6 +28,7 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/database.lua',
     'server/logs.lua',
+    'server/security.lua',
     'server/callbacks.lua',
     'server/main.lua'
 }
