@@ -75,6 +75,12 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:openEuroDreamsMenu' }
         },
         {
+            header = 'Joker',
+            txt = 'Compra um código Joker para o próximo sorteio.',
+            icon = 'fas fa-hashtag',
+            params = { event = 'cj:client:buyJoker' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }

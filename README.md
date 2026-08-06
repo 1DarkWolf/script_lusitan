@@ -54,6 +54,10 @@ O jogo está configurado em `Config.Euromillions`: preço, dias/horário do sort
 
 O EuroDreams usa seis números de 1 a 40 e um número Dream de 1 a 5. Preço, horário e escalões de prémio são definidos em `Config.EuroDreams`.
 
+## Joker
+
+O Joker gera um código de seis dígitos para cada bilhete e compara-o com o código do sorteio diário. Os prémios por posições acertadas são configurados em `Config.Joker.prizes`.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

@@ -185,6 +185,13 @@ Config.EuroDreams = {
     }
 }
 
+Config.Joker = {
+    label = 'Joker',
+    price = 1,
+    schedule = { days = {}, hour = 21, minute = 0 },
+    prizes = { [6] = 1000, [5] = 100, [4] = 15, [3] = 3 }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,
