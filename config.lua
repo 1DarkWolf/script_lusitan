@@ -94,6 +94,53 @@ Config.Jackpot = {
     maximumAmount = 1000000000
 }
 
+Config.ScratchCards = {
+    bronze = {
+        label = 'Raspadinha Bronze',
+        price = 2,
+        prizes = {
+            { weight = 8000, amount = 0 },
+            { weight = 1500, amount = 2 },
+            { weight = 450, amount = 5 },
+            { weight = 49, amount = 20 },
+            { weight = 1, amount = 100 }
+        }
+    },
+    silver = {
+        label = 'Raspadinha Prata',
+        price = 5,
+        prizes = {
+            { weight = 7700, amount = 0 },
+            { weight = 1800, amount = 5 },
+            { weight = 450, amount = 15 },
+            { weight = 49, amount = 50 },
+            { weight = 1, amount = 250 }
+        }
+    },
+    gold = {
+        label = 'Raspadinha Ouro',
+        price = 10,
+        prizes = {
+            { weight = 7400, amount = 0 },
+            { weight = 2100, amount = 10 },
+            { weight = 450, amount = 30 },
+            { weight = 49, amount = 100 },
+            { weight = 1, amount = 500 }
+        }
+    },
+    diamond = {
+        label = 'Raspadinha Diamante',
+        price = 20,
+        prizes = {
+            { weight = 7000, amount = 0 },
+            { weight = 2500, amount = 20 },
+            { weight = 450, amount = 75 },
+            { weight = 49, amount = 250 },
+            { weight = 1, amount = 1000 }
+        }
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

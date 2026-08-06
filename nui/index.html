@@ -4,6 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Centro de Jogos</title>
+    <link rel="stylesheet" href="css/style.css">
   </head>
-  <body></body>
+  <body>
+    <main id="scratch-app" class="hidden">
+      <section class="scratch-card" aria-label="Raspadinha">
+        <button id="close" type="button" aria-label="Fechar">×</button>
+        <p class="eyebrow">CENTRO DE JOGOS</p>
+        <h1 id="card-title">Raspadinha</h1>
+        <p class="instruction">Raspa a área dourada para revelar o teu prémio.</p>
+        <div id="scratch-area" class="scratch-area">
+          <div id="prize" class="prize">?</div>
+          <canvas id="scratch-canvas"></canvas>
+        </div>
+        <p id="status" class="status">Mantém premido e raspa.</p>
+        <button id="finish" class="hidden" type="button">Concluir</button>
+      </section>
+    </main>
+    <script src="js/app.js"></script>
+  </body>
 </html>

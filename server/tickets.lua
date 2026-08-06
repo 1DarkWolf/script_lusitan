@@ -124,6 +124,31 @@ function CJ.Tickets.Consume(source, ticketId)
     return ticket
 end
 
+---@param source number
+---@param ticket table
+---@return boolean
+function CJ.Tickets.Restore(source, ticket)
+    local player = CJ.Framework.GetPlayer(source)
+    if not player or not ticket or ticket.status ~= 'redeemed' then
+        return false
+    end
+
+    local metadata = {
+        ticket_id = ticket.ticket_id,
+        signature = ticket.signature,
+        ticket_type = ticket.ticket_type,
+        description = ('Bilhete %s'):format(ticket.ticket_id:sub(1, 8))
+    }
+
+    if not player.Functions.AddItem(ticket.item_name, 1, false, metadata, 'centrojogos-ticket-restore') then
+        return false
+    end
+
+    local affectedRows = MySQL.update.await([[UPDATE `cj_tickets` SET `status` = 'issued', `redeemed_at` = NULL
+        WHERE `ticket_id` = ? AND `status` = 'redeemed']], { ticket.ticket_id })
+    return affectedRows == 1
+end
+
 local function registerUsableTicket(itemName)
     QBCore.Functions.CreateUseableItem(itemName, function(source, item)
         local metadata = item.info or {}
@@ -135,10 +160,15 @@ local function registerUsableTicket(itemName)
             return
         end
 
+        local payload = json.decode(ticket.payload) or {}
+        if ticket.ticket_type == 'scratch' then
+            payload = { cardId = payload.cardId }
+        end
+
         TriggerClientEvent('cj:client:openTicket', source, {
             ticketId = ticket.ticket_id,
             ticketType = ticket.ticket_type,
-            payload = json.decode(ticket.payload) or {},
+            payload = payload,
             createdAt = ticket.created_at
         })
     end)
@@ -154,3 +184,4 @@ exports('IssueTicket', CJ.Tickets.Issue)
 exports('GetTicket', CJ.Tickets.Get)
 exports('ValidateTicketOwnership', CJ.Tickets.ValidateOwnership)
 exports('ConsumeTicket', CJ.Tickets.Consume)
+exports('RestoreTicket', CJ.Tickets.Restore)

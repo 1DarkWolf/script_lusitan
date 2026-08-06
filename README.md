@@ -38,6 +38,10 @@ Os módulos de jogo registam-se através de `exports['script_lusitan']:RegisterD
 
 Um jogo pode declarar `jackpot = { name = '...', initialAmount = 0 }` ao registar-se no motor de sorteios. Usa `exports['script_lusitan']:AddToJackpot(nome, valor)` para acumular contribuições e devolve `claimJackpot = true` no resultado do sorteio quando deve atribuí-lo. A reclamação usa uma atualização condicional na base de dados, por isso o mesmo jackpot não pode ser entregue duas vezes.
 
+## Raspadinhas
+
+As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio determinam a probabilidade e são sorteados no servidor no momento da compra; o cliente só recebe o tipo de raspadinha. Configure prémios até `Config.AutoPayLimit` para pagamento imediato.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

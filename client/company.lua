@@ -51,9 +51,10 @@ local function openCompanyTerminal()
             isMenuHeader = true
         },
         {
-            header = 'Jogos disponíveis',
-            txt = 'A seleção de jogos será adicionada em breve.',
-            disabled = true
+            header = 'Raspadinhas',
+            txt = 'Compra uma raspadinha e descobre o teu prémio.',
+            icon = 'fas fa-ticket',
+            params = { event = 'cj:client:openScratchMenu' }
         },
         {
             header = 'Fechar',

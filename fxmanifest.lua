@@ -27,6 +27,7 @@ client_scripts {
     'client/tickets.lua',
     'client/draws.lua',
     'client/jackpot.lua',
+    'client/scratch.lua',
     'client/main.lua'
 }
 
@@ -42,6 +43,7 @@ server_scripts {
     'server/tickets.lua',
     'server/draws.lua',
     'server/jackpot.lua',
+    'server/scratch.lua',
     'server/main.lua'
 }
 
