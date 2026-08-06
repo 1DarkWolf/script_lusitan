@@ -4,18 +4,6 @@ CJ.Company = CJ.Company or {}
 local QBCore = exports['qb-core']:GetCoreObject()
 local vendorPed
 
----@return boolean
-function CJ.Company.IsOpen()
-    local hour = GetClockHours()
-    local openingHours = Config.Company.OpeningHours
-
-    if openingHours.open < openingHours.close then
-        return hour >= openingHours.open and hour < openingHours.close
-    end
-
-    return hour >= openingHours.open or hour < openingHours.close
-end
-
 local function notifyClosed()
     CJ.Framework.Notify(('O %s está fechado neste momento.'):format(Config.CompanyName), 'error')
 end
@@ -40,7 +28,7 @@ local function openBossMenu()
 end
 
 local function openCompanyTerminal()
-    if not CJ.Company.IsOpen() then
+    if not CJ.Callbacks.Await('cj:server:isCompanyOpen') then
         notifyClosed()
         return
     end

@@ -13,6 +13,10 @@ function CJ.Company.IsOpen()
     return hour >= openingHours.open or hour < openingHours.close
 end
 
+CJ.Callbacks.Register('cj:server:isCompanyOpen', function()
+    return CJ.Company.IsOpen()
+end)
+
 ---@return table|nil
 function CJ.Company.Get()
     return CJ.Cache.GetOrSet(companyCacheKey, function()
