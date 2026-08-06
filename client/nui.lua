@@ -11,6 +11,8 @@ end)
 RegisterNUICallback('loadDashboard', function(data, callback)
     if data.section == 'tickets' then callback(CJ.Callbacks.Await('cj:server:getPlayerTickets'))
     elseif data.section == 'results' then callback(CJ.Callbacks.Await('cj:server:getRecentResults'))
+    elseif data.section == 'profile' then callback(CJ.Callbacks.Await('cj:server:getLoyaltyProfile'))
+    elseif data.section == 'ranking' then callback(CJ.Callbacks.Await('cj:server:getLoyaltyRanking'))
     else callback({}) end
 end)
 

@@ -87,10 +87,16 @@ async function showTab(tab) {
   content.innerHTML = '<p class="status">A carregar…</p>';
   const response = await post('loadDashboard', { section: tab });
   const rows = await response.json();
+  if (tab === 'profile') {
+    content.innerHTML = `<div class="record"><strong>Nível ${esc(rows.level?.label || 'Bronze')}</strong><span>${esc(rows.points || 0)} pontos</span><br><small>Total gasto: €${esc(rows.total_spent || 0)} · Total ganho: €${esc(rows.total_won || 0)}</small></div>`;
+    return;
+  }
   if (!rows.length) { content.innerHTML = '<p class="status">Ainda não existem registos.</p>'; return; }
   content.innerHTML = `<div class="record-list">${rows.map(row => tab === 'tickets'
     ? `<article class="record"><strong>${esc(row.payload.game)}</strong><span>Bilhete ${esc(row.ticket_id)}</span><br><small>${esc(row.status)}</small></article>`
-    : `<article class="record"><strong>${esc(row.game_id)}</strong><span>${esc(JSON.stringify(row.result))}</span><br><small>${esc(row.drawn_at)}</small></article>`).join('')}</div>`;
+    : tab === 'ranking'
+      ? `<article class="record"><strong>${esc(row.citizenid)}</strong><span>${esc(row.points)} pontos</span><br><small>Gasto: €${esc(row.total_spent)} · Ganho: €${esc(row.total_won)}</small></article>`
+      : `<article class="record"><strong>${esc(row.game_id)}</strong><span>${esc(JSON.stringify(row.result))}</span><br><small>${esc(row.drawn_at)}</small></article>`).join('')}</div>`;
 }
 
 document.querySelectorAll('.tabs button').forEach(button => button.onclick = () => showTab(button.dataset.tab));
