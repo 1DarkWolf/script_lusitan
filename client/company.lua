@@ -81,6 +81,12 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:buyJoker' }
         },
         {
+            header = 'Lotarias',
+            txt = 'Lotaria Clássica, Popular e Instantânea.',
+            icon = 'fas fa-clover',
+            params = { event = 'cj:client:openLotteriesMenu' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }

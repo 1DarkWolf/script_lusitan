@@ -32,6 +32,7 @@ client_scripts {
     'client/totoloto.lua',
     'client/eurodreams.lua',
     'client/joker.lua',
+    'client/lotteries.lua',
     'client/main.lua'
 }
 
@@ -52,6 +53,7 @@ server_scripts {
     'games/totoloto/server.lua',
     'games/eurodreams/server.lua',
     'games/joker/server.lua',
+    'games/lotteries/server.lua',
     'server/main.lua'
 }
 

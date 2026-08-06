@@ -58,6 +58,10 @@ O EuroDreams usa seis números de 1 a 40 e um número Dream de 1 a 5. Preço, ho
 
 O Joker gera um código de seis dígitos para cada bilhete e compara-o com o código do sorteio diário. Os prémios por posições acertadas são configurados em `Config.Joker.prizes`.
 
+## Lotarias
+
+`Config.Lotteries` configura a Lotaria Clássica, Popular e Instantânea. As duas primeiras emitem números únicos para o próximo sorteio; a Instantânea define o prémio no servidor na compra e revela-o ao utilizar o bilhete.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

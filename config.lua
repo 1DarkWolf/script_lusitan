@@ -192,6 +192,12 @@ Config.Joker = {
     prizes = { [6] = 1000, [5] = 100, [4] = 15, [3] = 3 }
 }
 
+Config.Lotteries = {
+    classic = { label = 'Lotaria Clássica', price = 5, schedule = { days = { 1 }, hour = 20, minute = 0 }, maximumNumber = 100000, prize = 3000 },
+    popular = { label = 'Lotaria Popular', price = 2, schedule = { days = { 4 }, hour = 20, minute = 0 }, maximumNumber = 50000, prize = 1000 },
+    instant = { label = 'Lotaria Instantânea', price = 2, prizes = { { weight = 8000, amount = 0 }, { weight = 1500, amount = 2 }, { weight = 450, amount = 8 }, { weight = 49, amount = 30 }, { weight = 1, amount = 200 } } }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,
