@@ -23,6 +23,14 @@ function paintCover() {
   context.globalCompositeOperation = 'destination-out';
 }
 
+function requestScratchResult() {
+  if (completed) return;
+  completed = true;
+  drawing = false;
+  status.textContent = 'A validar o bilhete…';
+  post('scratchComplete');
+}
+
 function scratch(event) {
   if (!drawing || completed) return;
   const bounds = canvas.getBoundingClientRect();
@@ -37,16 +45,14 @@ function scratch(event) {
     clearedOpacity += 1 - (pixels[index] / 255);
   }
   if (clearedOpacity / (canvas.width * canvas.height) >= .5) {
-    completed = true;
-    drawing = false;
-    status.textContent = 'A validar o bilhete…';
-    post('scratchComplete');
+    requestScratchResult();
   }
 }
 
 canvas.addEventListener('pointerdown', event => { drawing = true; canvas.setPointerCapture(event.pointerId); scratch(event); });
 canvas.addEventListener('pointermove', scratch);
-canvas.addEventListener('pointerup', () => { drawing = false; });
+canvas.addEventListener('pointerup', requestScratchResult);
+canvas.addEventListener('pointercancel', requestScratchResult);
 document.getElementById('close').addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
 finish.addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
 
