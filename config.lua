@@ -44,6 +44,41 @@ Config.Company = {
     }
 }
 
+Config.EmployeeRoles = {
+    intern = {
+        grade = 0,
+        label = 'Estagiário',
+        permissions = { sell_games = true }
+    },
+    employee = {
+        grade = 1,
+        label = 'Funcionário',
+        permissions = { sell_games = true, validate_prizes = true }
+    },
+    supervisor = {
+        grade = 2,
+        label = 'Supervisor',
+        permissions = { sell_games = true, validate_prizes = true, view_sales = true, manage_stock = true, hire = true }
+    },
+    manager = {
+        grade = 3,
+        label = 'Gerente',
+        permissions = {
+            sell_games = true,
+            validate_prizes = true,
+            view_sales = true,
+            withdraw_company_money = true,
+            manage_stock = true,
+            hire = true,
+            fire = true,
+            promote = true
+        }
+    }
+}
+
+Config.UnemployedJob = 'unemployed'
+Config.UnemployedGrade = 0
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

@@ -24,6 +24,18 @@ CREATE TABLE IF NOT EXISTS `cj_company_employees` (
     CONSTRAINT `fk_cj_employee_company` FOREIGN KEY (`company_id`) REFERENCES `cj_companies` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cj_employee_audits` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `action` VARCHAR(20) NOT NULL,
+    `actor_citizenid` VARCHAR(50) NOT NULL,
+    `target_citizenid` VARCHAR(50) NOT NULL,
+    `previous_grade` VARCHAR(50) DEFAULT NULL,
+    `new_grade` VARCHAR(50) DEFAULT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    KEY `idx_cj_employee_audit_target` (`target_citizenid`, `created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cj_transactions` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `company_id` INT UNSIGNED NOT NULL,

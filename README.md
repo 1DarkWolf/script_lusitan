@@ -22,6 +22,10 @@ Consulte `tests/smoke-test.md` antes de começar a desenvolver ou instalar funci
 
 O NPC, o balcão, o blip e o horário são configurados em `Config.Company`. O Boss Menu só aparece a jogadores cujo cargo QBCore esteja marcado como `isboss`; se usar esta funcionalidade, inicie também `qb-management` antes deste recurso.
 
+## Empregados
+
+Copie a definição de emprego em `docs/qbcore-job.lua` para `qb-core/shared/jobs.lua` e reinicie `qb-core`. Os cargos e permissões do recurso são configurados em `Config.EmployeeRoles`. Contratações, promoções e despedimentos são validadas no servidor e auditadas na tabela `cj_employee_audits`.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

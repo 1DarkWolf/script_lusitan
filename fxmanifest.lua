@@ -23,6 +23,7 @@ client_scripts {
     'client/callbacks.lua',
     'client/company.lua',
     'client/finance.lua',
+    'client/employees.lua',
     'client/main.lua'
 }
 
@@ -33,6 +34,7 @@ server_scripts {
     'server/security.lua',
     'server/callbacks.lua',
     'server/company.lua',
+    'server/employees.lua',
     'server/finance.lua',
     'server/main.lua'
 }

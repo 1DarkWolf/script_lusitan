@@ -100,6 +100,16 @@ local function addTargets()
                     action = function()
                         TriggerEvent('cj:client:openFinanceMenu')
                     end
+                },
+                {
+                    icon = 'fas fa-users',
+                    label = 'Gestão de empregados',
+                    canInteract = function()
+                        return CJ.EmployeesCanManage()
+                    end,
+                    action = function()
+                        TriggerEvent('cj:client:openEmployeeMenu')
+                    end
                 }
             },
             distance = Config.Company.BossMenu.distance
