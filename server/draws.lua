@@ -67,6 +67,15 @@ function CJ.Draws.GetLatestResult(gameId)
     return result
 end
 
+---@param key string
+---@return table|nil
+function CJ.Draws.GetResultByKey(key)
+    local rows = CJ.Database.Query('SELECT `game_id`, `draw_key`, `result`, `drawn_at` FROM `cj_draw_results` WHERE `draw_key` = ? LIMIT 1', { key })
+    if not rows or not rows[1] then return nil end
+    rows[1].result = json.decode(rows[1].result) or {}
+    return rows[1]
+end
+
 ---@param gameId string
 ---@param key string
 ---@return table|nil
@@ -81,7 +90,7 @@ function CJ.Draws.Run(gameId, key)
         return nil
     end
 
-    local success, result = pcall(definition.draw)
+    local success, result = pcall(definition.draw, key)
     if not success or type(result) ~= 'table' then
         CJ.Log.Write('error', ('Falha ao gerar sorteio %s: %s'):format(gameId, result or 'resultado inválido'))
         return nil
@@ -112,6 +121,24 @@ function CJ.Draws.Run(gameId, key)
     TriggerClientEvent('cj:client:drawCompleted', -1, payload)
     CJ.Log.Discord('jackpots', 'Sorteio concluído', ('O sorteio %s foi concluído.'):format(payload.label))
     return payload
+end
+
+---@param gameId string
+---@return string|nil
+function CJ.Draws.GetNextDrawKey(gameId)
+    local definition = games[gameId]
+    if not definition then return nil end
+
+    local now = os.time()
+    for offset = 0, 8 do
+        local candidate = os.date('*t', now + (offset * 86400))
+        if hasScheduledDay(definition.schedule, candidate.wday) then
+            local scheduled = os.time({ year = candidate.year, month = candidate.month, day = candidate.day, hour = definition.schedule.hour, min = definition.schedule.minute, sec = 0 })
+            if scheduled > now then
+                return drawKey(gameId, os.date('*t', scheduled))
+            end
+        end
+    end
 end
 
 local function checkSchedules()
@@ -149,3 +176,5 @@ end)
 exports('RegisterDrawGame', CJ.Draws.RegisterGame)
 exports('RunDraw', CJ.Draws.Run)
 exports('GetLatestDrawResult', CJ.Draws.GetLatestResult)
+exports('GetDrawResultByKey', CJ.Draws.GetResultByKey)
+exports('GetNextDrawKey', CJ.Draws.GetNextDrawKey)

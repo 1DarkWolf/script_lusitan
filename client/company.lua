@@ -57,6 +57,12 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:openScratchMenu' }
         },
         {
+            header = 'Euromilhões',
+            txt = 'Escolhe a tua chave ou usa Quick Pick.',
+            icon = 'fas fa-star',
+            params = { event = 'cj:client:openEuromillionsMenu' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }

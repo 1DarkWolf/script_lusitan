@@ -28,6 +28,7 @@ client_scripts {
     'client/draws.lua',
     'client/jackpot.lua',
     'client/scratch.lua',
+    'client/euromillions.lua',
     'client/main.lua'
 }
 
@@ -44,6 +45,7 @@ server_scripts {
     'server/draws.lua',
     'server/jackpot.lua',
     'server/scratch.lua',
+    'games/euromillions/server.lua',
     'server/main.lua'
 }
 

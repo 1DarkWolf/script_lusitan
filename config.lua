@@ -141,6 +141,25 @@ Config.ScratchCards = {
     }
 }
 
+Config.Euromillions = {
+    label = 'Euromilhões',
+    price = 3,
+    schedule = { days = { 3, 6 }, hour = 20, minute = 30 },
+    prizes = {
+        ['5+2'] = 5000,
+        ['5+1'] = 1000,
+        ['5+0'] = 250,
+        ['4+2'] = 100,
+        ['4+1'] = 50,
+        ['4+0'] = 25,
+        ['3+2'] = 20,
+        ['3+1'] = 10,
+        ['3+0'] = 5,
+        ['2+2'] = 5,
+        ['2+1'] = 3
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

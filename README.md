@@ -42,6 +42,10 @@ Um jogo pode declarar `jackpot = { name = '...', initialAmount = 0 }` ao regista
 
 As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio determinam a probabilidade e são sorteados no servidor no momento da compra; o cliente só recebe o tipo de raspadinha. Configure prémios até `Config.AutoPayLimit` para pagamento imediato.
 
+## Euromilhões
+
+O jogo está configurado em `Config.Euromillions`: preço, dias/horário do sorteio e escalões de prémio. O jogador pode escolher cinco números e duas estrelas ou usar Quick Pick; a seleção, a chave vencedora e o cálculo dos acertos são todos validados no servidor.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.
