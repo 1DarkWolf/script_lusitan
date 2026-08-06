@@ -3,6 +3,16 @@ CJ.Company = CJ.Company or {}
 
 local companyCacheKey = 'company:primary'
 
+---@return boolean
+function CJ.Company.IsOpen()
+    local hour = os.date('*t').hour
+    local openingHours = Config.Company.OpeningHours
+    if openingHours.open < openingHours.close then
+        return hour >= openingHours.open and hour < openingHours.close
+    end
+    return hour >= openingHours.open or hour < openingHours.close
+end
+
 ---@return table|nil
 function CJ.Company.Get()
     return CJ.Cache.GetOrSet(companyCacheKey, function()

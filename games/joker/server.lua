@@ -14,6 +14,7 @@ local function matchingPositions(first, second)
 end
 
 CJ.Security.RegisterEvent('cj:server:purchaseJoker', function(source)
+    if not CJ.Company.IsOpen() then CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error'); return end
     if CJ.Framework.GetMoney(source) < Config.Joker.price or not CJ.Framework.RemoveMoney(source, Config.Joker.price, 'centrojogos-joker-purchase') then
         CJ.Framework.Notify(source, CJ.T('games.insufficient_funds'), 'error')
         return

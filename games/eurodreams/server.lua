@@ -30,6 +30,7 @@ local function countMatches(values, winning)
 end
 
 CJ.Security.RegisterEvent('cj:server:purchaseEuroDreams', function(source, selection)
+    if not CJ.Company.IsOpen() then CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error'); return end
     selection = type(selection) == 'table' and selection or {}
     local numbers, dreamNumber
     if selection.quickPick then

@@ -24,6 +24,7 @@ registerScheduledLottery('classic')
 registerScheduledLottery('popular')
 
 CJ.Security.RegisterEvent('cj:server:purchaseLottery', function(source, gameId)
+    if not CJ.Company.IsOpen() then CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error'); return end
     local lottery = Config.Lotteries[gameId]
     if not lottery then CJ.Security.Reject(source, 'cj:server:purchaseLottery', 'jogo inválido'); return end
     if CJ.Framework.GetMoney(source) < lottery.price or not CJ.Framework.RemoveMoney(source, lottery.price, 'centrojogos-lottery-purchase') then

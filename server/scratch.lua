@@ -20,6 +20,10 @@ local function selectPrize(card)
 end
 
 CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
+    if not CJ.Company.IsOpen() then
+        CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error')
+        return
+    end
     local card = Config.ScratchCards[cardId]
     if not card then
         CJ.Security.Reject(source, 'cj:server:purchaseScratch', 'raspadinha inválida')
