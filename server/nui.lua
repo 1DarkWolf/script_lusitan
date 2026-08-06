@@ -22,3 +22,17 @@ CJ.Callbacks.Register('cj:server:getRecentResults', function()
     for _, result in ipairs(rows) do result.result = json.decode(result.result) or {} end
     return rows
 end)
+
+CJ.Callbacks.Register('cj:server:getCompanyDashboard', function(source)
+    if not CJ.Employees.HasPermission(source, 'view_sales') and not CJ.Company.IsBoss(source) then
+        return nil
+    end
+
+    local company = CJ.Company.Get()
+    if not company then return nil end
+    local transactions = CJ.Database.Query([[SELECT `type`, `amount`, `created_at` FROM `cj_transactions`
+        WHERE `company_id` = ? ORDER BY `created_at` DESC LIMIT 20]], { company.id }) or {}
+    local employees = CJ.Database.Query([[SELECT `citizenid`, `grade`, `hired_at` FROM `cj_company_employees`
+        WHERE `company_id` = ? ORDER BY `hired_at` DESC LIMIT 20]], { company.id }) or {}
+    return { balance = CJ.Company.GetBalance(), transactions = transactions, employees = employees }
+end)

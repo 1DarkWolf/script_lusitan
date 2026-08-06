@@ -91,6 +91,13 @@ async function showTab(tab) {
     content.innerHTML = `<div class="record"><strong>Nível ${esc(rows.level?.label || 'Bronze')}</strong><span>${esc(rows.points || 0)} pontos</span><br><small>Total gasto: €${esc(rows.total_spent || 0)} · Total ganho: €${esc(rows.total_won || 0)}</small></div>`;
     return;
   }
+  if (tab === 'company') {
+    if (!rows) { content.innerHTML = '<p class="status">Não tens permissão para consultar a empresa.</p>'; return; }
+    const transactions = rows.transactions.map(row => `<article class="record"><strong>${esc(row.type)}</strong><span>€${esc(row.amount)}</span><br><small>${esc(row.created_at)}</small></article>`).join('') || '<p class="status">Sem movimentos.</p>';
+    const employees = rows.employees.map(row => `<article class="record"><strong>${esc(row.grade)}</strong><span>${esc(row.citizenid)}</span><br><small>${esc(row.hired_at)}</small></article>`).join('') || '<p class="status">Sem empregados.</p>';
+    content.innerHTML = `<div class="record"><strong>Saldo da empresa</strong><span>€${esc(rows.balance)}</span></div><h2>Movimentos recentes</h2><div class="record-list">${transactions}</div><h2>Empregados</h2><div class="record-list">${employees}</div>`;
+    return;
+  }
   if (!rows.length) { content.innerHTML = '<p class="status">Ainda não existem registos.</p>'; return; }
   content.innerHTML = `<div class="record-list">${rows.map(row => tab === 'tickets'
     ? `<article class="record"><strong>${esc(row.payload.game)}</strong><span>Bilhete ${esc(row.ticket_id)}</span><br><small>${esc(row.status)}</small></article>`
