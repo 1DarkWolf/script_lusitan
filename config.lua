@@ -198,6 +198,16 @@ Config.Lotteries = {
     instant = { label = 'Lotaria Instantânea', price = 2, prizes = { { weight = 8000, amount = 0 }, { weight = 1500, amount = 2 }, { weight = 450, amount = 8 }, { weight = 49, amount = 30 }, { weight = 1, amount = 200 } } }
 }
 
+Config.Loyalty = {
+    pointsPerCurrency = 1,
+    levels = {
+        { id = 'bronze', label = 'Bronze', points = 0 },
+        { id = 'silver', label = 'Prata', points = 100 },
+        { id = 'gold', label = 'Ouro', points = 500 },
+        { id = 'diamond', label = 'Diamante', points = 1500 }
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

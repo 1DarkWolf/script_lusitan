@@ -62,6 +62,10 @@ O Joker gera um código de seis dígitos para cada bilhete e compara-o com o có
 
 `Config.Lotteries` configura a Lotaria Clássica, Popular e Instantânea. As duas primeiras emitem números únicos para o próximo sorteio; a Instantânea define o prémio no servidor na compra e revela-o ao utilizar o bilhete.
 
+## Fidelização
+
+`Config.Loyalty` define os pontos por valor gasto e os níveis. As compras de jogos acumulam pontos automaticamente; os perfis guardam também o total gasto e o total de prémios recebidos.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

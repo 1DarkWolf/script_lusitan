@@ -29,6 +29,9 @@ function CJ.Finance.Credit(amount, citizenId, transactionType)
 
     CJ.Cache.Remove('company:primary')
     CJ.Company.RecordTransaction(transactionType or 'credit', amount, citizenId)
+    if citizenId and transactionType and transactionType:sub(-9) == '_purchase' and CJ.Loyalty then
+        CJ.Loyalty.AddPurchase(citizenId, amount)
+    end
     return true
 end
 

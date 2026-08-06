@@ -46,6 +46,7 @@ server_scripts {
     'server/company.lua',
     'server/employees.lua',
     'server/finance.lua',
+    'server/loyalty.lua',
     'server/tickets.lua',
     'server/nui.lua',
     'server/draws.lua',

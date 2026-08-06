@@ -42,7 +42,11 @@ if IsDuplicityVersion() then
     ---@return boolean
     function CJ.Framework.AddMoney(source, amount, reason, moneyType)
         local player = CJ.Framework.GetPlayer(source)
-        return player and player.Functions.AddMoney(moneyType or Config.MoneyType, amount, reason) or false
+        local success = player and player.Functions.AddMoney(moneyType or Config.MoneyType, amount, reason) or false
+        if success and CJ.Loyalty and type(reason) == 'string' and reason:sub(-6) == '-prize' then
+            CJ.Loyalty.AddWinnings(player.PlayerData.citizenid, amount)
+        end
+        return success
     end
 
     ---@param source number
