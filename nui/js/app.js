@@ -95,7 +95,9 @@ async function showTab(tab) {
     if (!rows) { content.innerHTML = '<p class="status">Não tens permissão para consultar a empresa.</p>'; return; }
     const transactions = rows.transactions.map(row => `<article class="record"><strong>${esc(row.type)}</strong><span>€${esc(row.amount)}</span><br><small>${esc(row.created_at)}</small></article>`).join('') || '<p class="status">Sem movimentos.</p>';
     const employees = rows.employees.map(row => `<article class="record"><strong>${esc(row.grade)}</strong><span>${esc(row.citizenid)}</span><br><small>${esc(row.hired_at)}</small></article>`).join('') || '<p class="status">Sem empregados.</p>';
-    content.innerHTML = `<div class="record"><strong>Saldo da empresa</strong><span>€${esc(rows.balance)}</span></div><h2>Movimentos recentes</h2><div class="record-list">${transactions}</div><h2>Empregados</h2><div class="record-list">${employees}</div>`;
+    const claims = (rows.claims || []).map(row => `<article class="record"><strong>€${esc(row.amount)}</strong><span>${esc(row.citizenid)}</span><br><small>${esc(row.reason)}</small><br><button class="game-button" data-claim="${esc(row.id)}">Aprovar</button></article>`).join('') || '<p class="status">Sem prémios pendentes.</p>';
+    content.innerHTML = `<div class="record"><strong>Saldo da empresa</strong><span>€${esc(rows.balance)}</span></div><h2>Movimentos recentes</h2><div class="record-list">${transactions}</div><h2>Empregados</h2><div class="record-list">${employees}</div><h2>Prémios pendentes</h2><div class="record-list">${claims}</div>`;
+    content.querySelectorAll('[data-claim]').forEach(button => button.onclick = () => post('approvePrize', { claimId: Number(button.dataset.claim) }).then(() => showTab('company')));
     return;
   }
   if (!rows.length) { content.innerHTML = '<p class="status">Ainda não existem registos.</p>'; return; }

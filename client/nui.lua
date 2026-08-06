@@ -36,6 +36,11 @@ RegisterNUICallback('closeDashboard', function(_, callback)
     callback({ ok = true })
 end)
 
+RegisterNUICallback('approvePrize', function(data, callback)
+    TriggerServerEvent('cj:server:approvePrizeClaim', data.claimId)
+    callback({ ok = true })
+end)
+
 AddEventHandler('onResourceStop', function(resourceName)
     if resourceName == GetCurrentResourceName() and dashboardOpen then SetNuiFocus(false, false) end
 end)

@@ -70,6 +70,10 @@ O Joker gera um código de seis dígitos para cada bilhete e compara-o com o có
 
 Os comandos requerem uma permissão listada em `Config.AdminPermissions`: `/drawnow`, `/resetdraw`, `/addjackpot`, `/setjackpot`, `/resetjackpot`, `/addmoney`, `/giveticket`, `/removeticket` e `/lotteryreload`.
 
+## Prémios grandes
+
+Prémios acima de `Config.AutoPayLimit` são registados em `cj_prize_claims` e ficam pendentes. Funcionários com a permissão `validate_prizes` podem aprová-los no separador Empresa do painel NUI quando o jogador estiver online.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

@@ -125,4 +125,17 @@ CREATE TABLE IF NOT EXISTS `cj_loyalty` (
     KEY `idx_cj_loyalty_points` (`points`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cj_prize_claims` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `citizenid` VARCHAR(50) NOT NULL,
+    `amount` BIGINT NOT NULL,
+    `reason` VARCHAR(100) NOT NULL,
+    `status` ENUM('pending', 'paid') NOT NULL DEFAULT 'pending',
+    `approved_by` VARCHAR(50) DEFAULT NULL,
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `paid_at` TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_cj_prize_claim_status` (`status`, `created_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 INSERT IGNORE INTO `cj_companies` (`name`, `balance`) VALUES ('Centro de Jogos', 0);

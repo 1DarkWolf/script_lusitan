@@ -24,7 +24,7 @@ CJ.Callbacks.Register('cj:server:getRecentResults', function()
 end)
 
 CJ.Callbacks.Register('cj:server:getCompanyDashboard', function(source)
-    if not CJ.Employees.HasPermission(source, 'view_sales') and not CJ.Company.IsBoss(source) then
+    if not CJ.Employees.HasPermission(source, 'view_sales') and not CJ.Employees.HasPermission(source, 'validate_prizes') and not CJ.Company.IsBoss(source) then
         return nil
     end
 
@@ -34,5 +34,5 @@ CJ.Callbacks.Register('cj:server:getCompanyDashboard', function(source)
         WHERE `company_id` = ? ORDER BY `created_at` DESC LIMIT 20]], { company.id }) or {}
     local employees = CJ.Database.Query([[SELECT `citizenid`, `grade`, `hired_at` FROM `cj_company_employees`
         WHERE `company_id` = ? ORDER BY `hired_at` DESC LIMIT 20]], { company.id }) or {}
-    return { balance = CJ.Company.GetBalance(), transactions = transactions, employees = employees }
+    return { balance = CJ.Company.GetBalance(), transactions = transactions, employees = employees, claims = CJ.Prizes.GetPending(source) }
 end)

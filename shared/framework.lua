@@ -42,6 +42,13 @@ if IsDuplicityVersion() then
     ---@return boolean
     function CJ.Framework.AddMoney(source, amount, reason, moneyType)
         local player = CJ.Framework.GetPlayer(source)
+        if player and CJ.Prizes and type(reason) == 'string' and reason:sub(-6) == '-prize' and amount > Config.AutoPayLimit then
+            local queued = CJ.Prizes.Queue(player.PlayerData.citizenid, amount, reason)
+            if queued then
+                CJ.Framework.Notify(source, ('O prémio de €%s aguarda validação por um funcionário.'):format(amount), 'primary')
+            end
+            return queued
+        end
         local success = player and player.Functions.AddMoney(moneyType or Config.MoneyType, amount, reason) or false
         if success and CJ.Loyalty and type(reason) == 'string' and reason:sub(-6) == '-prize' then
             CJ.Loyalty.AddWinnings(player.PlayerData.citizenid, amount)
