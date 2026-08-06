@@ -1,0 +1,131 @@
+CJ = CJ or {}
+CJ.Draws = CJ.Draws or {}
+
+local games = {}
+
+local function hasScheduledDay(schedule, weekday)
+    if not schedule.days or #schedule.days == 0 then
+        return true
+    end
+
+    for _, day in ipairs(schedule.days) do
+        if day == weekday then
+            return true
+        end
+    end
+
+    return false
+end
+
+local function shouldRun(schedule, time)
+    return schedule.hour == time.hour and schedule.minute == time.min and hasScheduledDay(schedule, time.wday)
+end
+
+local function drawKey(gameId, time)
+    return ('%s:%04d-%02d-%02d-%02d-%02d'):format(gameId, time.year, time.month, time.day, time.hour, time.min)
+end
+
+---@param gameId string
+---@param definition {label: string, schedule: table, draw: fun(): table}
+---@return boolean
+function CJ.Draws.RegisterGame(gameId, definition)
+    if not CJ.Utils.IsNonEmptyString(gameId) or type(definition) ~= 'table' or type(definition.draw) ~= 'function' then
+        return false
+    end
+
+    if type(definition.schedule) ~= 'table' or type(definition.schedule.hour) ~= 'number' or type(definition.schedule.minute) ~= 'number' then
+        return false
+    end
+
+    games[gameId] = definition
+    CJ.Log.Write('info', ('Jogo registado para sorteios: %s'):format(gameId))
+    return true
+end
+
+---@param gameId string
+---@return table|nil
+function CJ.Draws.GetLatestResult(gameId)
+    local rows = CJ.Database.Query([[SELECT `game_id`, `draw_key`, `result`, `drawn_at`
+        FROM `cj_draw_results` WHERE `game_id` = ? ORDER BY `drawn_at` DESC LIMIT 1]], { gameId })
+
+    if not rows or not rows[1] then
+        return nil
+    end
+
+    local result = rows[1]
+    result.result = json.decode(result.result) or {}
+    return result
+end
+
+---@param gameId string
+---@param key string
+---@return table|nil
+function CJ.Draws.Run(gameId, key)
+    local definition = games[gameId]
+    if not definition then
+        return nil
+    end
+
+    local existing = CJ.Database.Scalar('SELECT `id` FROM `cj_draw_results` WHERE `draw_key` = ? LIMIT 1', { key })
+    if existing then
+        return nil
+    end
+
+    local success, result = pcall(definition.draw)
+    if not success or type(result) ~= 'table' then
+        CJ.Log.Write('error', ('Falha ao gerar sorteio %s: %s'):format(gameId, result or 'resultado inválido'))
+        return nil
+    end
+
+    local inserted = MySQL.insert.await([[INSERT INTO `cj_draw_results` (`game_id`, `draw_key`, `result`)
+        VALUES (?, ?, ?)]], { gameId, key, json.encode(result) })
+    if not inserted then
+        return nil
+    end
+
+    local payload = {
+        gameId = gameId,
+        label = definition.label or gameId,
+        result = result
+    }
+
+    TriggerClientEvent('cj:client:drawCompleted', -1, payload)
+    CJ.Log.Discord('jackpots', 'Sorteio concluído', ('O sorteio %s foi concluído.'):format(payload.label))
+    return payload
+end
+
+local function checkSchedules()
+    if not Config.DrawScheduler.enabled then
+        return
+    end
+
+    local currentTime = os.date('*t')
+    for gameId, definition in pairs(games) do
+        if shouldRun(definition.schedule, currentTime) then
+            CJ.Draws.Run(gameId, drawKey(gameId, currentTime))
+        end
+    end
+end
+
+local function scheduleNextCheck()
+    SetTimeout(Config.DrawScheduler.checkInterval, function()
+        checkSchedules()
+        scheduleNextCheck()
+    end)
+end
+
+CreateThread(function()
+    scheduleNextCheck()
+end)
+
+CJ.Callbacks.Register('cj:server:getLatestDrawResult', function(_, gameId)
+    if not CJ.Utils.IsNonEmptyString(gameId) then
+        return nil
+    end
+
+    return CJ.Draws.GetLatestResult(gameId)
+end)
+
+exports('RegisterDrawGame', CJ.Draws.RegisterGame)
+exports('RunDraw', CJ.Draws.Run)
+exports('GetLatestDrawResult', CJ.Draws.GetLatestResult)

@@ -84,6 +84,11 @@ Config.TicketItems = {
     scratch = 'scratch_ticket'
 }
 
+Config.DrawScheduler = {
+    enabled = true,
+    checkInterval = 60000
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

@@ -30,6 +30,10 @@ Copie a definição de emprego em `docs/qbcore-job.lua` para `qb-core/shared/job
 
 Copie os itens em `docs/qbcore-items.lua` para `qb-core/shared/items.lua` e adicione as respetivas imagens ao inventário. Cada bilhete é um item único e contém apenas metadados de identificação; a propriedade, a validade e a utilização única são sempre confirmadas contra `cj_tickets` no servidor.
 
+## Sorteios
+
+Os módulos de jogo registam-se através de `exports['script_lusitan']:RegisterDrawGame(id, definition)`, fornecendo o horário e a função que gera o resultado. O scheduler verifica apenas uma vez por intervalo configurável e grava cada resultado de forma única em `cj_draw_results`.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

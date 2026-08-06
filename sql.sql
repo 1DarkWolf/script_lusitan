@@ -65,6 +65,17 @@ CREATE TABLE IF NOT EXISTS `cj_draws` (
     CONSTRAINT `fk_cj_draw_company` FOREIGN KEY (`company_id`) REFERENCES `cj_companies` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cj_draw_results` (
+    `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `game_id` VARCHAR(50) NOT NULL,
+    `draw_key` VARCHAR(100) NOT NULL,
+    `result` LONGTEXT NOT NULL,
+    `drawn_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_cj_draw_result_key` (`draw_key`),
+    KEY `idx_cj_draw_result_game_date` (`game_id`, `drawn_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cj_draw_tickets` (
     `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     `draw_id` INT UNSIGNED NOT NULL,
