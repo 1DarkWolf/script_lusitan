@@ -55,6 +55,10 @@ window.addEventListener('message', ({ data }) => {
     showTab('buy');
   }
   if (data.action === 'closeDashboard') dashboard.classList.add('hidden');
+  if (data.action === 'closeAll') {
+    app.classList.add('hidden');
+    dashboard.classList.add('hidden');
+  }
   if (data.action === 'openScratch') {
     document.getElementById('card-title').textContent = data.card.label;
     prize.textContent = '?';

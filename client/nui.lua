@@ -2,6 +2,11 @@ CJ = CJ or {}
 
 local dashboardOpen = false
 
+CreateThread(function()
+    SetNuiFocus(false, false)
+    SendNUIMessage({ action = 'closeAll' })
+end)
+
 RegisterNetEvent('cj:client:openDashboard', function()
     dashboardOpen = true
     SetNuiFocus(true, true)
