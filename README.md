@@ -46,6 +46,10 @@ As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio d
 
 O jogo está configurado em `Config.Euromillions`: preço, dias/horário do sorteio e escalões de prémio. O jogador pode escolher cinco números e duas estrelas ou usar Quick Pick; a seleção, a chave vencedora e o cálculo dos acertos são todos validados no servidor.
 
+## Totoloto
+
+`Config.Totoloto` define o preço, sorteios e prémios. Cada aposta usa cinco números de 1 a 49 e um número da sorte de 1 a 13; a compra, o sorteio e a conferência do bilhete são integralmente validados no servidor.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

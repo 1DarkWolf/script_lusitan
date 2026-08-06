@@ -160,6 +160,21 @@ Config.Euromillions = {
     }
 }
 
+Config.Totoloto = {
+    label = 'Totoloto',
+    price = 2,
+    schedule = { days = { 4, 7 }, hour = 20, minute = 30 },
+    prizes = {
+        ['5+1'] = 3000,
+        ['5+0'] = 750,
+        ['4+1'] = 150,
+        ['4+0'] = 40,
+        ['3+1'] = 15,
+        ['3+0'] = 5,
+        ['2+1'] = 3
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

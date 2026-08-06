@@ -63,6 +63,12 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:openEuromillionsMenu' }
         },
         {
+            header = 'Totoloto',
+            txt = 'Escolhe cinco números e o número da sorte.',
+            icon = 'fas fa-circle-dot',
+            params = { event = 'cj:client:openTotolotoMenu' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }
