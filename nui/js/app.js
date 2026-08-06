@@ -45,21 +45,27 @@ function scratch(event) {
 canvas.addEventListener('pointerdown', event => { drawing = true; canvas.setPointerCapture(event.pointerId); scratch(event); });
 canvas.addEventListener('pointermove', scratch);
 canvas.addEventListener('pointerup', () => { drawing = false; });
-document.getElementById('close').addEventListener('click', () => { app.classList.add('hidden'); post('closeScratch'); });
-finish.addEventListener('click', () => { app.classList.add('hidden'); post('closeScratch'); });
+document.getElementById('close').addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
+finish.addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
 
 window.addEventListener('message', ({ data }) => {
   if (data.action === 'openDashboard') {
+    document.body.classList.add('cj-visible');
     app.classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     showTab('buy');
   }
-  if (data.action === 'closeDashboard') dashboard.classList.add('hidden');
+  if (data.action === 'closeDashboard') {
+    dashboard.classList.add('hidden');
+    document.body.classList.remove('cj-visible');
+  }
   if (data.action === 'closeAll') {
     app.classList.add('hidden');
     dashboard.classList.add('hidden');
+    document.body.classList.remove('cj-visible');
   }
   if (data.action === 'openScratch') {
+    document.body.classList.add('cj-visible');
     document.getElementById('card-title').textContent = data.card.label;
     prize.textContent = '?';
     status.textContent = 'Mantém premido e raspa.';
@@ -113,4 +119,4 @@ async function showTab(tab) {
 }
 
 document.querySelectorAll('.tabs button').forEach(button => button.onclick = () => showTab(button.dataset.tab));
-document.getElementById('dashboard-close').onclick = () => { dashboard.classList.add('hidden'); post('closeDashboard'); };
+document.getElementById('dashboard-close').onclick = () => { dashboard.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeDashboard'); };
