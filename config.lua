@@ -79,6 +79,11 @@ Config.EmployeeRoles = {
 Config.UnemployedJob = 'unemployed'
 Config.UnemployedGrade = 0
 
+Config.TicketItems = {
+    draw = 'lottery_ticket',
+    scratch = 'scratch_ticket'
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

@@ -26,6 +26,10 @@ O NPC, o balcão, o blip e o horário são configurados em `Config.Company`. O B
 
 Copie a definição de emprego em `docs/qbcore-job.lua` para `qb-core/shared/jobs.lua` e reinicie `qb-core`. Os cargos e permissões do recurso são configurados em `Config.EmployeeRoles`. Contratações, promoções e despedimentos são validadas no servidor e auditadas na tabela `cj_employee_audits`.
 
+## Bilhetes
+
+Copie os itens em `docs/qbcore-items.lua` para `qb-core/shared/items.lua` e adicione as respetivas imagens ao inventário. Cada bilhete é um item único e contém apenas metadados de identificação; a propriedade, a validade e a utilização única são sempre confirmadas contra `cj_tickets` no servidor.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

@@ -77,6 +77,21 @@ CREATE TABLE IF NOT EXISTS `cj_draw_tickets` (
     CONSTRAINT `fk_cj_ticket_draw` FOREIGN KEY (`draw_id`) REFERENCES `cj_draws` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cj_tickets` (
+    `ticket_id` CHAR(36) NOT NULL,
+    `ticket_type` VARCHAR(50) NOT NULL,
+    `owner_citizenid` VARCHAR(50) NOT NULL,
+    `payload` LONGTEXT NOT NULL,
+    `signature` CHAR(64) NOT NULL,
+    `item_name` VARCHAR(100) NOT NULL,
+    `status` ENUM('issued', 'redeemed', 'cancelled') NOT NULL DEFAULT 'issued',
+    `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `redeemed_at` TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (`ticket_id`),
+    KEY `idx_cj_ticket_owner_status` (`owner_citizenid`, `status`),
+    KEY `idx_cj_ticket_type_status` (`ticket_type`, `status`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cj_jackpots` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
     `company_id` INT UNSIGNED NOT NULL,

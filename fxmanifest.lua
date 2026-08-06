@@ -24,6 +24,7 @@ client_scripts {
     'client/company.lua',
     'client/finance.lua',
     'client/employees.lua',
+    'client/tickets.lua',
     'client/main.lua'
 }
 
@@ -36,6 +37,7 @@ server_scripts {
     'server/company.lua',
     'server/employees.lua',
     'server/finance.lua',
+    'server/tickets.lua',
     'server/main.lua'
 }
 
