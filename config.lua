@@ -208,6 +208,8 @@ Config.Loyalty = {
     }
 }
 
+Config.AdminPermissions = { 'god', 'admin' }
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

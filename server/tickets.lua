@@ -149,6 +149,13 @@ function CJ.Tickets.Restore(source, ticket)
     return affectedRows == 1
 end
 
+---@param ticketId string
+---@return boolean
+function CJ.Tickets.Cancel(ticketId)
+    return MySQL.update.await([[UPDATE `cj_tickets` SET `status` = 'cancelled'
+        WHERE `ticket_id` = ? AND `status` = 'issued']], { ticketId }) == 1
+end
+
 local function registerUsableTicket(itemName)
     QBCore.Functions.CreateUseableItem(itemName, function(source, item)
         local metadata = item.info or {}
@@ -185,3 +192,4 @@ exports('GetTicket', CJ.Tickets.Get)
 exports('ValidateTicketOwnership', CJ.Tickets.ValidateOwnership)
 exports('ConsumeTicket', CJ.Tickets.Consume)
 exports('RestoreTicket', CJ.Tickets.Restore)
+exports('CancelTicket', CJ.Tickets.Cancel)

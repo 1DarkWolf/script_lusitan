@@ -66,6 +66,10 @@ O Joker gera um código de seis dígitos para cada bilhete e compara-o com o có
 
 `Config.Loyalty` define os pontos por valor gasto e os níveis. As compras de jogos acumulam pontos automaticamente; os perfis guardam também o total gasto e o total de prémios recebidos.
 
+## Administração
+
+Os comandos requerem uma permissão listada em `Config.AdminPermissions`: `/drawnow`, `/resetdraw`, `/addjackpot`, `/setjackpot`, `/resetjackpot`, `/addmoney`, `/giveticket`, `/removeticket` e `/lotteryreload`.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.

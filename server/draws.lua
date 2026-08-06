@@ -76,6 +76,12 @@ function CJ.Draws.GetResultByKey(key)
     return rows[1]
 end
 
+---@param key string
+---@return boolean
+function CJ.Draws.DeleteResult(key)
+    return MySQL.update.await('DELETE FROM `cj_draw_results` WHERE `draw_key` = ?', { key }) == 1
+end
+
 ---@param gameId string
 ---@param key string
 ---@return table|nil
@@ -177,4 +183,5 @@ exports('RegisterDrawGame', CJ.Draws.RegisterGame)
 exports('RunDraw', CJ.Draws.Run)
 exports('GetLatestDrawResult', CJ.Draws.GetLatestResult)
 exports('GetDrawResultByKey', CJ.Draws.GetResultByKey)
+exports('DeleteDrawResult', CJ.Draws.DeleteResult)
 exports('GetNextDrawKey', CJ.Draws.GetNextDrawKey)
