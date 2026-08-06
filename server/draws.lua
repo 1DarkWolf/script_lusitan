@@ -37,6 +37,16 @@ function CJ.Draws.RegisterGame(gameId, definition)
         return false
     end
 
+    if definition.jackpot then
+        if not CJ.Utils.IsNonEmptyString(definition.jackpot.name) then
+            return false
+        end
+
+        if not CJ.Jackpot.Ensure(definition.jackpot.name, definition.jackpot.initialAmount) then
+            return false
+        end
+    end
+
     games[gameId] = definition
     CJ.Log.Write('info', ('Jogo registado para sorteios: %s'):format(gameId))
     return true
@@ -81,6 +91,16 @@ function CJ.Draws.Run(gameId, key)
         VALUES (?, ?, ?)]], { gameId, key, json.encode(result) })
     if not inserted then
         return nil
+    end
+
+    if definition.jackpot and result.claimJackpot == true then
+        local jackpotAmount = CJ.Jackpot.Claim(definition.jackpot.name)
+        if not jackpotAmount then
+            CJ.Log.Write('warn', ('O jogo %s assinalou um jackpot, mas não foi possível reclamá-lo.'):format(gameId))
+        else
+            result.jackpotAmount = jackpotAmount
+            MySQL.update.await('UPDATE `cj_draw_results` SET `result` = ? WHERE `id` = ?', { json.encode(result), inserted })
+        end
     end
 
     local payload = {

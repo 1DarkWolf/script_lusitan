@@ -26,6 +26,7 @@ client_scripts {
     'client/employees.lua',
     'client/tickets.lua',
     'client/draws.lua',
+    'client/jackpot.lua',
     'client/main.lua'
 }
 
@@ -40,6 +41,7 @@ server_scripts {
     'server/finance.lua',
     'server/tickets.lua',
     'server/draws.lua',
+    'server/jackpot.lua',
     'server/main.lua'
 }
 

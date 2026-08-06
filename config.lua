@@ -89,6 +89,11 @@ Config.DrawScheduler = {
     checkInterval = 60000
 }
 
+Config.Jackpot = {
+    cacheTtl = 30,
+    maximumAmount = 1000000000
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,
