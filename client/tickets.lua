@@ -16,5 +16,10 @@ RegisterNetEvent('cj:client:openTicket', function(ticket)
         return
     end
 
+    if ticket.ticketType == 'draw' and ticket.payload.game == 'eurodreams' then
+        TriggerServerEvent('cj:server:checkEuroDreamsTicket', ticket.ticketId)
+        return
+    end
+
     CJ.Framework.Notify(('Bilhete %s aberto. A interface deste jogo será apresentada aqui.'):format(ticket.ticketId:sub(1, 8)), 'primary')
 end)

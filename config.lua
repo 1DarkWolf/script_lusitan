@@ -175,6 +175,16 @@ Config.Totoloto = {
     }
 }
 
+Config.EuroDreams = {
+    label = 'EuroDreams',
+    price = 3,
+    schedule = { days = {}, hour = 20, minute = 30 },
+    prizes = {
+        ['6+1'] = 5000, ['6+0'] = 2000, ['5+1'] = 500, ['5+0'] = 100,
+        ['4+1'] = 40, ['4+0'] = 15, ['3+1'] = 8, ['3+0'] = 3
+    }
+}
+
 Config.Security = {
     DefaultRateLimit = {
         maxAttempts = 5,

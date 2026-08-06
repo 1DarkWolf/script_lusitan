@@ -69,6 +69,12 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:openTotolotoMenu' }
         },
         {
+            header = 'EuroDreams',
+            txt = 'Escolhe seis números e o número Dream.',
+            icon = 'fas fa-moon',
+            params = { event = 'cj:client:openEuroDreamsMenu' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }

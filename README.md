@@ -50,6 +50,10 @@ O jogo está configurado em `Config.Euromillions`: preço, dias/horário do sort
 
 `Config.Totoloto` define o preço, sorteios e prémios. Cada aposta usa cinco números de 1 a 49 e um número da sorte de 1 a 13; a compra, o sorteio e a conferência do bilhete são integralmente validados no servidor.
 
+## EuroDreams
+
+O EuroDreams usa seis números de 1 a 40 e um número Dream de 1 a 5. Preço, horário e escalões de prémio são definidos em `Config.EuroDreams`.
+
 ## Idiomas
 
 O recurso inclui Português (`pt`) e Inglês (`en`). Defina o idioma em `Config.Locale` no ficheiro `config.lua`.
