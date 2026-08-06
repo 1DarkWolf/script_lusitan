@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
+    <main id="dashboard" class="hidden">
+      <section class="dashboard-shell">
+        <button id="dashboard-close" type="button" aria-label="Fechar">×</button>
+        <p class="eyebrow">CENTRO DE JOGOS</p>
+        <h1>Painel de apostas</h1>
+        <nav class="tabs">
+          <button data-tab="buy" class="active">Comprar</button>
+          <button data-tab="tickets">Bilhetes</button>
+          <button data-tab="results">Resultados</button>
+        </nav>
+        <div id="dashboard-content"></div>
+      </section>
+    </main>
     <main id="scratch-app" class="hidden">
       <section class="scratch-card" aria-label="Raspadinha">
         <button id="close" type="button" aria-label="Fechar">×</button>

@@ -33,6 +33,7 @@ client_scripts {
     'client/eurodreams.lua',
     'client/joker.lua',
     'client/lotteries.lua',
+    'client/nui.lua',
     'client/main.lua'
 }
 
@@ -46,6 +47,7 @@ server_scripts {
     'server/employees.lua',
     'server/finance.lua',
     'server/tickets.lua',
+    'server/nui.lua',
     'server/draws.lua',
     'server/jackpot.lua',
     'server/scratch.lua',

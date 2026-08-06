@@ -49,6 +49,12 @@ document.getElementById('close').addEventListener('click', () => { app.classList
 finish.addEventListener('click', () => { app.classList.add('hidden'); post('closeScratch'); });
 
 window.addEventListener('message', ({ data }) => {
+  if (data.action === 'openDashboard') {
+    app.classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    showTab('buy');
+  }
+  if (data.action === 'closeDashboard') dashboard.classList.add('hidden');
   if (data.action === 'openScratch') {
     document.getElementById('card-title').textContent = data.card.label;
     prize.textContent = '?';
@@ -65,3 +71,27 @@ window.addEventListener('message', ({ data }) => {
     finish.classList.remove('hidden');
   }
 });
+
+const dashboard = document.getElementById('dashboard');
+const content = document.getElementById('dashboard-content');
+const games = [['scratch', 'Raspadinhas'], ['euromillions', 'Euromilhões'], ['totoloto', 'Totoloto'], ['eurodreams', 'EuroDreams'], ['joker', 'Joker'], ['lotteries', 'Lotarias']];
+const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+async function showTab(tab) {
+  document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
+  if (tab === 'buy') {
+    content.innerHTML = `<div class="game-grid">${games.map(([id, label]) => `<button class="game-button" data-game="${id}">${label}</button>`).join('')}</div>`;
+    content.querySelectorAll('[data-game]').forEach(button => button.onclick = () => post('buyGame', { game: button.dataset.game }));
+    return;
+  }
+  content.innerHTML = '<p class="status">A carregar…</p>';
+  const response = await post('loadDashboard', { section: tab });
+  const rows = await response.json();
+  if (!rows.length) { content.innerHTML = '<p class="status">Ainda não existem registos.</p>'; return; }
+  content.innerHTML = `<div class="record-list">${rows.map(row => tab === 'tickets'
+    ? `<article class="record"><strong>${esc(row.payload.game)}</strong><span>Bilhete ${esc(row.ticket_id)}</span><br><small>${esc(row.status)}</small></article>`
+    : `<article class="record"><strong>${esc(row.game_id)}</strong><span>${esc(JSON.stringify(row.result))}</span><br><small>${esc(row.drawn_at)}</small></article>`).join('')}</div>`;
+}
+
+document.querySelectorAll('.tabs button').forEach(button => button.onclick = () => showTab(button.dataset.tab));
+document.getElementById('dashboard-close').onclick = () => { dashboard.classList.add('hidden'); post('closeDashboard'); };

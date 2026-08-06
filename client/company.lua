@@ -51,6 +51,12 @@ local function openCompanyTerminal()
             isMenuHeader = true
         },
         {
+            header = 'Abrir painel de apostas',
+            txt = 'Comprar jogos, consultar bilhetes e resultados.',
+            icon = 'fas fa-display',
+            params = { event = 'cj:client:openDashboard' }
+        },
+        {
             header = 'Raspadinhas',
             txt = 'Compra uma raspadinha e descobre o teu prémio.',
             icon = 'fas fa-ticket',

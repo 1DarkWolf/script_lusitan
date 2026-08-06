@@ -1,0 +1,38 @@
+CJ = CJ or {}
+
+local dashboardOpen = false
+
+RegisterNetEvent('cj:client:openDashboard', function()
+    dashboardOpen = true
+    SetNuiFocus(true, true)
+    SendNUIMessage({ action = 'openDashboard' })
+end)
+
+RegisterNUICallback('loadDashboard', function(data, callback)
+    if data.section == 'tickets' then callback(CJ.Callbacks.Await('cj:server:getPlayerTickets'))
+    elseif data.section == 'results' then callback(CJ.Callbacks.Await('cj:server:getRecentResults'))
+    else callback({}) end
+end)
+
+RegisterNUICallback('buyGame', function(data, callback)
+    SetNuiFocus(false, false)
+    dashboardOpen = false
+    SendNUIMessage({ action = 'closeDashboard' })
+    local events = {
+        scratch = 'cj:client:openScratchMenu', euromillions = 'cj:client:openEuromillionsMenu',
+        totoloto = 'cj:client:openTotolotoMenu', eurodreams = 'cj:client:openEuroDreamsMenu',
+        joker = 'cj:client:buyJoker', lotteries = 'cj:client:openLotteriesMenu'
+    }
+    if events[data.game] then TriggerEvent(events[data.game]) end
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('closeDashboard', function(_, callback)
+    dashboardOpen = false
+    SetNuiFocus(false, false)
+    callback({ ok = true })
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName == GetCurrentResourceName() and dashboardOpen then SetNuiFocus(false, false) end
+end)
