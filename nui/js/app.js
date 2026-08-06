@@ -32,9 +32,11 @@ function scratch(event) {
   context.arc(x, y, 18, 0, Math.PI * 2);
   context.fill();
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-  let clear = 0;
-  for (let index = 3; index < pixels.length; index += 4) if (pixels[index] === 0) clear++;
-  if (clear / (canvas.width * canvas.height) >= .5) {
+  let clearedOpacity = 0;
+  for (let index = 3; index < pixels.length; index += 4) {
+    clearedOpacity += 1 - (pixels[index] / 255);
+  }
+  if (clearedOpacity / (canvas.width * canvas.height) >= .5) {
     completed = true;
     drawing = false;
     status.textContent = 'A validar o bilhete…';

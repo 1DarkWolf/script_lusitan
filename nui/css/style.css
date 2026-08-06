@@ -5,7 +5,7 @@
   color-scheme: normal !important;
 }
 
-html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent !important; background-color: transparent !important; color-scheme: normal !important; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent !important; background-color: transparent !important; color: #e9efff; color-scheme: normal !important; }
 .hidden { display: none !important; }
 #scratch-app {
   display: grid;
