@@ -10,6 +10,10 @@ local function isValidAmount(amount)
     return amount and amount > 0 and amount == math.floor(amount) and amount <= Config.Jackpot.maximumAmount and amount or nil
 end
 
+local function isActive(jackpot)
+    return jackpot and (jackpot.is_active == true or tonumber(jackpot.is_active) == 1)
+end
+
 ---@param name string
 ---@param initialAmount? number
 ---@return table|nil
@@ -68,7 +72,7 @@ end
 function CJ.Jackpot.Add(name, amount)
     amount = isValidAmount(amount)
     local jackpot = CJ.Jackpot.Ensure(name)
-    if not amount or not jackpot or tonumber(jackpot.is_active) ~= 1 then
+    if not amount or not isActive(jackpot) then
         return nil
     end
 
@@ -87,7 +91,7 @@ end
 ---@return number|nil
 function CJ.Jackpot.Claim(name)
     local jackpot = CJ.Jackpot.Get(name, true)
-    if not jackpot or tonumber(jackpot.is_active) ~= 1 or jackpot.amount <= 0 then
+    if not isActive(jackpot) or jackpot.amount <= 0 then
         return nil
     end
 

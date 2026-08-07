@@ -42,8 +42,13 @@ end), false)
 
 RegisterCommand('addjackpot', guarded('addjackpot', function(source, args)
     local amount = tonumber(args[2])
+    if not args[1] or not amount then
+        reply(source, 'Uso: /addjackpot [nome] [valor]', 'error')
+        return
+    end
+
     local total = args[1] and amount and CJ.Jackpot.Add(args[1], amount)
-    reply(source, total and ('Jackpot atualizado: €%s.'):format(total) or 'Uso: /addjackpot [nome] [valor]', total and 'success' or 'error')
+    reply(source, total and ('Jackpot atualizado: €%s.'):format(total) or 'Não foi possível atualizar o jackpot. Confirma se a base de dados foi importada.', total and 'success' or 'error')
 end), false)
 
 RegisterCommand('setjackpot', guarded('setjackpot', function(source, args)
