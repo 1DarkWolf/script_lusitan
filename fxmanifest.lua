@@ -33,6 +33,7 @@ client_scripts {
     'client/eurodreams.lua',
     'client/joker.lua',
     'client/lotteries.lua',
+    'client/phone.lua',
     'client/nui.lua',
     'client/main.lua'
 }
@@ -70,7 +71,11 @@ files {
     'nui/css/*.css',
     'nui/js/*.js',
     'nui/img/*.*',
-    'nui/sounds/*.*'
+    'nui/sounds/*.*',
+    'phone/index.html',
+    'phone/css/*.css',
+    'phone/js/*.js',
+    'phone/*.svg'
 }
 
 dependencies {
@@ -78,6 +83,7 @@ dependencies {
     'qb-target',
     'qb-menu',
     'qb-input',
+    'lb-phone',
     'ox_lib',
     'oxmysql'
 }

@@ -93,6 +93,13 @@ Config.TicketItems = {
     legacy_draw = 'lottery_ticket'
 }
 
+Config.LBPhone = {
+    appIdentifier = 'centrojogos-results',
+    appName = 'Resultados',
+    appDescription = 'Resultados oficiais do Centro de Jogos.',
+    appIcon = 'phone/icon.svg'
+}
+
 Config.DrawScheduler = {
     enabled = true,
     checkInterval = 60000

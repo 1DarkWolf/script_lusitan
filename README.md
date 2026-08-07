@@ -8,6 +8,7 @@ Recurso FiveM para QBCore, desenvolvido para gerir um centro de jogos.
 - `qb-target`
 - `ox_lib`
 - `oxmysql`
+- `lb-phone`
 
 ## Instalação
 
@@ -15,6 +16,8 @@ Recurso FiveM para QBCore, desenvolvido para gerir um centro de jogos.
 2. Coloque esta pasta nos recursos do seu servidor FiveM.
 3. Garanta as dependências antes de `script_lusitan` no `server.cfg`.
 4. Adicione `ensure script_lusitan` ao `server.cfg`.
+
+Inicie `lb-phone` antes deste resource. A aplicação Resultados é registada automaticamente e mostra no telefone os números vencedores já publicados.
 
 Consulte `tests/smoke-test.md` antes de começar a desenvolver ou instalar funcionalidades adicionais.
 

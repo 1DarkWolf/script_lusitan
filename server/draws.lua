@@ -125,6 +125,13 @@ function CJ.Draws.Run(gameId, key)
     }
 
     TriggerClientEvent('cj:client:drawCompleted', -1, payload)
+    if GetResourceState('lb-phone') == 'started' then
+        exports['lb-phone']:NotifyEveryone('online', {
+            app = Config.LBPhone.appIdentifier,
+            title = Config.CompanyName,
+            content = ('Novo resultado disponível: %s.'):format(payload.label)
+        })
+    end
     CJ.Log.Discord('jackpots', 'Sorteio concluído', ('O sorteio %s foi concluído.'):format(payload.label))
     return payload
 end
