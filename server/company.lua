@@ -13,6 +13,19 @@ function CJ.Company.IsOpen()
     return hour >= openingHours.open or hour < openingHours.close
 end
 
+---@param source number
+---@return boolean
+function CJ.Company.IsNearCounter(source)
+    local ped = GetPlayerPed(source)
+    if not ped or ped <= 0 then
+        return false
+    end
+
+    local counter = Config.Company.Counter
+    local coords = GetEntityCoords(ped)
+    return #(coords - counter.coords) <= (counter.distance + 1.5)
+end
+
 CJ.Callbacks.Register('cj:server:isCompanyOpen', function()
     return CJ.Company.IsOpen()
 end)

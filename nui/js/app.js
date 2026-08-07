@@ -4,12 +4,52 @@ const context = canvas.getContext('2d', { willReadFrequently: true });
 const status = document.getElementById('status');
 const prize = document.getElementById('prize');
 const finish = document.getElementById('finish');
+const ticketCard = document.getElementById('ticket-card');
+const ticketTitle = document.getElementById('ticket-title');
+const ticketId = document.getElementById('ticket-id');
+const ticketDetails = document.getElementById('ticket-details');
 let drawing = false;
 let completed = false;
 
 const post = (name, data = {}) => fetch(`https://${GetParentResourceName()}/${name}`, {
   method: 'POST', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(data)
 });
+
+const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+const values = (items, className = '') => `<div class="ticket-values">${(items || []).map(value => `<span class="ticket-value ${className}">${escapeHtml(value)}</span>`).join('')}</div>`;
+const ticketRow = (label, content) => `<article class="ticket-row"><strong>${escapeHtml(label)}</strong>${content}</article>`;
+
+function showTicketCard(ticket) {
+  const payload = ticket.payload || {};
+  const game = payload.game;
+  const rows = [];
+  ticketTitle.textContent = ticket.label || 'Bilhete de lotaria';
+  ticketId.textContent = `Bilhete #${String(ticket.ticketId || '').slice(0, 8)}`;
+
+  if (game === 'euromillions') {
+    rows.push(ticketRow('Números', values(payload.numbers)));
+    rows.push(ticketRow('Estrelas', values(payload.stars, 'star')));
+  } else if (game === 'totoloto') {
+    rows.push(ticketRow('Números', values(payload.numbers)));
+    rows.push(ticketRow('Número da sorte', values([payload.luckyNumber], 'star')));
+  } else if (game === 'eurodreams') {
+    rows.push(ticketRow('Números', values(payload.numbers)));
+    rows.push(ticketRow('Número Dream', values([payload.dreamNumber], 'dream')));
+  } else if (game === 'joker') {
+    rows.push(ticketRow('Código Joker', `<span class="ticket-code">${escapeHtml(payload.code)}</span>`));
+  } else if (game === 'classic' || game === 'popular') {
+    rows.push(ticketRow('Número do bilhete', `<span class="ticket-code">${escapeHtml(payload.number)}</span>`));
+  } else if (game === 'instant') {
+    rows.push(ticketRow('Validação', '<span>Apresenta este bilhete no balcão para validação.</span>'));
+  }
+
+  if (payload.drawKey) rows.push(ticketRow('Sorteio', `<span>${escapeHtml(payload.drawKey)}</span>`));
+  ticketDetails.innerHTML = rows.join('');
+  document.body.classList.add('cj-visible');
+  app.classList.add('hidden');
+  dashboard.classList.add('hidden');
+  ticketCard.classList.remove('hidden');
+}
 
 function paintCover() {
   const bounds = canvas.getBoundingClientRect();
@@ -55,11 +95,13 @@ canvas.addEventListener('pointerup', requestScratchResult);
 canvas.addEventListener('pointercancel', requestScratchResult);
 document.getElementById('close').addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
 finish.addEventListener('click', () => { app.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeScratch'); });
+document.getElementById('ticket-close').addEventListener('click', () => { ticketCard.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeTicketCard'); });
 
 window.addEventListener('message', ({ data }) => {
   if (data.action === 'openDashboard') {
     document.body.classList.add('cj-visible');
     app.classList.add('hidden');
+    ticketCard.classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     showTab('buy');
   }
@@ -70,8 +112,10 @@ window.addEventListener('message', ({ data }) => {
   if (data.action === 'closeAll') {
     app.classList.add('hidden');
     dashboard.classList.add('hidden');
+    ticketCard.classList.add('hidden');
     document.body.classList.remove('cj-visible');
   }
+  if (data.action === 'openTicketCard') showTicketCard(data.ticket || {});
   if (data.action === 'openScratch') {
     document.body.classList.add('cj-visible');
     document.getElementById('card-title').textContent = data.card.label;

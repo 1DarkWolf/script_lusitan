@@ -80,8 +80,17 @@ Config.UnemployedJob = 'unemployed'
 Config.UnemployedGrade = 0
 
 Config.TicketItems = {
-    draw = 'lottery_ticket',
-    scratch = 'scratch_ticket'
+    scratch = 'scratch_ticket',
+    euromillions = 'euromillions_ticket',
+    totoloto = 'totoloto_ticket',
+    eurodreams = 'eurodreams_ticket',
+    joker = 'joker_ticket',
+    classic = 'lottery_classic_ticket',
+    popular = 'lottery_popular_ticket',
+    instant = 'lottery_instant_ticket',
+
+    -- Mantém os bilhetes antigos utilizáveis depois da atualização.
+    legacy_draw = 'lottery_ticket'
 }
 
 Config.DrawScheduler = {

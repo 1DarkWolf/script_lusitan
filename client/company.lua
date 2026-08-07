@@ -81,11 +81,60 @@ local function openCompanyTerminal()
             params = { event = 'cj:client:openLotteriesMenu' }
         },
         {
+            header = 'Levantar prémios',
+            txt = 'Apresenta no balcão os bilhetes de sorteios já realizados.',
+            icon = 'fas fa-money-bill-wave',
+            params = { event = 'cj:client:openPrizeClaimMenu' }
+        },
+        {
             header = 'Fechar',
             params = { event = 'qb-menu:client:closeMenu' }
         }
     })
 end
+
+local claimEvents = {
+    euromillions = 'cj:server:checkEuromillionsTicket',
+    totoloto = 'cj:server:checkTotolotoTicket',
+    eurodreams = 'cj:server:checkEuroDreamsTicket',
+    joker = 'cj:server:checkJokerTicket',
+    classic = 'cj:server:checkLotteryTicket',
+    popular = 'cj:server:checkLotteryTicket',
+    instant = 'cj:server:checkLotteryTicket'
+}
+
+RegisterNetEvent('cj:client:openPrizeClaimMenu', function()
+    local tickets = CJ.Callbacks.Await('cj:server:getClaimableTickets') or {}
+    if #tickets == 0 then
+        CJ.Framework.Notify('Não tens bilhetes prontos para levantamento.', 'primary')
+        return
+    end
+
+    local menu = {
+        { header = 'Levantar prémios', isMenuHeader = true }
+    }
+
+    for _, ticket in ipairs(tickets) do
+        menu[#menu + 1] = {
+            header = ticket.label,
+            txt = ('Bilhete #%s'):format(ticket.ticketId:sub(1, 8)),
+            icon = 'fas fa-ticket',
+            params = {
+                event = 'cj:client:claimPrizeTicket',
+                args = ticket
+            }
+        }
+    end
+
+    exports['qb-menu']:openMenu(menu)
+end)
+
+RegisterNetEvent('cj:client:claimPrizeTicket', function(ticket)
+    local eventName = ticket and claimEvents[ticket.game]
+    if eventName and ticket.ticketId then
+        TriggerServerEvent(eventName, ticket.ticketId)
+    end
+end)
 
 local function addTargets()
     if not Config.UseTarget then

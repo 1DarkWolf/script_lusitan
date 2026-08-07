@@ -53,6 +53,7 @@ server_scripts {
     'server/nui.lua',
     'server/draws.lua',
     'server/jackpot.lua',
+    'server/phone.lua',
     'server/scratch.lua',
     'games/euromillions/server.lua',
     'games/totoloto/server.lua',

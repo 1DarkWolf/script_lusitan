@@ -14,6 +14,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
   background: rgba(7, 11, 20, .78);
 }
 #dashboard { display: grid; min-height: 100vh; place-items: center; background: rgba(7, 11, 20, .78); }
+#ticket-card { display: grid; min-height: 100vh; place-items: center; background: rgba(7, 11, 20, .78); }
 .dashboard-shell { position: relative; width: min(820px, 92vw); max-height: 82vh; overflow: auto; padding: 28px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 20px; background: #0d172a; box-shadow: 0 20px 60px rgba(0,0,0,.48); }
 .dashboard-shell h1 { margin-top: 7px; }
 #dashboard-close { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: #fff; font-size: 28px; cursor: pointer; }
@@ -23,6 +24,18 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .game-grid, .record-list { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 .record { padding: 13px; border-radius: 9px; background: #14213a; color: #c9d5ec; }
 .record strong { display: block; color: #fff; margin-bottom: 5px; }
+.ticket-shell { position: relative; width: min(470px, 90vw); padding: 30px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 20px; background: linear-gradient(135deg, #142647, #0a1020); box-shadow: 0 20px 60px rgba(0,0,0,.48); text-align: center; }
+#ticket-close { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: #fff; font-size: 28px; cursor: pointer; }
+.ticket-id { margin: 0 0 18px; color: #b5c2dc; font-size: 13px; }
+.ticket-details { display: grid; gap: 12px; text-align: left; }
+.ticket-row { padding: 14px; border-radius: 10px; background: #1d2c4b; }
+.ticket-row strong { display: block; margin-bottom: 9px; color: #ffd75c; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+.ticket-values { display: flex; flex-wrap: wrap; gap: 7px; }
+.ticket-value { display: inline-grid; min-width: 34px; height: 34px; place-items: center; padding: 0 5px; border-radius: 50%; background: #f3be30; color: #101827; font-weight: 800; }
+.ticket-value.star { background: #fff; color: #17243e; }
+.ticket-value.dream { background: #be75ec; color: #fff; }
+.ticket-code { color: #fff; font-size: 26px; font-weight: 800; letter-spacing: .16em; }
+.ticket-note { margin: 20px 0 0; color: #b5c2dc; font-size: 13px; line-height: 1.45; }
 .scratch-card {
   position: relative;
   width: min(440px, 90vw);

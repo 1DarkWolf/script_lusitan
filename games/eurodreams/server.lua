@@ -64,6 +64,11 @@ CJ.Draws.RegisterGame(GAME_ID, { label = Config.EuroDreams.label, schedule = Con
 end })
 
 CJ.Security.RegisterEvent('cj:server:checkEuroDreamsTicket', function(source, ticketId)
+    if not CJ.Company.IsOpen() or not CJ.Company.IsNearCounter(source) then
+        CJ.Framework.Notify(source, 'Dirige-te ao balcão para levantar este prémio.', 'error')
+        return
+    end
+
     local ticket = CJ.Tickets.ValidateOwnership(source, ticketId)
     local payload = ticket and json.decode(ticket.payload) or nil
     if not ticket or ticket.ticket_type ~= 'draw' or not payload or payload.game ~= GAME_ID then

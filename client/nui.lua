@@ -41,6 +41,11 @@ RegisterNUICallback('closeDashboard', function(_, callback)
     callback({ ok = true })
 end)
 
+RegisterNUICallback('closeTicketCard', function(_, callback)
+    SetNuiFocus(false, false)
+    callback({ ok = true })
+end)
+
 RegisterNUICallback('approvePrize', function(data, callback)
     TriggerServerEvent('cj:server:approvePrizeClaim', data.claimId)
     callback({ ok = true })

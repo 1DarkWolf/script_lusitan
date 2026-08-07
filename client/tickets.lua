@@ -6,28 +6,9 @@ RegisterNetEvent('cj:client:openTicket', function(ticket)
         return
     end
 
-    if ticket.ticketType == 'draw' and ticket.payload.game == 'euromillions' then
-        TriggerServerEvent('cj:server:checkEuromillionsTicket', ticket.ticketId)
-        return
-    end
-
-    if ticket.ticketType == 'draw' and ticket.payload.game == 'totoloto' then
-        TriggerServerEvent('cj:server:checkTotolotoTicket', ticket.ticketId)
-        return
-    end
-
-    if ticket.ticketType == 'draw' and ticket.payload.game == 'eurodreams' then
-        TriggerServerEvent('cj:server:checkEuroDreamsTicket', ticket.ticketId)
-        return
-    end
-
-    if ticket.ticketType == 'draw' and ticket.payload.game == 'joker' then
-        TriggerServerEvent('cj:server:checkJokerTicket', ticket.ticketId)
-        return
-    end
-
-    if ticket.ticketType == 'draw' and (ticket.payload.game == 'classic' or ticket.payload.game == 'popular' or ticket.payload.game == 'instant') then
-        TriggerServerEvent('cj:server:checkLotteryTicket', ticket.ticketId)
+    if ticket.ticketType == 'draw' then
+        SetNuiFocus(true, true)
+        SendNUIMessage({ action = 'openTicketCard', ticket = ticket })
         return
     end
 
