@@ -46,6 +46,15 @@ RegisterNUICallback('closeTicketCard', function(_, callback)
     callback({ ok = true })
 end)
 
+RegisterNUICallback('loadOwnerAnalytics', function(_, callback)
+    callback(CJ.Callbacks.Await('cj:server:getOwnerAnalytics'))
+end)
+
+RegisterNUICallback('closeOwnerDashboard', function(_, callback)
+    SetNuiFocus(false, false)
+    callback({ ok = true })
+end)
+
 RegisterNUICallback('approvePrize', function(data, callback)
     TriggerServerEvent('cj:server:approvePrizeClaim', data.claimId)
     callback({ ok = true })

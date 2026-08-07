@@ -30,17 +30,29 @@ CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
         return
     end
 
+    if CJ.Stock.Get(cardId) < 1 then
+        CJ.Framework.Notify(source, 'Esta raspadinha está esgotada. Volta mais tarde.', 'error')
+        return
+    end
+
     if CJ.Framework.GetMoney(source) < card.price then
         CJ.Framework.Notify(source, CJ.T('games.insufficient_funds'), 'error')
         return
     end
 
+    if not CJ.Stock.Take(cardId, 1) then
+        CJ.Framework.Notify(source, 'Esta raspadinha acabou de esgotar. Volta mais tarde.', 'error')
+        return
+    end
+
     if not CJ.Framework.RemoveMoney(source, card.price, 'centrojogos-scratch-purchase') then
+        CJ.Stock.Add(cardId, 1)
         return
     end
 
     local citizenId = CJ.Framework.GetCitizenId(source)
     if not CJ.Finance.Credit(card.price, citizenId, 'scratch_purchase') then
+        CJ.Stock.Add(cardId, 1)
         CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
@@ -52,6 +64,7 @@ CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
     })
 
     if not ticket then
+        CJ.Stock.Add(cardId, 1)
         CJ.Finance.Debit(card.price, citizenId, 'scratch_issue_reversal')
         CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')

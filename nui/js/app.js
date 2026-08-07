@@ -8,6 +8,8 @@ const ticketCard = document.getElementById('ticket-card');
 const ticketTitle = document.getElementById('ticket-title');
 const ticketId = document.getElementById('ticket-id');
 const ticketDetails = document.getElementById('ticket-details');
+const ownerDashboard = document.getElementById('owner-dashboard');
+const ownerContent = document.getElementById('owner-content');
 let drawing = false;
 let completed = false;
 
@@ -48,6 +50,7 @@ function showTicketCard(ticket) {
   document.body.classList.add('cj-visible');
   app.classList.add('hidden');
   dashboard.classList.add('hidden');
+  ownerDashboard.classList.add('hidden');
   ticketCard.classList.remove('hidden');
 }
 
@@ -102,6 +105,7 @@ window.addEventListener('message', ({ data }) => {
     document.body.classList.add('cj-visible');
     app.classList.add('hidden');
     ticketCard.classList.add('hidden');
+    ownerDashboard.classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     showTab('buy');
   }
@@ -113,9 +117,18 @@ window.addEventListener('message', ({ data }) => {
     app.classList.add('hidden');
     dashboard.classList.add('hidden');
     ticketCard.classList.add('hidden');
+    ownerDashboard.classList.add('hidden');
     document.body.classList.remove('cj-visible');
   }
   if (data.action === 'openTicketCard') showTicketCard(data.ticket || {});
+  if (data.action === 'openOwnerDashboard') {
+    document.body.classList.add('cj-visible');
+    app.classList.add('hidden');
+    dashboard.classList.add('hidden');
+    ticketCard.classList.add('hidden');
+    ownerDashboard.classList.remove('hidden');
+    loadOwnerAnalytics();
+  }
   if (data.action === 'openScratch') {
     document.body.classList.add('cj-visible');
     document.getElementById('card-title').textContent = data.card.label;
@@ -138,6 +151,52 @@ const dashboard = document.getElementById('dashboard');
 const content = document.getElementById('dashboard-content');
 const games = [['scratch', 'Raspadinhas'], ['euromillions', 'Euromilhões'], ['totoloto', 'Totoloto'], ['eurodreams', 'EuroDreams'], ['joker', 'Joker'], ['lotteries', 'Lotarias']];
 const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+const money = value => `€${Number(value || 0).toLocaleString('pt-PT')}`;
+
+function analyticsRows(rows, emptyText, format) {
+  if (!rows || !rows.length) return `<p class="status">${emptyText}</p>`;
+  return rows.map(format).join('');
+}
+
+function renderOwnerAnalytics(data) {
+  if (!data) {
+    ownerContent.innerHTML = '<p class="status">Não tens permissão para consultar a gestão.</p>';
+    return;
+  }
+
+  const stock = analyticsRows(data.scratch?.stock, 'Sem stock registado.', row => `
+    <div class="analytics-row"><span>${esc(row.label)}</span><strong>${Number(row.quantity || 0)}</strong></div>`);
+  const jackpots = analyticsRows(data.jackpots, 'Sem jackpots registados.', row => `
+    <div class="analytics-row"><span>${esc(row.name)}</span><strong>${money(row.amount)}</strong></div>`);
+  const games = analyticsRows(data.gameSales, 'Ainda não existem vendas.', row => `
+    <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_purchase$/, '').replace(/_/g, ' '))}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
+  const daily = analyticsRows(data.dailySales, 'Sem vendas nos últimos sete dias.', row => `
+    <div class="analytics-row"><span>${esc(row.day)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
+  const transactions = analyticsRows(data.recentTransactions, 'Ainda não existem movimentos.', row => `
+    <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_/g, ' '))}</span><strong>${money(row.amount)}</strong></div>`);
+
+  ownerContent.innerHTML = `
+    <div class="metric-grid">
+      <article class="metric-card"><span>Saldo da empresa</span><strong>${money(data.balance)}</strong></article>
+      <article class="metric-card"><span>Raspadinhas vendidas</span><strong>${Number(data.scratch?.sold || 0)}</strong></article>
+      <article class="metric-card"><span>Receita de raspadinhas</span><strong>${money(data.scratch?.revenue)}</strong></article>
+      <article class="metric-card"><span>Vendas totais</span><strong>${Number(data.totals?.sales || 0)}</strong></article>
+    </div>
+    <div class="analytics-grid">
+      <section class="analytics-panel"><h3>Stock da loja</h3>${stock}</section>
+      <section class="analytics-panel"><h3>Jackpots por sorteio</h3>${jackpots}</section>
+      <section class="analytics-panel"><h3>Vendas por jogo</h3>${games}</section>
+      <section class="analytics-panel"><h3>Últimos 7 dias</h3>${daily}</section>
+      <section class="analytics-panel analytics-wide"><h3>Movimentos recentes</h3>${transactions}</section>
+    </div>`;
+}
+
+async function loadOwnerAnalytics() {
+  ownerContent.innerHTML = '<p class="status">A carregar dados da empresa...</p>';
+  const response = await post('loadOwnerAnalytics');
+  renderOwnerAnalytics(await response.json());
+}
 
 async function showTab(tab) {
   document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
@@ -172,3 +231,5 @@ async function showTab(tab) {
 
 document.querySelectorAll('.tabs button').forEach(button => button.onclick = () => showTab(button.dataset.tab));
 document.getElementById('dashboard-close').onclick = () => { dashboard.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeDashboard'); };
+document.getElementById('owner-close').onclick = () => { ownerDashboard.classList.add('hidden'); document.body.classList.remove('cj-visible'); post('closeOwnerDashboard'); };
+document.getElementById('owner-refresh').onclick = loadOwnerAnalytics;

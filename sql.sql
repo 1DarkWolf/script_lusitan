@@ -115,6 +115,17 @@ CREATE TABLE IF NOT EXISTS `cj_jackpots` (
     CONSTRAINT `fk_cj_jackpot_company` FOREIGN KEY (`company_id`) REFERENCES `cj_companies` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `cj_store_stock` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `company_id` INT UNSIGNED NOT NULL,
+    `stock_key` VARCHAR(50) NOT NULL,
+    `quantity` INT UNSIGNED NOT NULL DEFAULT 0,
+    `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_cj_store_stock` (`company_id`, `stock_key`),
+    CONSTRAINT `fk_cj_store_stock_company` FOREIGN KEY (`company_id`) REFERENCES `cj_companies` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS `cj_loyalty` (
     `citizenid` VARCHAR(50) NOT NULL,
     `points` BIGINT NOT NULL DEFAULT 0,

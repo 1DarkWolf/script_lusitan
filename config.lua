@@ -44,6 +44,15 @@ Config.Company = {
     }
 }
 
+Config.OwnerDashboard = {
+    Npc = {
+        model = 'a_m_y_business_01',
+        coords = vector4(-44.95, -1758.16, 29.42, 140.0),
+        scenario = 'WORLD_HUMAN_CLIPBOARD'
+    },
+    distance = 2.0
+}
+
 Config.EmployeeRoles = {
     intern = {
         grade = 0,
@@ -155,6 +164,15 @@ Config.ScratchCards = {
             { weight = 1, amount = 1000 }
         }
     }
+}
+
+-- Estes são cartões em branco. O futuro sistema de crafting deve criar estes itens;
+-- o dono entrega-os ao stock da loja no NPC de gestão.
+Config.ScratchStockItems = {
+    bronze = 'scratch_bronze_stock',
+    silver = 'scratch_silver_stock',
+    gold = 'scratch_gold_stock',
+    diamond = 'scratch_diamond_stock'
 }
 
 Config.Euromillions = {

@@ -45,6 +45,12 @@ Um jogo pode declarar `jackpot = { name = '...', initialAmount = 0 }` ao regista
 
 As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio determinam a probabilidade e são sorteados no servidor no momento da compra; o cliente só recebe o tipo de raspadinha. Configure prémios até `Config.AutoPayLimit` para pagamento imediato.
 
+## Stock e painel de gestão
+
+As raspadinhas só podem ser vendidas quando existir stock na loja. O stock começa a zero; o dono da empresa deve ter no inventário os itens `scratch_bronze_stock`, `scratch_silver_stock`, `scratch_gold_stock` ou `scratch_diamond_stock` e entregá-los no NPC de gestão. Estes são cartões em branco preparados para o futuro sistema de crafting; este recurso ainda não cria os itens.
+
+O NPC de gestão é configurado em `Config.OwnerDashboard.Npc`. Apenas o cargo QBCore da empresa com `isboss = true` consegue reabastecer a loja e abrir o dashboard. O painel mostra saldo da empresa, unidades e receita de raspadinhas, stock por tipo, jackpots, vendas por jogo, vendas dos últimos sete dias e movimentos recentes. Importe novamente `sql.sql` após atualizar para criar a tabela `cj_store_stock`.
+
 ## Euromilhões
 
 O jogo está configurado em `Config.Euromillions`: preço, dias/horário do sorteio e escalões de prémio. O jogador pode escolher cinco números e duas estrelas ou usar Quick Pick; a seleção, a chave vencedora e o cálculo dos acertos são todos validados no servidor.

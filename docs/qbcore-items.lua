@@ -1,6 +1,12 @@
 -- Adicione estes itens em qb-core/shared/items.lua e reinicie qb-core.
 -- Todos usam a mesma imagem por defeito; pode criar uma imagem própria para cada jogo se preferir.
 scratch_ticket = { name = 'scratch_ticket', label = 'Raspadinha', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha do Centro de Jogos.' },
+
+-- CartÃµes ainda sem prÃ©mio. SerÃ£o o resultado do futuro crafting e sÃ³ servem para reabastecer a loja no NPC de gestÃ£o.
+scratch_bronze_stock = { name = 'scratch_bronze_stock', label = 'Raspadinha Bronze em branco', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = false, useable = false, shouldClose = true, description = 'CartÃ£o em branco para reabastecer as raspadinhas Bronze.' },
+scratch_silver_stock = { name = 'scratch_silver_stock', label = 'Raspadinha Prata em branco', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = false, useable = false, shouldClose = true, description = 'CartÃ£o em branco para reabastecer as raspadinhas Prata.' },
+scratch_gold_stock = { name = 'scratch_gold_stock', label = 'Raspadinha Ouro em branco', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = false, useable = false, shouldClose = true, description = 'CartÃ£o em branco para reabastecer as raspadinhas Ouro.' },
+scratch_diamond_stock = { name = 'scratch_diamond_stock', label = 'Raspadinha Diamante em branco', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = false, useable = false, shouldClose = true, description = 'CartÃ£o em branco para reabastecer as raspadinhas Diamante.' },
 euromillions_ticket = { name = 'euromillions_ticket', label = 'Bilhete Euromilhões', weight = 0, type = 'item', image = 'euromillions_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de Euromilhões do Centro de Jogos.' },
 totoloto_ticket = { name = 'totoloto_ticket', label = 'Bilhete Totoloto', weight = 0, type = 'item', image = 'totoloto_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de Totoloto do Centro de Jogos.' },
 eurodreams_ticket = { name = 'eurodreams_ticket', label = 'Bilhete EuroDreams', weight = 0, type = 'item', image = 'eurodreams_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de EuroDreams do Centro de Jogos.' },
