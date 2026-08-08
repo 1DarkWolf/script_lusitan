@@ -2,7 +2,7 @@ CJ = CJ or {}
 CJ.Company = CJ.Company or {}
 
 local QBCore = exports['qb-core']:GetCoreObject()
-local vendorPed
+local vendorPeds = {}
 
 local function notifyClosed()
     CJ.Framework.Notify(('O %s está fechado neste momento.'):format(Config.CompanyName), 'error')
@@ -136,22 +136,25 @@ RegisterNetEvent('cj:client:claimPrizeTicket', function(ticket)
     end
 end)
 
-local function addTargets()
+local function addVendorTarget(ped, seller)
     if not Config.UseTarget then
         return
     end
 
-    exports['qb-target']:AddTargetEntity(vendorPed, {
+    exports['qb-target']:AddTargetEntity(ped, {
         options = {
             {
                 icon = 'fas fa-ticket',
-                label = ('Falar com %s'):format(Config.CompanyName),
+                label = ('Falar com %s'):format(seller.label),
                 action = openCompanyTerminal
             }
         },
-        distance = Config.Company.Counter.distance
+        distance = seller.distance
     })
+end
 
+local function addBossTargets()
+    if not Config.UseTarget then return end
     if Config.Company.BossMenu.enabled then
         exports['qb-target']:AddBoxZone('cj_boss_menu', Config.Company.BossMenu.coords, 1.0, 1.0, {
             name = 'cj_boss_menu',
@@ -191,39 +194,45 @@ local function addTargets()
     end
 end
 
-local function createBlip()
-    if not Config.Company.Blip.enabled then
+local function createBlip(seller)
+    if not seller.Blip or not seller.Blip.enabled then
         return
     end
 
-    local coords = Config.Company.Npc.coords
+    local coords = seller.Npc.coords
     local blip = AddBlipForCoord(coords.x, coords.y, coords.z)
-    SetBlipSprite(blip, Config.Company.Blip.sprite)
+    SetBlipSprite(blip, seller.Blip.sprite)
     SetBlipDisplay(blip, 4)
-    SetBlipScale(blip, Config.Company.Blip.scale)
-    SetBlipColour(blip, Config.Company.Blip.colour)
+    SetBlipScale(blip, seller.Blip.scale)
+    SetBlipColour(blip, seller.Blip.colour)
     SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName('STRING')
-    AddTextComponentString(Config.Company.Blip.label)
+    AddTextComponentString(seller.Blip.label or seller.label)
     EndTextCommandSetBlipName(blip)
 end
 
 CreateThread(function()
-    local npc = Config.Company.Npc
-    lib.requestModel(npc.model)
+    for _, seller in ipairs(Config.Sellers) do
+        local npc = seller.Npc
+        lib.requestModel(npc.model)
 
-    vendorPed = CreatePed(0, joaat(npc.model), npc.coords.x, npc.coords.y, npc.coords.z - 1.0, npc.coords.w, false, false)
-    SetEntityInvincible(vendorPed, true)
-    SetBlockingOfNonTemporaryEvents(vendorPed, true)
-    FreezeEntityPosition(vendorPed, true)
-    TaskStartScenarioInPlace(vendorPed, npc.scenario, 0, true)
+        local ped = CreatePed(0, joaat(npc.model), npc.coords.x, npc.coords.y, npc.coords.z - 1.0, npc.coords.w, false, false)
+        vendorPeds[#vendorPeds + 1] = ped
+        SetEntityInvincible(ped, true)
+        SetBlockingOfNonTemporaryEvents(ped, true)
+        FreezeEntityPosition(ped, true)
+        TaskStartScenarioInPlace(ped, npc.scenario, 0, true)
 
-    addTargets()
-    createBlip()
+        addVendorTarget(ped, seller)
+        createBlip(seller)
+    end
+
+    addBossTargets()
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == GetCurrentResourceName() and DoesEntityExist(vendorPed) then
-        DeleteEntity(vendorPed)
+    if resourceName ~= GetCurrentResourceName() then return end
+    for _, ped in ipairs(vendorPeds) do
+        if DoesEntityExist(ped) then DeleteEntity(ped) end
     end
 end)

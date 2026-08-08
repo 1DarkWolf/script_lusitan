@@ -9,8 +9,9 @@ end
 ---@param amount number
 ---@param citizenId? string
 ---@param transactionType? string
+---@param metadata? table
 ---@return boolean
-function CJ.Finance.Credit(amount, citizenId, transactionType)
+function CJ.Finance.Credit(amount, citizenId, transactionType, metadata)
     amount = isValidAmount(amount)
     local company = CJ.Company.Get()
 
@@ -28,7 +29,7 @@ function CJ.Finance.Credit(amount, citizenId, transactionType)
     end
 
     CJ.Cache.Remove('company:primary')
-    CJ.Company.RecordTransaction(transactionType or 'credit', amount, citizenId)
+    CJ.Company.RecordTransaction(transactionType or 'credit', amount, citizenId, metadata)
     if citizenId and transactionType and transactionType:sub(-9) == '_purchase' and CJ.Loyalty then
         CJ.Loyalty.AddPurchase(citizenId, amount)
     end

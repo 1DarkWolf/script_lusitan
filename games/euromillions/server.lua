@@ -32,6 +32,8 @@ end
 
 CJ.Security.RegisterEvent('cj:server:purchaseEuromillions', function(source, selection)
     if not CJ.Company.IsOpen() then CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error'); return end
+    local sellerMetadata = CJ.Company.GetSellerMetadata(source)
+    if not sellerMetadata then CJ.Framework.Notify(source, 'Dirige-te a um ponto de venda para comprar.', 'error'); return end
     selection = type(selection) == 'table' and selection or {}
     local numbers, stars
     if selection.quickPick == true then
@@ -50,7 +52,7 @@ CJ.Security.RegisterEvent('cj:server:purchaseEuromillions', function(source, sel
     end
 
     local citizenId = CJ.Framework.GetCitizenId(source)
-    if not CJ.Finance.Credit(Config.Euromillions.price, citizenId, 'euromillions_purchase') then
+    if not CJ.Finance.Credit(Config.Euromillions.price, citizenId, 'euromillions_purchase', sellerMetadata) then
         CJ.Framework.AddMoney(source, Config.Euromillions.price, 'centrojogos-euromillions-refund')
         return
     end

@@ -14,16 +14,37 @@ function CJ.Company.IsOpen()
 end
 
 ---@param source number
----@return boolean
-function CJ.Company.IsNearCounter(source)
+---@return table|nil
+function CJ.Company.GetNearbySeller(source)
     local ped = GetPlayerPed(source)
     if not ped or ped <= 0 then
-        return false
+        return nil
     end
 
-    local counter = Config.Company.Counter
     local coords = GetEntityCoords(ped)
-    return #(coords - counter.coords) <= (counter.distance + 1.5)
+    for _, seller in ipairs(Config.Sellers or {}) do
+        local npc = seller.Npc
+        local distance = tonumber(seller.distance) or Config.Company.Counter.distance
+        if npc and npc.coords and seller.id and #(coords - vector3(npc.coords.x, npc.coords.y, npc.coords.z)) <= (distance + 1.5) then
+            return seller
+        end
+    end
+
+    return nil
+end
+
+---@param source number
+---@return boolean
+function CJ.Company.IsNearCounter(source)
+    return CJ.Company.GetNearbySeller(source) ~= nil
+end
+
+---@param source number
+---@return table|nil
+function CJ.Company.GetSellerMetadata(source)
+    local seller = CJ.Company.GetNearbySeller(source)
+    if not seller then return nil end
+    return { sellerId = seller.id, sellerLabel = seller.label }
 end
 
 CJ.Callbacks.Register('cj:server:isCompanyOpen', function()

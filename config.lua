@@ -44,6 +44,26 @@ Config.Company = {
     }
 }
 
+-- Adicione ou remova estabelecimentos nesta lista. Cada NPC vende todos os jogos
+-- e as respetivas vendas aparecem separadamente no dashboard do dono.
+Config.Sellers = {
+    {
+        id = 'loja_central',
+        label = 'Centro de Jogos - Loja Central',
+        Npc = Config.Company.Npc,
+        distance = Config.Company.Counter.distance,
+        Blip = Config.Company.Blip
+    },
+    -- Exemplo para uma segunda loja:
+    -- {
+    --     id = 'loja_praia',
+    --     label = 'Centro de Jogos - Praia',
+    --     Npc = { model = 'a_f_y_business_01', coords = vector4(-1200.0, -1500.0, 4.4, 120.0), scenario = 'WORLD_HUMAN_CLIPBOARD' },
+    --     distance = 2.0,
+    --     Blip = { enabled = true, sprite = 500, colour = 2, scale = 0.75, label = 'Centro de Jogos - Praia' }
+    -- }
+}
+
 Config.OwnerDashboard = {
     Npc = {
         model = 'a_m_y_business_01',

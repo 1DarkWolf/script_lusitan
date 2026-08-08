@@ -33,6 +33,16 @@ function CJ.Analytics.GetOwnerDashboard(source)
     local dailySales = CJ.Database.Query([[SELECT DATE(`created_at`) AS `day`, COUNT(*) AS `sales`, COALESCE(SUM(`amount`), 0) AS `revenue`
         FROM `cj_transactions` WHERE `company_id` = ? AND `type` LIKE '%_purchase'
         GROUP BY DATE(`created_at`) ORDER BY `day` DESC LIMIT 7]], { company.id }) or {}
+    local weeklySellerSales = CJ.Database.Query([[SELECT
+            JSON_UNQUOTE(JSON_EXTRACT(`metadata`, '$.sellerId')) AS `seller_id`,
+            JSON_UNQUOTE(JSON_EXTRACT(`metadata`, '$.sellerLabel')) AS `seller_label`,
+            COUNT(*) AS `sales`, COALESCE(SUM(`amount`), 0) AS `revenue`
+        FROM `cj_transactions`
+        WHERE `company_id` = ? AND `type` LIKE '%_purchase'
+          AND `created_at` >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+          AND JSON_VALID(`metadata`) = 1
+          AND JSON_EXTRACT(`metadata`, '$.sellerId') IS NOT NULL
+        GROUP BY `seller_id`, `seller_label` ORDER BY `revenue` DESC]], { company.id }) or {}
     local jackpots = CJ.Database.Query([[SELECT `name`, `amount`, `is_active`, `updated_at` FROM `cj_jackpots`
         WHERE `company_id` = ? ORDER BY `name`]], { company.id }) or {}
     local recent = CJ.Database.Query([[SELECT `type`, `amount`, `created_at` FROM `cj_transactions`
@@ -40,8 +50,37 @@ function CJ.Analytics.GetOwnerDashboard(source)
 
     normaliseRows(gameSales, { 'sales', 'revenue' })
     normaliseRows(dailySales, { 'sales', 'revenue' })
+    normaliseRows(weeklySellerSales, { 'sales', 'revenue' })
     normaliseRows(jackpots, { 'amount' })
     normaliseRows(recent, { 'amount' })
+
+    local sellerSalesById = {}
+    for _, row in ipairs(weeklySellerSales) do
+        if row.seller_id then sellerSalesById[row.seller_id] = row end
+    end
+
+    local sellerSales, configuredSellerIds = {}, {}
+    for _, seller in ipairs(Config.Sellers or {}) do
+        local row = sellerSalesById[seller.id] or {}
+        sellerSales[#sellerSales + 1] = {
+            id = seller.id,
+            label = seller.label,
+            sales = tonumber(row.sales) or 0,
+            revenue = tonumber(row.revenue) or 0
+        }
+        configuredSellerIds[seller.id] = true
+    end
+    for _, row in ipairs(weeklySellerSales) do
+        if row.seller_id and not configuredSellerIds[row.seller_id] then
+            sellerSales[#sellerSales + 1] = {
+                id = row.seller_id,
+                label = row.seller_label or row.seller_id,
+                sales = row.sales,
+                revenue = row.revenue
+            }
+        end
+    end
+    table.sort(sellerSales, function(left, right) return left.label < right.label end)
 
     local totals = { sales = 0, revenue = 0 }
     for _, row in ipairs(gameSales) do
@@ -55,6 +94,7 @@ function CJ.Analytics.GetOwnerDashboard(source)
         totals = totals,
         gameSales = gameSales,
         dailySales = dailySales,
+        sellerSales = sellerSales,
         jackpots = jackpots,
         recentTransactions = recent
     }

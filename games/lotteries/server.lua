@@ -25,13 +25,15 @@ registerScheduledLottery('popular')
 
 CJ.Security.RegisterEvent('cj:server:purchaseLottery', function(source, gameId)
     if not CJ.Company.IsOpen() then CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error'); return end
+    local sellerMetadata = CJ.Company.GetSellerMetadata(source)
+    if not sellerMetadata then CJ.Framework.Notify(source, 'Dirige-te a um ponto de venda para comprar.', 'error'); return end
     local lottery = Config.Lotteries[gameId]
     if not lottery then CJ.Security.Reject(source, 'cj:server:purchaseLottery', 'jogo inválido'); return end
     if CJ.Framework.GetMoney(source) < lottery.price or not CJ.Framework.RemoveMoney(source, lottery.price, 'centrojogos-lottery-purchase') then
         CJ.Framework.Notify(source, CJ.T('games.insufficient_funds'), 'error'); return
     end
     local citizenId = CJ.Framework.GetCitizenId(source)
-    if not CJ.Finance.Credit(lottery.price, citizenId, gameId .. '_purchase') then
+    if not CJ.Finance.Credit(lottery.price, citizenId, gameId .. '_purchase', sellerMetadata) then
         CJ.Framework.AddMoney(source, lottery.price, 'centrojogos-lottery-refund'); return
     end
     local payload = { game = gameId }

@@ -23,7 +23,7 @@ Consulte `tests/smoke-test.md` antes de começar a desenvolver ou instalar funci
 
 ## Empresa
 
-O NPC, o balcão, o blip e o horário são configurados em `Config.Company`. O horário é confirmado pelo relógio do servidor em todas as compras. O Boss Menu só aparece a jogadores cujo cargo QBCore esteja marcado como `isboss`; se usar esta funcionalidade, inicie também `qb-management` antes deste recurso.
+O horário e o Boss Menu são configurados em `Config.Company`. Os pontos de venda são definidos em `Config.Sellers`: copie o exemplo comentado para criar novos NPCs, atribua um `id` único e altere as coordenadas. Cada vendedor abre a mesma loja, mas o servidor valida a proximidade do jogador e regista a venda no respetivo estabelecimento. O Boss Menu só aparece a jogadores cujo cargo QBCore esteja marcado como `isboss`; se usar esta funcionalidade, inicie também `qb-management` antes deste recurso.
 
 ## Empregados
 
@@ -49,7 +49,7 @@ As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio d
 
 As raspadinhas só podem ser vendidas quando existir stock na loja. O stock começa a zero; o dono da empresa deve ter no inventário os itens `scratch_bronze_stock`, `scratch_silver_stock`, `scratch_gold_stock` ou `scratch_diamond_stock` e entregá-los no NPC de gestão. Estes são cartões em branco preparados para o futuro sistema de crafting; este recurso ainda não cria os itens.
 
-O NPC de gestão é configurado em `Config.OwnerDashboard.Npc`. Apenas o cargo QBCore da empresa com `isboss = true` consegue reabastecer a loja e abrir o dashboard. O painel mostra saldo da empresa, unidades e receita de raspadinhas, stock por tipo, jackpots, vendas por jogo, vendas dos últimos sete dias e movimentos recentes. Importe novamente `sql.sql` após atualizar para criar a tabela `cj_store_stock`.
+O NPC de gestão é configurado em `Config.OwnerDashboard.Npc`. Apenas o cargo QBCore da empresa com `isboss = true` consegue reabastecer a loja e abrir o dashboard. O painel mostra saldo da empresa, unidades e receita de raspadinhas, stock por tipo, jackpots, vendas por jogo, vendas dos últimos sete dias, movimentos recentes e a faturação semanal de cada NPC configurado. Importe novamente `sql.sql` após atualizar para criar a tabela `cj_store_stock`.
 
 ## Euromilhões
 

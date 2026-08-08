@@ -173,6 +173,8 @@ function renderOwnerAnalytics(data) {
     <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_purchase$/, '').replace(/_/g, ' '))}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const daily = analyticsRows(data.dailySales, 'Sem vendas nos últimos sete dias.', row => `
     <div class="analytics-row"><span>${esc(row.day)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
+  const sellers = analyticsRows(data.sellerSales, 'Sem pontos de venda configurados.', row => `
+    <div class="analytics-row"><span>${esc(row.label)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const transactions = analyticsRows(data.recentTransactions, 'Ainda não existem movimentos.', row => `
     <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_/g, ' '))}</span><strong>${money(row.amount)}</strong></div>`);
 
@@ -188,6 +190,7 @@ function renderOwnerAnalytics(data) {
       <section class="analytics-panel"><h3>Jackpots por sorteio</h3>${jackpots}</section>
       <section class="analytics-panel"><h3>Vendas por jogo</h3>${games}</section>
       <section class="analytics-panel"><h3>Últimos 7 dias</h3>${daily}</section>
+      <section class="analytics-panel analytics-wide"><h3>Faturação semanal por NPC</h3>${sellers}</section>
       <section class="analytics-panel analytics-wide"><h3>Movimentos recentes</h3>${transactions}</section>
     </div>`;
 }

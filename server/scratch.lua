@@ -24,6 +24,11 @@ CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
         CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error')
         return
     end
+    local sellerMetadata = CJ.Company.GetSellerMetadata(source)
+    if not sellerMetadata then
+        CJ.Framework.Notify(source, 'Dirige-te a um ponto de venda para comprar.', 'error')
+        return
+    end
     local card = Config.ScratchCards[cardId]
     if not card then
         CJ.Security.Reject(source, 'cj:server:purchaseScratch', 'raspadinha inválida')
@@ -51,7 +56,7 @@ CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
     end
 
     local citizenId = CJ.Framework.GetCitizenId(source)
-    if not CJ.Finance.Credit(card.price, citizenId, 'scratch_purchase') then
+    if not CJ.Finance.Credit(card.price, citizenId, 'scratch_purchase', sellerMetadata) then
         CJ.Stock.Add(cardId, 1)
         CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
