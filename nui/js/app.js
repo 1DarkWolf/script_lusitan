@@ -4,6 +4,9 @@ const context = canvas.getContext('2d', { willReadFrequently: true });
 const status = document.getElementById('status');
 const prize = document.getElementById('prize');
 const finish = document.getElementById('finish');
+const scratchTicket = document.getElementById('scratch-ticket');
+const scratchTicketImage = document.getElementById('scratch-ticket-image');
+const scratchArea = document.getElementById('scratch-area');
 const ticketCard = document.getElementById('ticket-card');
 const ticketTitle = document.getElementById('ticket-title');
 const ticketId = document.getElementById('ticket-id');
@@ -12,6 +15,14 @@ const ownerDashboard = document.getElementById('owner-dashboard');
 const ownerContent = document.getElementById('owner-content');
 let drawing = false;
 let completed = false;
+let activeScratchLayout;
+
+const scratchLayouts = Object.freeze({
+  bronze: { image: 'img/scratch_bronze.png', left: '27.5%', top: '62.8%', width: '44.7%', height: '16.3%', cover: '#a58958' },
+  silver: { image: 'img/scratch_silver.png', left: '32.1%', top: '55.1%', width: '35.0%', height: '15.4%', cover: '#aeb6c0' },
+  gold: { image: 'img/scratch_gold.png', left: '32.2%', top: '79.7%', width: '35.2%', height: '7.4%', cover: '#b5b4ad' },
+  diamond: { image: 'img/scratch_diamond.png', left: '28.3%', top: '65.6%', width: '43.5%', height: '15.5%', cover: '#b8bec5' }
+});
 
 const post = (name, data = {}) => fetch(`https://${GetParentResourceName()}/${name}`, {
   method: 'POST', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(data)
@@ -59,11 +70,25 @@ function paintCover() {
   canvas.width = Math.floor(bounds.width);
   canvas.height = Math.floor(bounds.height);
   context.globalCompositeOperation = 'source-over';
-  context.fillStyle = '#d3a62f';
+  context.fillStyle = activeScratchLayout?.cover || '#b5b4ad';
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.fillStyle = 'rgba(255,255,255,.26)';
-  for (let x = -canvas.height; x < canvas.width; x += 16) context.fillRect(x, 0, 7, canvas.height);
+  for (let x = -canvas.height; x < canvas.width; x += 14) context.fillRect(x, 0, 5, canvas.height);
   context.globalCompositeOperation = 'destination-out';
+}
+
+function setScratchLayout(card = {}) {
+  const cardId = scratchLayouts[card.id] ? card.id : 'bronze';
+  activeScratchLayout = scratchLayouts[cardId];
+  scratchTicket.dataset.card = cardId;
+  scratchTicketImage.src = activeScratchLayout.image;
+  scratchTicketImage.alt = card.label || 'Raspadinha';
+  Object.assign(scratchArea.style, {
+    left: activeScratchLayout.left,
+    top: activeScratchLayout.top,
+    width: activeScratchLayout.width,
+    height: activeScratchLayout.height
+  });
 }
 
 function requestScratchResult() {
@@ -131,13 +156,15 @@ window.addEventListener('message', ({ data }) => {
   }
   if (data.action === 'openScratch') {
     document.body.classList.add('cj-visible');
-    document.getElementById('card-title').textContent = data.card.label;
+    setScratchLayout(data.card || {});
     prize.textContent = '?';
     status.textContent = 'Mantém premido e raspa.';
     finish.classList.add('hidden');
     completed = false;
     app.classList.remove('hidden');
-    requestAnimationFrame(paintCover);
+    const paintWhenReady = () => requestAnimationFrame(paintCover);
+    if (scratchTicketImage.complete && scratchTicketImage.naturalWidth) paintWhenReady();
+    else scratchTicketImage.addEventListener('load', paintWhenReady, { once: true });
   }
   if (data.action === 'scratchResult') {
     prize.textContent = data.prize > 0 ? `€${data.prize}` : 'Sem prémio';

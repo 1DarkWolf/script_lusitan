@@ -92,19 +92,24 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .ticket-note { margin: 20px 0 0; color: #b5c2dc; font-size: 13px; line-height: 1.45; }
 .scratch-card {
   position: relative;
-  width: min(440px, 90vw);
-  padding: 28px;
-  border: 1px solid rgba(255, 205, 82, .72);
-  border-radius: 20px;
-  background: linear-gradient(135deg, #142647, #0a1020);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .48);
+  display: grid;
+  width: min(460px, 90vw, 50vh);
+  justify-items: center;
+  padding: 12px 12px 16px;
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 18px;
+  background: rgba(5, 10, 19, .84);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .58);
   text-align: center;
 }
-#close { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: #fff; font-size: 28px; cursor: pointer; }
+#close { position: absolute; z-index: 3; right: 15px; top: 12px; width: 32px; height: 32px; border: 1px solid rgba(255, 255, 255, .32); border-radius: 50%; background: rgba(5, 10, 19, .72); color: #fff; font-size: 24px; line-height: 1; cursor: pointer; }
 .eyebrow { margin: 0; color: #ffd75c; font-size: 12px; font-weight: 800; letter-spacing: .16em; }
 h1 { margin: 8px 0; font-size: 28px; }
 .instruction, .status { color: #b5c2dc; font-size: 14px; }
-.scratch-area { position: relative; height: 190px; overflow: hidden; border-radius: 12px; background: radial-gradient(circle, #293a62, #18233c); }
-.prize { display: grid; height: 100%; place-items: center; color: #ffd75c; font-size: 52px; font-weight: 800; text-shadow: 0 2px 10px #000; }
+.scratch-ticket { position: relative; width: 100%; line-height: 0; }
+#scratch-ticket-image { display: block; width: 100%; height: auto; user-select: none; pointer-events: none; }
+.scratch-area { position: absolute; overflow: hidden; border-radius: 4%; background: #102039; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .18); }
+.prize { display: grid; width: 100%; height: 100%; place-items: center; box-sizing: border-box; padding: 6px; background: radial-gradient(circle at 50% 25%, #29496f, #101927 74%); color: #fff; font-size: clamp(15px, 6vw, 34px); font-weight: 900; line-height: 1; text-shadow: 0 2px 5px #000; }
 #scratch-canvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; }
-#finish { width: 100%; margin-top: 10px; border: 0; border-radius: 8px; padding: 12px; background: #f3be30; color: #111; font-weight: 800; cursor: pointer; }
+.scratch-status { min-height: 20px; margin: 4px 0 0; color: #d3deed; font-size: 13px; line-height: 1.35; }
+#finish { width: min(300px, 100%); margin-top: 7px; border: 0; border-radius: 8px; padding: 12px; background: #f3be30; color: #111; font-weight: 800; cursor: pointer; }

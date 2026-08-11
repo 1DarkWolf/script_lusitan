@@ -54,14 +54,14 @@
     <main id="scratch-app" class="hidden">
       <section class="scratch-card" aria-label="Raspadinha">
         <button id="close" type="button" aria-label="Fechar">×</button>
-        <p class="eyebrow">CENTRO DE JOGOS</p>
-        <h1 id="card-title">Raspadinha</h1>
-        <p class="instruction">Raspa a área dourada para revelar o teu prémio.</p>
-        <div id="scratch-area" class="scratch-area">
-          <div id="prize" class="prize">?</div>
-          <canvas id="scratch-canvas"></canvas>
+        <div id="scratch-ticket" class="scratch-ticket" data-card="bronze">
+          <img id="scratch-ticket-image" src="img/scratch_bronze.png" alt="Raspadinha Bronze">
+          <div id="scratch-area" class="scratch-area" aria-label="Área para raspar">
+            <div id="prize" class="prize">?</div>
+            <canvas id="scratch-canvas"></canvas>
+          </div>
         </div>
-        <p id="status" class="status">Mantém premido e raspa.</p>
+        <p id="status" class="scratch-status">Mantém premido e raspa a zona prateada.</p>
         <button id="finish" class="hidden" type="button">Concluir</button>
       </section>
     </main>
