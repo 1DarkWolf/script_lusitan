@@ -150,18 +150,18 @@ Config.Jackpot = {
 }
 
 Config.ScratchCards = {
-    -- Os pesos de cada categoria somam 10.000. O retorno médio é 62% do preço,
-    -- deixando uma margem esperada de 38% para a empresa no longo prazo.
+    -- Os pesos de cada categoria somam 10.000. O retorno médio é 55% do preço,
+    -- deixando uma margem esperada de 45% para a empresa no longo prazo.
     bronze = {
         label = 'Raspadinha Bronze',
         price = 100,
         prizes = {
-            { weight = 4700, amount = 0 },
+            { weight = 5045, amount = 0 },
             { weight = 2700, amount = 50 },
-            { weight = 1600, amount = 100 },
-            { weight = 700, amount = 200 },
-            { weight = 250, amount = 500 },
-            { weight = 45, amount = 1000 },
+            { weight = 1500, amount = 100 },
+            { weight = 500, amount = 200 },
+            { weight = 200, amount = 500 },
+            { weight = 50, amount = 1000 },
             { weight = 5, amount = 3000 }
         }
     },
@@ -169,12 +169,12 @@ Config.ScratchCards = {
         label = 'Raspadinha Prata',
         price = 500,
         prizes = {
-            { weight = 4700, amount = 0 },
+            { weight = 5045, amount = 0 },
             { weight = 2700, amount = 250 },
-            { weight = 1600, amount = 500 },
-            { weight = 700, amount = 1000 },
-            { weight = 250, amount = 2500 },
-            { weight = 45, amount = 5000 },
+            { weight = 1500, amount = 500 },
+            { weight = 500, amount = 1000 },
+            { weight = 200, amount = 2500 },
+            { weight = 50, amount = 5000 },
             { weight = 5, amount = 15000 }
         }
     },
@@ -182,12 +182,12 @@ Config.ScratchCards = {
         label = 'Raspadinha Ouro',
         price = 1000,
         prizes = {
-            { weight = 4700, amount = 0 },
+            { weight = 5045, amount = 0 },
             { weight = 2700, amount = 500 },
-            { weight = 1600, amount = 1000 },
-            { weight = 700, amount = 2000 },
-            { weight = 250, amount = 5000 },
-            { weight = 45, amount = 10000 },
+            { weight = 1500, amount = 1000 },
+            { weight = 500, amount = 2000 },
+            { weight = 200, amount = 5000 },
+            { weight = 50, amount = 10000 },
             { weight = 5, amount = 30000 }
         }
     },
@@ -195,12 +195,12 @@ Config.ScratchCards = {
         label = 'Raspadinha Diamante',
         price = 3000,
         prizes = {
-            { weight = 4700, amount = 0 },
+            { weight = 5045, amount = 0 },
             { weight = 2700, amount = 1500 },
-            { weight = 1600, amount = 3000 },
-            { weight = 700, amount = 6000 },
-            { weight = 250, amount = 15000 },
-            { weight = 45, amount = 30000 },
+            { weight = 1500, amount = 3000 },
+            { weight = 500, amount = 6000 },
+            { weight = 200, amount = 15000 },
+            { weight = 50, amount = 30000 },
             { weight = 5, amount = 90000 }
         }
     }
