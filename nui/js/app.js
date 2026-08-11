@@ -183,9 +183,18 @@ window.addEventListener('message', ({ data }) => {
     else scratchTicketImage.addEventListener('load', paintWhenReady, { once: true });
   }
   if (data.action === 'scratchResult') {
+    if (data.error) {
+      prize.textContent = '—';
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      status.textContent = data.error;
+      finish.classList.remove('hidden');
+      return;
+    }
     prize.textContent = data.prize > 0 ? `€${data.prize}` : 'Sem prémio';
     context.clearRect(0, 0, canvas.width, canvas.height);
-    status.textContent = data.prize > 0 ? 'Parabéns! O prémio foi pago.' : 'Mais sorte na próxima.';
+    status.textContent = data.pendingApproval
+      ? 'Prémio pendente de validação. Recebeste um recibo no inventário.'
+      : data.prize > 0 ? 'Parabéns! O prémio foi pago.' : 'Mais sorte na próxima.';
     finish.classList.remove('hidden');
   }
 });

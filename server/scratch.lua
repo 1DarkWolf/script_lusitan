@@ -145,12 +145,24 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
             return
         end
 
-        if not CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, prize) then
+        local receiptIssued, receiptFailure = CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, prize)
+        if not receiptIssued then
+            local receiptMessage = receiptFailure == 'missing_item'
+                and 'O recibo de prémio não está configurado no inventário. Contacta a administração.'
+                or 'Não foi possível entregar o recibo. Liberta espaço no inventário e tenta novamente.'
             if CJ.Prizes.CancelPending(claimId, citizenId) then
                 CJ.Tickets.Restore(source, consumed)
-                CJ.Framework.Notify(source, 'Não foi possível entregar o recibo. Liberta espaço no inventário e tenta novamente.', 'error')
+                CJ.Framework.Notify(source, receiptMessage, 'error')
+                TriggerClientEvent('cj:client:scratchResult', source, {
+                    error = ('%s O bilhete foi devolvido ao teu inventário.'):format(receiptMessage),
+                    ticketRestored = true
+                })
             else
                 CJ.Framework.Notify(source, 'O prémio ficou pendente, mas não foi possível entregar o recibo. Contacta um trabalhador.', 'error')
+                TriggerClientEvent('cj:client:scratchResult', source, {
+                    error = 'O prémio ficou pendente. Contacta um trabalhador para validação.',
+                    pendingApproval = true
+                })
             end
             CJ.Log.Write('error', ('Falha ao entregar recibo do prémio pendente da raspadinha %s.'):format(ticketId))
             return
@@ -162,6 +174,9 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         CJ.Prizes.LogWin(source, prize, card.label, ticket.ticket_id)
     end
     CJ.Framework.Notify(source, prize > 0 and ('Ganhaste €%s!'):format(prize) or 'Não tiveste prémio desta vez.', prize > 0 and 'success' or 'error')
-    TriggerClientEvent('cj:client:scratchResult', source, { prize = prize })
+    TriggerClientEvent('cj:client:scratchResult', source, {
+        prize = prize,
+        pendingApproval = prize > Config.AutoPayLimit
+    })
     CJ.Log.Discord('purchases', 'Raspadinha revelada', ('%s revelou uma raspadinha: €%s.'):format(GetPlayerName(source), prize))
 end)

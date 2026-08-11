@@ -17,6 +17,12 @@ if IsDuplicityVersion() then
         return player and player.PlayerData.citizenid or nil
     end
 
+    ---@param itemName string
+    ---@return boolean
+    function CJ.Framework.IsItemRegistered(itemName)
+        return type(itemName) == 'string' and QBCore.Shared and QBCore.Shared.Items and QBCore.Shared.Items[itemName] ~= nil or false
+    end
+
     ---@param source number
     ---@param moneyType? string
     ---@return number

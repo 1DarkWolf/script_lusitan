@@ -63,7 +63,16 @@ RegisterNetEvent('cj:client:scratchResult', function(result)
         return
     end
 
-    SendNUIMessage({ action = 'scratchResult', prize = result.prize })
+    if result.ticketRestored then
+        redemptionRequested = false
+    end
+
+    SendNUIMessage({
+        action = 'scratchResult',
+        prize = result.prize,
+        pendingApproval = result.pendingApproval == true,
+        error = result.error
+    })
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)

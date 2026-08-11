@@ -24,11 +24,16 @@ end
 ---@param ticket table
 ---@param card table
 ---@param amount number
----@return boolean
+---@return boolean, 'missing_item'|'inventory_full'|'unavailable'|nil
 function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
     local player = CJ.Framework.GetPlayer(source)
     if not player or not ticket or not card or not Config.ScratchPrizeReceiptItem then
-        return false
+        return false, 'unavailable'
+    end
+
+    if not CJ.Framework.IsItemRegistered(Config.ScratchPrizeReceiptItem) then
+        CJ.Log.Write('error', ('O item %s não está registado no QBCore.'):format(Config.ScratchPrizeReceiptItem))
+        return false, 'missing_item'
     end
 
     local ticketId = ticket.ticket_id or 'N/D'
@@ -40,7 +45,8 @@ function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
         description = ('Prémio pendente de €%s — %s #%s'):format(amount, card.label or 'Raspadinha', ticketId:sub(1, 8))
     }
 
-    return player.Functions.AddItem(Config.ScratchPrizeReceiptItem, 1, false, metadata, 'centrojogos-scratch-prize-receipt') == true
+    local added = player.Functions.AddItem(Config.ScratchPrizeReceiptItem, 1, false, metadata, 'centrojogos-scratch-prize-receipt') == true
+    return added, added and nil or 'inventory_full'
 end
 
 ---@param source number
