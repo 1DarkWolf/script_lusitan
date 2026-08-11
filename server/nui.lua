@@ -1,6 +1,10 @@
 CJ = CJ or {}
 
 CJ.Callbacks.Register('cj:server:getPlayerTickets', function(source)
+    if not CJ.Company.IsEmployee(source) then
+        return {}
+    end
+
     local citizenId = CJ.Framework.GetCitizenId(source)
     local rows = CJ.Database.Query([[SELECT `ticket_id`, `ticket_type`, `payload`, `status`, `created_at`
         FROM `cj_tickets` WHERE `owner_citizenid` = ? ORDER BY `created_at` DESC LIMIT 30]], { citizenId }) or {}

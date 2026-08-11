@@ -16,7 +16,12 @@ end)
 RegisterNetEvent('cj:client:openDashboard', function()
     dashboardOpen = true
     SetNuiFocus(true, true)
-    SendNUIMessage({ action = 'openDashboard', canViewCompany = isCompanyEmployee() })
+    local isEmployee = isCompanyEmployee()
+    SendNUIMessage({
+        action = 'openDashboard',
+        canViewCompany = isEmployee,
+        canViewTickets = isEmployee
+    })
 end)
 
 RegisterNUICallback('loadDashboard', function(data, callback)

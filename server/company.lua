@@ -70,6 +70,14 @@ end
 
 ---@param source number
 ---@return boolean
+function CJ.Company.IsEmployee(source)
+    local player = CJ.Framework.GetPlayer(source)
+    local job = player and player.PlayerData.job
+    return job and job.name == Config.CompanyJob or false
+end
+
+---@param source number
+---@return boolean
 function CJ.Company.IsBoss(source)
     local player = CJ.Framework.GetPlayer(source)
     local job = player and player.PlayerData.job
