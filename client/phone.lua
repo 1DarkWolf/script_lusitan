@@ -1,11 +1,10 @@
 CJ = CJ or {}
 
-CreateThread(function()
-    while GetResourceState('lb-phone') ~= 'started' do
-        Wait(500)
+local function registerResultsApp()
+    if GetResourceState('lb-phone') ~= 'started' then
+        return
     end
 
-    Wait(500)
     local resourceName = GetCurrentResourceName()
     local success, reason = exports['lb-phone']:AddCustomApp({
         identifier = Config.LBPhone.appIdentifier,
@@ -13,7 +12,7 @@ CreateThread(function()
         description = Config.LBPhone.appDescription,
         developer = Config.CompanyName,
         defaultApp = true,
-        ui = 'phone/index.html',
+        ui = ('%s/phone/index.html'):format(resourceName),
         icon = ('https://cfx-nui-%s/%s'):format(resourceName, Config.LBPhone.appIcon),
         fixBlur = true
     })
@@ -21,6 +20,23 @@ CreateThread(function()
     if not success then
         CJ.Utils.Debug(('Não foi possível registar a app LB Phone: %s'):format(reason or 'erro desconhecido'))
     end
+end
+
+CreateThread(function()
+    while GetResourceState('lb-phone') ~= 'started' do
+        Wait(500)
+    end
+
+    Wait(500)
+    registerResultsApp()
+end)
+
+AddEventHandler('onResourceStart', function(resourceName)
+    if resourceName ~= 'lb-phone' then return end
+    CreateThread(function()
+        Wait(500)
+        registerResultsApp()
+    end)
 end)
 
 RegisterNUICallback('getLotteryResults', function(_, callback)

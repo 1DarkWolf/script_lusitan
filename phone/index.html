@@ -3,20 +3,46 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#091426">
     <link rel="stylesheet" href="css/style.css">
-    <title>Resultados</title>
+    <title>Centro de Jogos — Resultados</title>
   </head>
   <body>
-    <main>
-      <header>
-        <div>
-          <p>CENTRO DE JOGOS</p>
-          <h1>Resultados</h1>
+    <main class="app-shell">
+      <header class="app-header">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">CJ</span>
+          <div>
+            <p class="eyebrow">CENTRO DE JOGOS</p>
+            <h1>Resultados</h1>
+          </div>
         </div>
-        <button id="refresh" type="button" aria-label="Atualizar resultados">↻</button>
+        <button id="refresh" class="refresh-button" type="button" aria-label="Atualizar resultados" title="Atualizar resultados">
+          <span aria-hidden="true">↻</span>
+        </button>
       </header>
-      <p class="intro">Confirma os números vencedores e apresenta o teu bilhete no balcão.</p>
-      <section id="results" aria-live="polite"></section>
+
+      <section class="hero-card" aria-label="Informação">
+        <p class="hero-kicker">SORTEIOS OFICIAIS</p>
+        <h2>Confirma os números vencedores.</h2>
+        <p>Consulta os últimos resultados e apresenta o teu bilhete num balcão Centro de Jogos para levantar um prémio.</p>
+      </section>
+
+      <section class="results-section" aria-labelledby="results-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ATUALIZADO NO TELEFONE</p>
+            <h2 id="results-heading">Últimos resultados</h2>
+          </div>
+          <span id="result-count" class="result-count">—</span>
+        </div>
+        <div id="results" class="results-list" aria-live="polite">
+          <div class="loading-card">
+            <span class="loading-dot" aria-hidden="true"></span>
+            <p>A carregar resultados...</p>
+          </div>
+        </div>
+      </section>
     </main>
     <script src="js/app.js"></script>
   </body>
