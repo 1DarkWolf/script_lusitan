@@ -24,7 +24,7 @@ end
 ---@param ticket table
 ---@param card table
 ---@param amount number
----@return boolean, 'missing_item'|'inventory_full'|'unavailable'|nil
+---@return boolean, string|nil
 function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
     local player = CJ.Framework.GetPlayer(source)
     if not player or not ticket or not card or not Config.ScratchPrizeReceiptItem then
@@ -34,6 +34,17 @@ function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
     if not CJ.Framework.IsItemRegistered(Config.ScratchPrizeReceiptItem) then
         CJ.Log.Write('error', ('O item %s não está registado no QBCore.'):format(Config.ScratchPrizeReceiptItem))
         return false, 'missing_item'
+    end
+
+    if GetResourceState('qb-inventory') == 'started' then
+        local canAdd, reason = exports['qb-inventory']:CanAddItem(source, Config.ScratchPrizeReceiptItem, 1)
+        if not canAdd then
+            CJ.Log.Write('error', ('O qb-inventory recusou o recibo %s: %s.'):format(
+                Config.ScratchPrizeReceiptItem,
+                tostring(reason or 'motivo desconhecido')
+            ))
+            return false, 'inventory_' .. tostring(reason or 'rejected')
+        end
     end
 
     local ticketId = ticket.ticket_id or 'N/D'
@@ -46,7 +57,14 @@ function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
     }
 
     local added = player.Functions.AddItem(Config.ScratchPrizeReceiptItem, 1, false, metadata, 'centrojogos-scratch-prize-receipt') == true
-    return added, added and nil or 'inventory_full'
+    if not added then
+        CJ.Log.Write('error', ('O qb-inventory recusou adicionar o recibo %s apesar da pré-validação.'):format(
+            Config.ScratchPrizeReceiptItem
+        ))
+        return false, 'inventory_rejected'
+    end
+
+    return true
 end
 
 ---@param source number

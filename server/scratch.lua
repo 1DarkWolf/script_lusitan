@@ -149,7 +149,9 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         if not receiptIssued then
             local receiptMessage = receiptFailure == 'missing_item'
                 and 'O recibo de prémio não está configurado no inventário. Contacta a administração.'
-                or 'Não foi possível entregar o recibo. Liberta espaço no inventário e tenta novamente.'
+                or receiptFailure:sub(1, 10) == 'inventory_'
+                    and 'O inventário recusou o recibo. Confirma a configuração do item e reinicia o qb-core.'
+                    or 'Não foi possível entregar o recibo. Tenta novamente.'
             if CJ.Prizes.CancelPending(claimId, citizenId) then
                 CJ.Tickets.Restore(source, consumed)
                 CJ.Framework.Notify(source, receiptMessage, 'error')
