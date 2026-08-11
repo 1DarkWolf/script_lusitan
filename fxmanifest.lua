@@ -76,6 +76,7 @@ files {
     'nui/js/*.js',
     'nui/img/*.*',
     'nui/sounds/*.*',
+    'docs/item-images/*.png',
     'phone/index.html',
     'phone/css/*.css',
     'phone/js/*.js',

@@ -8,6 +8,8 @@ const scratchTicket = document.getElementById('scratch-ticket');
 const scratchTicketImage = document.getElementById('scratch-ticket-image');
 const scratchArea = document.getElementById('scratch-area');
 const ticketCard = document.getElementById('ticket-card');
+const ticketVisual = document.getElementById('ticket-visual');
+const ticketImage = document.getElementById('ticket-image');
 const ticketTitle = document.getElementById('ticket-title');
 const ticketId = document.getElementById('ticket-id');
 const ticketDetails = document.getElementById('ticket-details');
@@ -24,6 +26,16 @@ const scratchLayouts = Object.freeze({
   diamond: { image: 'img/scratch_diamond.png', left: '28.3%', top: '65.6%', width: '43.5%', height: '15.5%', cover: '#b8bec5' }
 });
 
+const lotteryTicketImages = Object.freeze({
+  euromillions: '../docs/item-images/euromillions_ticket.png',
+  totoloto: '../docs/item-images/totoloto_ticket.png',
+  eurodreams: '../docs/item-images/eurodreams_ticket.png',
+  joker: '../docs/item-images/joker_ticket.png',
+  classic: '../docs/item-images/lottery_classic_ticket.png',
+  popular: '../docs/item-images/lottery_popular_ticket.png',
+  instant: '../docs/item-images/lottery_instant_ticket.png'
+});
+
 const post = (name, data = {}) => fetch(`https://${GetParentResourceName()}/${name}`, {
   method: 'POST', headers: { 'Content-Type': 'application/json; charset=UTF-8' }, body: JSON.stringify(data)
 });
@@ -38,6 +50,9 @@ function showTicketCard(ticket) {
   const rows = [];
   ticketTitle.textContent = ticket.label || 'Bilhete de lotaria';
   ticketId.textContent = `Bilhete #${String(ticket.ticketId || '').slice(0, 8)}`;
+  ticketVisual.dataset.game = game || '';
+  ticketImage.src = lotteryTicketImages[game] || '../docs/item-images/euromillions_ticket.png';
+  ticketImage.alt = ticket.label || 'Bilhete de lotaria';
 
   if (game === 'euromillions') {
     rows.push(ticketRow('Números', values(payload.numbers)));
