@@ -181,6 +181,48 @@ const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;'
 
 const money = value => `€${Number(value || 0).toLocaleString('pt-PT')}`;
 
+const gameSaleLabels = Object.freeze({
+  scratch: 'Raspadinhas',
+  euromillions: 'Euromilhões',
+  totoloto: 'Totoloto',
+  eurodreams: 'EuroDreams',
+  joker: 'Joker',
+  classic: 'Lotaria Clássica',
+  popular: 'Lotaria Popular',
+  instant: 'Lotaria Instantânea'
+});
+
+const transactionLabels = Object.freeze({
+  scratch_purchase: 'Compra de raspadinha',
+  scratch_prize: 'Prémio de raspadinha',
+  scratch_issue_reversal: 'Reversão de emissão de raspadinha',
+  scratch_prize_reversal: 'Reversão de prémio de raspadinha',
+  euromillions_purchase: 'Compra de Euromilhões',
+  euromillions_issue_reversal: 'Reversão de emissão de Euromilhões',
+  totoloto_purchase: 'Compra de Totoloto',
+  totoloto_issue_reversal: 'Reversão de emissão de Totoloto',
+  eurodreams_purchase: 'Compra de EuroDreams',
+  eurodreams_issue_reversal: 'Reversão de emissão de EuroDreams',
+  joker_purchase: 'Compra de Joker',
+  joker_issue_reversal: 'Reversão de emissão de Joker',
+  classic_purchase: 'Compra de Lotaria Clássica',
+  classic_issue_reversal: 'Reversão de emissão de Lotaria Clássica',
+  popular_purchase: 'Compra de Lotaria Popular',
+  popular_issue_reversal: 'Reversão de emissão de Lotaria Popular',
+  instant_purchase: 'Compra de Lotaria Instantânea',
+  instant_issue_reversal: 'Reversão de emissão de Lotaria Instantânea',
+  scratch_restock: 'Reposição de stock de raspadinhas',
+  boss_deposit: 'Depósito do patrão',
+  boss_withdrawal: 'Levantamento do patrão',
+  withdrawal_reversal: 'Reversão de levantamento',
+  admin_credit: 'Crédito administrativo',
+  prize_claim_payout: 'Pagamento de prémio validado',
+  prize_claim_reversal: 'Reversão de prémio validado'
+});
+
+const translatedGameSale = type => gameSaleLabels[String(type || '').replace(/_purchase$/, '')] || String(type || '').replace(/_/g, ' ');
+const translatedTransaction = type => transactionLabels[type] || String(type || '').replace(/_/g, ' ');
+
 const shopProducts = [
   { id: 'scratch', category: 'JOGO INSTANTÂNEO', title: 'Raspadinhas', text: 'Revela o prémio no momento. Há quatro categorias disponíveis.', icon: '✦', tone: 'gold' },
   { id: 'euromillions', category: 'SORTEIOS', title: 'Euromilhões', text: 'Escolhe a chave ou deixa a sorte decidir por ti.', icon: '★', tone: 'blue' },
@@ -206,13 +248,13 @@ function renderOwnerAnalytics(data) {
   const jackpots = analyticsRows(data.jackpots, 'Sem jackpots registados.', row => `
     <div class="analytics-row"><span>${esc(row.name)}</span><strong>${money(row.amount)}</strong></div>`);
   const games = analyticsRows(data.gameSales, 'Ainda não existem vendas.', row => `
-    <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_purchase$/, '').replace(/_/g, ' '))}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
+    <div class="analytics-row"><span>${esc(translatedGameSale(row.type))}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const daily = analyticsRows(data.dailySales, 'Sem vendas nos últimos sete dias.', row => `
     <div class="analytics-row"><span>${esc(row.day)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const sellers = analyticsRows(data.sellerSales, 'Sem pontos de venda configurados.', row => `
     <div class="analytics-row"><span>${esc(row.label)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const transactions = analyticsRows(data.recentTransactions, 'Ainda não existem movimentos.', row => `
-    <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_/g, ' '))}</span><strong>${money(row.amount)}</strong></div>`);
+    <div class="analytics-row"><span>${esc(translatedTransaction(row.type))}</span><strong>${money(row.amount)}</strong></div>`);
   const stockOptions = (data.scratch?.stock || []).map(row => `<option value="${esc(row.cardId)}">${esc(row.label)} — stock atual: ${Number(row.quantity || 0)}</option>`).join('');
 
   ownerContent.innerHTML = `

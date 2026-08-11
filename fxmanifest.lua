@@ -58,6 +58,7 @@ server_scripts {
     'server/jackpot.lua',
     'server/phone.lua',
     'server/analytics.lua',
+    'server/weekly_sales_report.lua',
     'server/scratch.lua',
     'games/euromillions/server.lua',
     'games/totoloto/server.lua',

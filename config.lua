@@ -69,6 +69,15 @@ Config.Sellers = {
     -- }
 }
 
+-- No Lua, domingo corresponde a 1 em os.date('*t').wday. O relatório é enviado
+-- uma vez por semana e o respetivo estado mantém-se mesmo após reinícios.
+Config.WeeklySalesReport = {
+    enabled = true,
+    day = 1,
+    hour = 23,
+    minute = 5
+}
+
 Config.OwnerDashboard = {
     Npc = {
         model = 'a_m_y_business_01',
@@ -292,5 +301,6 @@ Config.Webhooks = {
     jackpots = '',
     employees = '',
     admin = '',
-    security = ''
+    security = '',
+    weekly_sales = ''
 }

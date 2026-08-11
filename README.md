@@ -101,7 +101,7 @@ Chefias do emprego configurado em `Config.CompanyJob` podem consultar o saldo, d
 
 ## Registos
 
-`CJ.Log.Write(nível, mensagem)` escreve no console do servidor. Para Discord, preencha o webhook em `Config.Webhooks` e use `CJ.Log.Discord(canal, título, descrição, campos, cor)`; não é feita qualquer chamada externa quando o webhook estiver vazio.
+`CJ.Log.Write(nível, mensagem)` escreve no console do servidor. Para Discord, preencha o webhook em `Config.Webhooks` e use `CJ.Log.Discord(canal, título, descrição, campos, cor)`; não é feita qualquer chamada externa quando o webhook estiver vazio. O canal `weekly_sales` recebe, por defeito aos domingos às 23:05, um relatório com vendas e faturação de cada NPC configurado em `Config.Sellers`. Altere o horário ou desative-o em `Config.WeeklySalesReport`.
 
 ## Segurança
 
