@@ -276,8 +276,8 @@ Config.Joker = {
 }
 
 Config.Lotteries = {
-    classic = { label = 'Lotaria Clássica', price = 200, schedule = { days = { 1 }, hour = 20, minute = 0 }, maximumNumber = 100000, prize = 8000000 },
-    popular = { label = 'Lotaria Popular', price = 200, schedule = { days = { 4 }, hour = 20, minute = 0 }, maximumNumber = 50000, prize = 4000000 },
+    classic = { label = 'Lotaria Clássica', price = 200, schedule = { days = { 1 }, hour = 20, minute = 0 }, maximumNumber = 100000, prize = 3000000 },
+    popular = { label = 'Lotaria Popular', price = 200, schedule = { days = { 4 }, hour = 20, minute = 0 }, maximumNumber = 50000, prize = 1500000 },
     instant = { label = 'Lotaria Instantânea', price = 200, prizes = { { weight = 8000, amount = 0 }, { weight = 1500, amount = 200 }, { weight = 450, amount = 800 }, { weight = 49, amount = 3000 }, { weight = 1, amount = 20000 } } }
 }
 
