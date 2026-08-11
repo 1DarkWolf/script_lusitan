@@ -109,7 +109,12 @@ Config.UnemployedJob = 'unemployed'
 Config.UnemployedGrade = 0
 
 Config.TicketItems = {
+    -- Mantém o item antigo para raspadinhas já emitidas antes desta atualização.
     scratch = 'scratch_ticket',
+    scratch_bronze = 'scratch_bronze_ticket',
+    scratch_silver = 'scratch_silver_ticket',
+    scratch_gold = 'scratch_gold_ticket',
+    scratch_diamond = 'scratch_diamond_ticket',
     euromillions = 'euromillions_ticket',
     totoloto = 'totoloto_ticket',
     eurodreams = 'eurodreams_ticket',

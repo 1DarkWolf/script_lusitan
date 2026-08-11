@@ -4,6 +4,10 @@ CJ.Tickets = CJ.Tickets or {}
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local function getTicketItemName(ticketType, payload)
+    if ticketType == 'scratch' and type(payload) == 'table' then
+        return Config.TicketItems['scratch_' .. tostring(payload.cardId)] or Config.TicketItems.scratch
+    end
+
     if ticketType == 'draw' and type(payload) == 'table' then
         return Config.TicketItems[payload.game] or Config.TicketItems.legacy_draw
     end

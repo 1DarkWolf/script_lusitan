@@ -1,6 +1,10 @@
 -- Adicione estes itens em qb-core/shared/items.lua e reinicie qb-core.
 -- Todos usam a mesma imagem por defeito; pode criar uma imagem própria para cada jogo se preferir.
 scratch_ticket = { name = 'scratch_ticket', label = 'Raspadinha', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha do Centro de Jogos.' },
+scratch_bronze_ticket = { name = 'scratch_bronze_ticket', label = 'Raspadinha Bronze', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha Bronze do Centro de Jogos.' },
+scratch_silver_ticket = { name = 'scratch_silver_ticket', label = 'Raspadinha Prata', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha Prata do Centro de Jogos.' },
+scratch_gold_ticket = { name = 'scratch_gold_ticket', label = 'Raspadinha Ouro', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha Ouro do Centro de Jogos.' },
+scratch_diamond_ticket = { name = 'scratch_diamond_ticket', label = 'Raspadinha Diamante', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Uma raspadinha Diamante do Centro de Jogos.' },
 
 -- Cartão sem prémio. Será o resultado do futuro crafting e o dono escolhe no painel qual stock quer repor.
 scratch_blank = { name = 'scratch_blank', label = 'Raspadinha em branco', weight = 0, type = 'item', image = 'scratch_ticket.png', unique = false, useable = false, shouldClose = true, description = 'Cartão em branco para reabastecer o stock do Centro de Jogos.' },

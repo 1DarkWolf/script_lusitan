@@ -154,6 +154,15 @@ const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;'
 
 const money = value => `€${Number(value || 0).toLocaleString('pt-PT')}`;
 
+const shopProducts = [
+  { id: 'scratch', category: 'JOGO INSTANTÂNEO', title: 'Raspadinhas', text: 'Revela o prémio no momento. Há quatro categorias disponíveis.', icon: '✦', tone: 'gold' },
+  { id: 'euromillions', category: 'SORTEIOS', title: 'Euromilhões', text: 'Escolhe a chave ou deixa a sorte decidir por ti.', icon: '★', tone: 'blue' },
+  { id: 'totoloto', category: 'SORTEIOS', title: 'Totoloto', text: 'Regista a tua chave para o próximo sorteio.', icon: '●', tone: 'violet' },
+  { id: 'eurodreams', category: 'SORTEIOS', title: 'EuroDreams', text: 'Seis números e um Dream Number para ganhar.', icon: '☾', tone: 'purple' },
+  { id: 'joker', category: 'SORTEIOS', title: 'Joker', text: 'Recebe o teu código de seis dígitos.', icon: '#', tone: 'red' },
+  { id: 'lotteries', category: 'BILHETES', title: 'Lotarias', text: 'Clássica, Popular e Instantânea num só balcão.', icon: '♣', tone: 'green' }
+];
+
 function analyticsRows(rows, emptyText, format) {
   if (!rows || !rows.length) return `<p class="status">${emptyText}</p>`;
   return rows.map(format).join('');
@@ -290,7 +299,19 @@ async function loadOwnerAnalytics() {
 async function showTab(tab) {
   document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
   if (tab === 'buy') {
-    content.innerHTML = `<div class="game-grid">${games.map(([id, label]) => `<button class="game-button" data-game="${id}">${label}</button>`).join('')}</div>`;
+    content.innerHTML = `
+      <section class="shop-hero">
+        <div><p class="eyebrow">PONTO DE VENDA OFICIAL</p><h2>Escolhe o teu próximo jogo</h2><p>Todos os bilhetes ficam guardados no teu inventário para consultares quando quiseres.</p></div>
+        <div class="shop-hero-mark">CJ</div>
+      </section>
+      <div class="shop-catalog">${shopProducts.map(product => `
+        <button class="shop-card ${product.tone}" data-game="${product.id}" type="button">
+          <span class="shop-icon">${product.icon}</span>
+          <span class="shop-category">${product.category}</span>
+          <strong>${product.title}</strong>
+          <small>${product.text}</small>
+          <span class="shop-action">Comprar <b>→</b></span>
+        </button>`).join('')}</div>`;
     content.querySelectorAll('[data-game]').forEach(button => button.onclick = () => post('buyGame', { game: button.dataset.game }));
     return;
   }
