@@ -226,59 +226,59 @@ Config.MaxScratchPurchaseQuantity = 20
 
 Config.Euromillions = {
     label = 'Euromilhões',
-    price = 3,
+    price = 300,
     schedule = { days = { 3, 6 }, hour = 20, minute = 30 },
     prizes = {
-        ['5+2'] = 5000,
-        ['5+1'] = 1000,
-        ['5+0'] = 250,
-        ['4+2'] = 100,
-        ['4+1'] = 50,
-        ['4+0'] = 25,
-        ['3+2'] = 20,
-        ['3+1'] = 10,
-        ['3+0'] = 5,
-        ['2+2'] = 5,
-        ['2+1'] = 3
+        ['5+2'] = 10000000,
+        ['5+1'] = 2000000,
+        ['5+0'] = 500000,
+        ['4+2'] = 200000,
+        ['4+1'] = 75000,
+        ['4+0'] = 25000,
+        ['3+2'] = 10000,
+        ['3+1'] = 5000,
+        ['3+0'] = 3000,
+        ['2+2'] = 5000,
+        ['2+1'] = 4500
     }
 }
 
 Config.Totoloto = {
     label = 'Totoloto',
-    price = 2,
+    price = 200,
     schedule = { days = { 4, 7 }, hour = 20, minute = 30 },
     prizes = {
-        ['5+1'] = 3000,
-        ['5+0'] = 750,
-        ['4+1'] = 150,
-        ['4+0'] = 40,
-        ['3+1'] = 15,
-        ['3+0'] = 5,
-        ['2+1'] = 3
+        ['5+1'] = 5000000,
+        ['5+0'] = 1000000,
+        ['4+1'] = 200000,
+        ['4+0'] = 40000,
+        ['3+1'] = 10000,
+        ['3+0'] = 5000,
+        ['2+1'] = 9000
     }
 }
 
 Config.EuroDreams = {
     label = 'EuroDreams',
-    price = 3,
+    price = 200,
     schedule = { days = {}, hour = 20, minute = 30 },
     prizes = {
-        ['6+1'] = 5000, ['6+0'] = 2000, ['5+1'] = 500, ['5+0'] = 100,
-        ['4+1'] = 40, ['4+0'] = 15, ['3+1'] = 8, ['3+0'] = 3
+        ['6+1'] = 5000000, ['6+0'] = 1000000, ['5+1'] = 300000, ['5+0'] = 75000,
+        ['4+1'] = 20000, ['4+0'] = 8000, ['3+1'] = 3000, ['3+0'] = 1200
     }
 }
 
 Config.Joker = {
     label = 'Joker',
-    price = 1,
+    price = 100,
     schedule = { days = {}, hour = 21, minute = 0 },
-    prizes = { [6] = 1000, [5] = 100, [4] = 15, [3] = 3 }
+    prizes = { [6] = 1000000, [5] = 50000, [4] = 5000, [3] = 2000 }
 }
 
 Config.Lotteries = {
-    classic = { label = 'Lotaria Clássica', price = 5, schedule = { days = { 1 }, hour = 20, minute = 0 }, maximumNumber = 100000, prize = 3000 },
-    popular = { label = 'Lotaria Popular', price = 2, schedule = { days = { 4 }, hour = 20, minute = 0 }, maximumNumber = 50000, prize = 1000 },
-    instant = { label = 'Lotaria Instantânea', price = 2, prizes = { { weight = 8000, amount = 0 }, { weight = 1500, amount = 2 }, { weight = 450, amount = 8 }, { weight = 49, amount = 30 }, { weight = 1, amount = 200 } } }
+    classic = { label = 'Lotaria Clássica', price = 200, schedule = { days = { 1 }, hour = 20, minute = 0 }, maximumNumber = 100000, prize = 8000000 },
+    popular = { label = 'Lotaria Popular', price = 200, schedule = { days = { 4 }, hour = 20, minute = 0 }, maximumNumber = 50000, prize = 4000000 },
+    instant = { label = 'Lotaria Instantânea', price = 200, prizes = { { weight = 8000, amount = 0 }, { weight = 1500, amount = 200 }, { weight = 450, amount = 800 }, { weight = 49, amount = 3000 }, { weight = 1, amount = 20000 } } }
 }
 
 Config.Loyalty = {
