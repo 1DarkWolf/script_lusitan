@@ -81,7 +81,7 @@ Config.WeeklySalesReport = {
 Config.OwnerDashboard = {
     Npc = {
         model = 'a_m_y_business_01',
-        coords = vector4(-44.95, -1758.16, 29.42, 140.0),
+        coords = vector4(-44.5937, -1754.9481, 29.4210, 101.3066),
         scenario = 'WORLD_HUMAN_CLIPBOARD'
     },
     distance = 2.0
