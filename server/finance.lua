@@ -1,9 +1,10 @@
 CJ = CJ or {}
 CJ.Finance = CJ.Finance or {}
 
-local function isValidAmount(amount)
+local function isValidAmount(amount, maximum)
     amount = tonumber(amount)
-    return amount and amount > 0 and amount == math.floor(amount) and amount <= Config.Company.Finance.maxTransaction and amount or nil
+    maximum = maximum or Config.Company.Finance.maxTransaction
+    return amount and amount > 0 and amount == math.floor(amount) and amount <= maximum and amount or nil
 end
 
 local function isNearOwnerDashboard(source)
@@ -19,8 +20,8 @@ end
 ---@param transactionType? string
 ---@param metadata? table
 ---@return boolean
-function CJ.Finance.Credit(amount, citizenId, transactionType, metadata)
-    amount = isValidAmount(amount)
+function CJ.Finance.Credit(amount, citizenId, transactionType, metadata, maximum)
+    amount = isValidAmount(amount, maximum)
     local company = CJ.Company.Get()
 
     if not amount or not company then
@@ -48,8 +49,8 @@ end
 ---@param citizenId? string
 ---@param transactionType? string
 ---@return boolean
-function CJ.Finance.Debit(amount, citizenId, transactionType)
-    amount = isValidAmount(amount)
+function CJ.Finance.Debit(amount, citizenId, transactionType, maximum)
+    amount = isValidAmount(amount, maximum)
     local company = CJ.Company.Get()
 
     if not amount or not company then

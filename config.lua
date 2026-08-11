@@ -11,6 +11,9 @@ Config.CompanyName = 'Centro de Jogos'
 Config.UseTarget = true
 Config.UseOxLibNotifications = true
 Config.AutoPayLimit = 5000
+-- Prémios acima deste valor ficam pendentes para aprovação de um funcionário.
+-- É também o limite máximo que uma raspadinha pode atribuir.
+Config.ScratchMaximumPrize = 90000
 Config.CacheDefaultTtl = 60
 
 Config.Company = {
@@ -40,7 +43,9 @@ Config.Company = {
         distance = 1.5
     },
     Finance = {
-        maxTransaction = 50000
+        maxTransaction = 50000,
+        -- Limite interno para pagamentos de prémios; não altera o limite de levantamentos do patrão.
+        maxPrizeTransaction = 1000000000
     }
 }
 
@@ -145,48 +150,58 @@ Config.Jackpot = {
 }
 
 Config.ScratchCards = {
+    -- Os pesos de cada categoria somam 10.000. O retorno médio é 62% do preço,
+    -- deixando uma margem esperada de 38% para a empresa no longo prazo.
     bronze = {
         label = 'Raspadinha Bronze',
-        price = 2,
+        price = 100,
         prizes = {
-            { weight = 8000, amount = 0 },
-            { weight = 1500, amount = 2 },
-            { weight = 450, amount = 5 },
-            { weight = 49, amount = 20 },
-            { weight = 1, amount = 100 }
+            { weight = 4700, amount = 0 },
+            { weight = 2700, amount = 50 },
+            { weight = 1600, amount = 100 },
+            { weight = 700, amount = 200 },
+            { weight = 250, amount = 500 },
+            { weight = 45, amount = 1000 },
+            { weight = 5, amount = 3000 }
         }
     },
     silver = {
         label = 'Raspadinha Prata',
-        price = 5,
+        price = 500,
         prizes = {
-            { weight = 7700, amount = 0 },
-            { weight = 1800, amount = 5 },
-            { weight = 450, amount = 15 },
-            { weight = 49, amount = 50 },
-            { weight = 1, amount = 250 }
+            { weight = 4700, amount = 0 },
+            { weight = 2700, amount = 250 },
+            { weight = 1600, amount = 500 },
+            { weight = 700, amount = 1000 },
+            { weight = 250, amount = 2500 },
+            { weight = 45, amount = 5000 },
+            { weight = 5, amount = 15000 }
         }
     },
     gold = {
         label = 'Raspadinha Ouro',
-        price = 10,
+        price = 1000,
         prizes = {
-            { weight = 7400, amount = 0 },
-            { weight = 2100, amount = 10 },
-            { weight = 450, amount = 30 },
-            { weight = 49, amount = 100 },
-            { weight = 1, amount = 500 }
+            { weight = 4700, amount = 0 },
+            { weight = 2700, amount = 500 },
+            { weight = 1600, amount = 1000 },
+            { weight = 700, amount = 2000 },
+            { weight = 250, amount = 5000 },
+            { weight = 45, amount = 10000 },
+            { weight = 5, amount = 30000 }
         }
     },
     diamond = {
         label = 'Raspadinha Diamante',
-        price = 20,
+        price = 3000,
         prizes = {
-            { weight = 7000, amount = 0 },
-            { weight = 2500, amount = 20 },
-            { weight = 450, amount = 75 },
-            { weight = 49, amount = 250 },
-            { weight = 1, amount = 1000 }
+            { weight = 4700, amount = 0 },
+            { weight = 2700, amount = 1500 },
+            { weight = 1600, amount = 3000 },
+            { weight = 700, amount = 6000 },
+            { weight = 250, amount = 15000 },
+            { weight = 45, amount = 30000 },
+            { weight = 5, amount = 90000 }
         }
     }
 }

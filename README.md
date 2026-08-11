@@ -43,7 +43,7 @@ Um jogo pode declarar `jackpot = { name = '...', initialAmount = 0 }` ao regista
 
 ## Raspadinhas
 
-As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio determinam a probabilidade e são sorteados no servidor no momento da compra; o cliente só recebe o tipo de raspadinha. Cada categoria emite o seu próprio item (`scratch_bronze_ticket`, `scratch_silver_ticket`, `scratch_gold_ticket` ou `scratch_diamond_ticket`). Configure prémios até `Config.AutoPayLimit` para pagamento imediato.
+As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio determinam a probabilidade e são sorteados no servidor no momento da compra; o cliente só recebe o tipo de raspadinha. Cada categoria emite o seu próprio item (`scratch_bronze_ticket`, `scratch_silver_ticket`, `scratch_gold_ticket` ou `scratch_diamond_ticket`). Por defeito, Bronze, Prata, Ouro e Diamante custam respetivamente €100, €500, €1.000 e €3.000. Os pesos somam 10.000 e produzem um retorno médio de 62%, ou seja, uma margem esperada de 38% para a empresa a longo prazo. Prémios acima de `Config.AutoPayLimit` ficam pendentes para validação; o teto de cada raspadinha é `Config.ScratchMaximumPrize`.
 
 ## Stock e painel de gestão
 

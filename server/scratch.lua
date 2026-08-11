@@ -89,7 +89,7 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
 
     local payload = json.decode(ticket.payload) or {}
     local prize = tonumber(payload.prize)
-    if not prize or prize < 0 or prize > Config.AutoPayLimit then
+    if not prize or prize < 0 or prize > Config.ScratchMaximumPrize then
         CJ.Security.Reject(source, 'cj:server:redeemScratch', 'prémio inválido')
         return
     end
@@ -100,9 +100,25 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         return
     end
 
-    if prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-scratch-prize') then
+    if prize > 0 and prize <= Config.AutoPayLimit then
+        local citizenId = CJ.Framework.GetCitizenId(source)
+        if not CJ.Finance.Debit(prize, citizenId, 'scratch_prize', Config.Company.Finance.maxPrizeTransaction) then
+            CJ.Tickets.Restore(source, consumed)
+            CJ.Framework.Notify(source, 'A empresa não tem saldo disponível para este prémio.', 'error')
+            return
+        end
+
+        if not CJ.Framework.AddMoney(source, prize, 'centrojogos-scratch-prize') then
+            CJ.Finance.Credit(prize, citizenId, 'scratch_prize_reversal', nil, Config.Company.Finance.maxPrizeTransaction)
+            CJ.Tickets.Restore(source, consumed)
+            CJ.Log.Write('error', ('Falha ao pagar raspadinha %s ao jogador %s.'):format(ticketId, source))
+            CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
+            return
+        end
+    elseif prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-scratch-prize') then
+        -- Prémios altos são colocados em cj_prize_claims e descontados da empresa na aprovação.
         CJ.Tickets.Restore(source, consumed)
-        CJ.Log.Write('error', ('Falha ao pagar raspadinha %s ao jogador %s.'):format(ticketId, source))
+        CJ.Log.Write('error', ('Falha ao registar prémio pendente da raspadinha %s.'):format(ticketId))
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
     end

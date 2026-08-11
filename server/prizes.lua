@@ -37,7 +37,13 @@ CJ.Security.RegisterEvent('cj:server:approvePrizeClaim', function(source, claimI
         CJ.Framework.Notify(source, 'O jogador tem de estar online para receber o prémio.', 'error')
         return
     end
-    if not target.Functions.AddMoney(Config.MoneyType, tonumber(claim.amount), 'centrojogos-prize-validation') then
+    local amount = tonumber(claim.amount)
+    if not CJ.Finance.Debit(amount, claim.citizenid, 'prize_claim_payout', Config.Company.Finance.maxPrizeTransaction) then
+        CJ.Framework.Notify(source, 'A empresa não tem saldo suficiente para pagar este prémio.', 'error')
+        return
+    end
+    if not target.Functions.AddMoney(Config.MoneyType, amount, 'centrojogos-prize-validation') then
+        CJ.Finance.Credit(amount, claim.citizenid, 'prize_claim_reversal', nil, Config.Company.Finance.maxPrizeTransaction)
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
     end
