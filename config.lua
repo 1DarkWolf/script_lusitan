@@ -302,12 +302,12 @@ Config.Security = {
 }
 
 Config.Webhooks = {
-    purchases = '',
-    jackpots = '',
-    employees = '',
-    admin = '',
-    security = '',
-    weekly_sales = '',
-    prizes = '',
-    prize_approvals = ''
+    purchases = 'https://discord.com/api/webhooks/1536683519936299048/EiAdFZ7LQ6sxPUsQoabfta0gBUr0cFthvskjIyC9MMuk9MT-08hbMjkyXqRLhS3UKz7D',
+    jackpots = 'https://discord.com/api/webhooks/1536683926624542724/PAAppoFqtpfkd_D5y-GRwRf9Pt2M-_H8VqUR2zCeOZ-6L8kGZ1_vpjbXmOhAFDQMyJ5D',
+    employees = 'https://discord.com/api/webhooks/1536683977128157296/KhOKoo5pdWJWVO-EG6WPoix4QghrlT410LgMgzRA3oouFMoE8FXrd_I4VJltrPsLXt0D',
+    admin = 'https://discord.com/api/webhooks/1536684020585205780/Usb1T5QhEbSdlgDgcQjelCdNLwFxByIzD8eed3PKNd44bcAdtSfj2FH_0PpC5LtEg_N9',
+    security = 'https://discord.com/api/webhooks/1536684071487275060/9QrBth9RCvaF-Z1fW6HN3Z4dE7szRYtVp3iTwLpCnOQ4X7vf3vGIi2_jsdAACR4aECQO',
+    weekly_sales = 'https://discord.com/api/webhooks/1536684115099910174/DQ6Dy6bkTLHkylhvhKsfOhd38aMbIVwzCy5mHE7XJhox6rmEnDEA7_a_4fVlKj-isNo8',
+    prizes = 'https://discord.com/api/webhooks/1536697403409694770/dPhm8RSxwJ3vKDXdNBMMFb1eJAL-lj_fW747yVEsVXsMpN4n4pfJ_NP5rcWGxT17OpVZ',
+    prize_approvals = 'https://discord.com/api/webhooks/1536697363266015253/6ZRVD38a4se5FWJGl01Uy6Yr59ythavtYui_HxQBZLZDPf3GwOtAx8Uh2qsjM-jpx0Q-'
 }
