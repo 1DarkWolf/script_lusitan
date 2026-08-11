@@ -104,6 +104,9 @@ CJ.Security.RegisterEvent('cj:server:checkEuromillionsTicket', function(source, 
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
     end
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, Config.Euromillions.label, ticket.ticket_id)
+    end
 
     CJ.Framework.Notify(source, prize > 0 and ('Tiveste %s números e %s estrelas: ganhaste €%s.'):format(numbers, stars, prize) or 'Não tiveste prémio neste bilhete.', prize > 0 and 'success' or 'error')
 end)

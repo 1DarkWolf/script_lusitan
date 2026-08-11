@@ -43,7 +43,8 @@ CJ.Security.RegisterEvent('cj:server:purchaseLottery', function(source, gameId)
         payload.number = number(lottery.maximumNumber)
         payload.drawKey = CJ.Draws.GetNextDrawKey(gameId)
     end
-    if not CJ.Tickets.Issue(source, 'draw', payload) then
+    local ticket = CJ.Tickets.Issue(source, 'draw', payload)
+    if not ticket then
         CJ.Finance.Debit(lottery.price, citizenId, gameId .. '_issue_reversal')
         CJ.Framework.AddMoney(source, lottery.price, 'centrojogos-lottery-refund')
         return
@@ -75,6 +76,9 @@ CJ.Security.RegisterEvent('cj:server:checkLotteryTicket', function(source, ticke
     if not consumed then return end
     if prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-lottery-prize') then
         CJ.Tickets.Restore(source, consumed); CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error'); return
+    end
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, lottery.label, ticket.ticket_id)
     end
     CJ.Framework.Notify(source, prize > 0 and ('Ganhaste €%s.'):format(prize) or 'Não tiveste prémio neste bilhete.', prize > 0 and 'success' or 'error')
 end)

@@ -113,6 +113,9 @@ CJ.Security.RegisterEvent('cj:server:checkTotolotoTicket', function(source, tick
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
     end
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, Config.Totoloto.label, ticket.ticket_id)
+    end
 
     CJ.Framework.Notify(source, prize > 0 and ('Tiveste %s números certos: ganhaste €%s.'):format(numberMatches, prize) or 'Não tiveste prémio neste bilhete.', prize > 0 and 'success' or 'error')
 end)

@@ -53,7 +53,8 @@ CJ.Security.RegisterEvent('cj:server:purchaseEuroDreams', function(source, selec
         CJ.Framework.AddMoney(source, Config.EuroDreams.price, 'centrojogos-eurodreams-refund')
         return
     end
-    if not CJ.Tickets.Issue(source, 'draw', { game = GAME_ID, drawKey = CJ.Draws.GetNextDrawKey(GAME_ID), numbers = numbers, dreamNumber = dreamNumber }) then
+    local ticket = CJ.Tickets.Issue(source, 'draw', { game = GAME_ID, drawKey = CJ.Draws.GetNextDrawKey(GAME_ID), numbers = numbers, dreamNumber = dreamNumber })
+    if not ticket then
         CJ.Finance.Debit(Config.EuroDreams.price, citizenId, 'eurodreams_issue_reversal')
         CJ.Framework.AddMoney(source, Config.EuroDreams.price, 'centrojogos-eurodreams-refund')
         return
@@ -86,6 +87,9 @@ CJ.Security.RegisterEvent('cj:server:checkEuroDreamsTicket', function(source, ti
     if not consumed then return end
     if prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-eurodreams-prize') then
         CJ.Tickets.Restore(source, consumed); CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error'); return
+    end
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, Config.EuroDreams.label, ticket.ticket_id)
     end
     CJ.Framework.Notify(source, prize > 0 and ('Ganhaste €%s.'):format(prize) or 'Não tiveste prémio neste bilhete.', prize > 0 and 'success' or 'error')
 end)

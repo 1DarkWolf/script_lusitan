@@ -58,5 +58,8 @@ CJ.Security.RegisterEvent('cj:server:checkJokerTicket', function(source, ticketI
     if prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-joker-prize') then
         CJ.Tickets.Restore(source, consumed); CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error'); return
     end
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, Config.Joker.label, ticket.ticket_id)
+    end
     CJ.Framework.Notify(source, prize > 0 and ('Acertaste %s posições: ganhaste €%s.'):format(matches, prize) or 'Não tiveste prémio neste bilhete.', prize > 0 and 'success' or 'error')
 end)

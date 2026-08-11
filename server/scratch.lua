@@ -123,6 +123,9 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         return
     end
 
+    if prize > 0 then
+        CJ.Prizes.LogWin(source, prize, card.label, ticket.ticket_id)
+    end
     CJ.Framework.Notify(source, prize > 0 and ('Ganhaste €%s!'):format(prize) or 'Não tiveste prémio desta vez.', prize > 0 and 'success' or 'error')
     TriggerClientEvent('cj:client:scratchResult', source, { prize = prize })
     CJ.Log.Discord('purchases', 'Raspadinha revelada', ('%s revelou uma raspadinha: €%s.'):format(GetPlayerName(source), prize))

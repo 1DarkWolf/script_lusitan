@@ -302,5 +302,7 @@ Config.Webhooks = {
     employees = '',
     admin = '',
     security = '',
-    weekly_sales = ''
+    weekly_sales = '',
+    prizes = '',
+    prize_approvals = ''
 }
