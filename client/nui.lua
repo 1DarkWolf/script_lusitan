@@ -2,6 +2,12 @@ CJ = CJ or {}
 
 local dashboardOpen = false
 
+local function isCompanyEmployee()
+    local playerData = CJ.Framework.GetPlayerData()
+    local job = playerData and playerData.job
+    return job and job.name == Config.CompanyJob or false
+end
+
 CreateThread(function()
     SetNuiFocus(false, false)
     SendNUIMessage({ action = 'closeAll' })
@@ -10,14 +16,12 @@ end)
 RegisterNetEvent('cj:client:openDashboard', function()
     dashboardOpen = true
     SetNuiFocus(true, true)
-    SendNUIMessage({ action = 'openDashboard' })
+    SendNUIMessage({ action = 'openDashboard', canViewCompany = isCompanyEmployee() })
 end)
 
 RegisterNUICallback('loadDashboard', function(data, callback)
     if data.section == 'tickets' then callback(CJ.Callbacks.Await('cj:server:getPlayerTickets'))
     elseif data.section == 'results' then callback(CJ.Callbacks.Await('cj:server:getRecentResults'))
-    elseif data.section == 'profile' then callback(CJ.Callbacks.Await('cj:server:getLoyaltyProfile'))
-    elseif data.section == 'ranking' then callback(CJ.Callbacks.Await('cj:server:getLoyaltyRanking'))
     elseif data.section == 'company' then callback(CJ.Callbacks.Await('cj:server:getCompanyDashboard'))
     else callback({}) end
 end)

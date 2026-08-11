@@ -146,6 +146,7 @@ window.addEventListener('message', ({ data }) => {
     app.classList.add('hidden');
     ticketCard.classList.add('hidden');
     ownerDashboard.classList.add('hidden');
+    companyTabButton.hidden = data.canViewCompany !== true;
     document.getElementById('dashboard').classList.remove('hidden');
     showTab('buy');
   }
@@ -191,6 +192,7 @@ window.addEventListener('message', ({ data }) => {
 
 const dashboard = document.getElementById('dashboard');
 const content = document.getElementById('dashboard-content');
+const companyTabButton = document.querySelector('.tabs button[data-tab="company"]');
 const games = [['scratch', 'Raspadinhas'], ['euromillions', 'Euromilhões'], ['totoloto', 'Totoloto'], ['eurodreams', 'EuroDreams'], ['joker', 'Joker'], ['lotteries', 'Lotarias']];
 const esc = value => String(value ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
@@ -589,6 +591,7 @@ async function loadOwnerAnalytics() {
 }
 
 async function showTab(tab) {
+  if (tab === 'company' && companyTabButton.hidden) return showTab('buy');
   document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
   if (tab === 'buy') {
     await renderShop();
