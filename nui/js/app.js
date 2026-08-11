@@ -247,6 +247,214 @@ const shopProducts = [
   { id: 'lotteries', category: 'BILHETES', title: 'Lotarias', text: 'Clássica, Popular e Instantânea num só balcão.', icon: '♣', tone: 'green' }
 ];
 
+let shopCatalog;
+
+const parseNumberList = value => (String(value || '').match(/\d+/g) || []).map(Number);
+const shopPrice = value => `€${Number(value || 0).toLocaleString('pt-PT')}`;
+
+async function requestPurchase(callbackName, payload, button, feedback) {
+  button.disabled = true;
+  try {
+    await post(callbackName, payload);
+    feedback.textContent = 'Pedido enviado. Confirma a notificação do servidor.';
+  } catch (_) {
+    feedback.textContent = 'Não foi possível enviar o pedido.';
+  }
+  button.disabled = false;
+}
+
+function renderPurchaseShell(title, text, body) {
+  content.innerHTML = `
+    <section class="purchase-panel">
+      <button id="purchase-back" class="purchase-back" type="button">← Voltar aos jogos</button>
+      <p class="eyebrow">COMPRA DE BILHETE</p>
+      <h2>${escapeHtml(title)}</h2>
+      <p class="purchase-description">${escapeHtml(text)}</p>
+      ${body}
+    </section>`;
+  content.querySelector('#purchase-back').onclick = () => renderShop();
+}
+
+function renderScratchPurchase() {
+  const cards = shopCatalog?.scratchCards || [];
+  if (!cards.length) {
+    renderPurchaseShell('Raspadinhas', 'Não existem raspadinhas configuradas.', '');
+    return;
+  }
+
+  renderPurchaseShell('Raspadinhas', 'Escolhe a categoria e a quantidade. Cada bilhete será adicionado separadamente ao inventário.', `
+    <div class="purchase-form">
+      <label for="scratch-card">Tipo de raspadinha</label>
+      <select id="scratch-card">${cards.map(card => `<option value="${escapeHtml(card.id)}">${escapeHtml(card.label)} — ${shopPrice(card.price)} — stock: ${Number(card.stock || 0)}</option>`).join('')}</select>
+      <label for="scratch-quantity">Quantidade</label>
+      <input id="scratch-quantity" type="number" min="1" max="${Number(shopCatalog.maxScratchQuantity || 20)}" step="1" value="1">
+      <div class="purchase-summary"><span>Total</span><strong id="scratch-total"></strong></div>
+      <button id="purchase-scratch" class="purchase-confirm" type="button">Comprar raspadinhas</button>
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+
+  const select = content.querySelector('#scratch-card');
+  const quantityInput = content.querySelector('#scratch-quantity');
+  const total = content.querySelector('#scratch-total');
+  const feedback = content.querySelector('#purchase-feedback');
+  const button = content.querySelector('#purchase-scratch');
+  const updateTotal = () => {
+    const card = cards.find(item => item.id === select.value) || cards[0];
+    const quantity = Math.max(1, Number(quantityInput.value) || 1);
+    total.textContent = shopPrice(card.price * quantity);
+  };
+  select.onchange = updateTotal;
+  quantityInput.oninput = updateTotal;
+  updateTotal();
+  button.onclick = async () => {
+    const quantity = Number(quantityInput.value);
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > Number(shopCatalog.maxScratchQuantity || 20)) {
+      feedback.textContent = `Indica uma quantidade entre 1 e ${Number(shopCatalog.maxScratchQuantity || 20)}.`;
+      return;
+    }
+    await requestPurchase('purchaseScratch', { cardId: select.value, quantity }, button, feedback);
+  };
+}
+
+function renderEuromillionsPurchase() {
+  const game = shopCatalog?.games?.euromillions || {};
+  renderPurchaseShell(game.label || 'Euromilhões', `Preço por aposta: ${shopPrice(game.price)}.`, `
+    <div class="purchase-form">
+      <button id="euromillions-quick" class="purchase-confirm" type="button">Quick Pick</button>
+      <div class="purchase-divider"><span>ou escolhe a tua chave</span></div>
+      <label for="euromillions-numbers">5 números (1–50), separados por vírgulas</label>
+      <input id="euromillions-numbers" type="text" placeholder="Ex.: 4, 12, 23, 37, 48">
+      <label for="euromillions-stars">2 estrelas (1–12), separadas por vírgulas</label>
+      <input id="euromillions-stars" type="text" placeholder="Ex.: 3, 9">
+      <button id="euromillions-manual" class="purchase-secondary" type="button">Comprar chave escolhida</button>
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+  const feedback = content.querySelector('#purchase-feedback');
+  content.querySelector('#euromillions-quick').onclick = event => requestPurchase('purchaseEuromillions', { selection: { quickPick: true } }, event.currentTarget, feedback);
+  content.querySelector('#euromillions-manual').onclick = event => requestPurchase('purchaseEuromillions', {
+    selection: { numbers: parseNumberList(content.querySelector('#euromillions-numbers').value), stars: parseNumberList(content.querySelector('#euromillions-stars').value) }
+  }, event.currentTarget, feedback);
+}
+
+function renderTotolotoPurchase() {
+  const game = shopCatalog?.games?.totoloto || {};
+  renderPurchaseShell(game.label || 'Totoloto', `Preço por aposta: ${shopPrice(game.price)}.`, `
+    <div class="purchase-form">
+      <button id="totoloto-quick" class="purchase-confirm" type="button">Quick Pick</button>
+      <div class="purchase-divider"><span>ou escolhe a tua chave</span></div>
+      <label for="totoloto-numbers">5 números (1–49), separados por vírgulas</label>
+      <input id="totoloto-numbers" type="text" placeholder="Ex.: 3, 11, 22, 36, 47">
+      <label for="totoloto-lucky">Número da sorte (1–13)</label>
+      <input id="totoloto-lucky" type="number" min="1" max="13" step="1" placeholder="Ex.: 7">
+      <button id="totoloto-manual" class="purchase-secondary" type="button">Comprar chave escolhida</button>
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+  const feedback = content.querySelector('#purchase-feedback');
+  content.querySelector('#totoloto-quick').onclick = event => requestPurchase('purchaseTotoloto', { selection: { quickPick: true } }, event.currentTarget, feedback);
+  content.querySelector('#totoloto-manual').onclick = event => requestPurchase('purchaseTotoloto', {
+    selection: { numbers: parseNumberList(content.querySelector('#totoloto-numbers').value), luckyNumber: Number(content.querySelector('#totoloto-lucky').value) }
+  }, event.currentTarget, feedback);
+}
+
+function renderEuroDreamsPurchase() {
+  const game = shopCatalog?.games?.eurodreams || {};
+  renderPurchaseShell(game.label || 'EuroDreams', `Preço por aposta: ${shopPrice(game.price)}.`, `
+    <div class="purchase-form">
+      <button id="eurodreams-quick" class="purchase-confirm" type="button">Quick Pick</button>
+      <div class="purchase-divider"><span>ou escolhe a tua chave</span></div>
+      <label for="eurodreams-numbers">6 números (1–40), separados por vírgulas</label>
+      <input id="eurodreams-numbers" type="text" placeholder="Ex.: 2, 9, 17, 24, 31, 40">
+      <label for="eurodreams-dream">Número Dream (1–5)</label>
+      <input id="eurodreams-dream" type="number" min="1" max="5" step="1" placeholder="Ex.: 4">
+      <button id="eurodreams-manual" class="purchase-secondary" type="button">Comprar chave escolhida</button>
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+  const feedback = content.querySelector('#purchase-feedback');
+  content.querySelector('#eurodreams-quick').onclick = event => requestPurchase('purchaseEuroDreams', { selection: { quickPick: true } }, event.currentTarget, feedback);
+  content.querySelector('#eurodreams-manual').onclick = event => requestPurchase('purchaseEuroDreams', {
+    selection: { numbers: parseNumberList(content.querySelector('#eurodreams-numbers').value), dreamNumber: Number(content.querySelector('#eurodreams-dream').value) }
+  }, event.currentTarget, feedback);
+}
+
+function renderJokerPurchase() {
+  const game = shopCatalog?.games?.joker || {};
+  renderPurchaseShell(game.label || 'Joker', `Preço por código: ${shopPrice(game.price)}. O código é gerado ao comprares.`, `
+    <div class="purchase-form">
+      <button id="purchase-joker" class="purchase-confirm" type="button">Comprar código Joker</button>
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+  const button = content.querySelector('#purchase-joker');
+  button.onclick = () => requestPurchase('purchaseJoker', {}, button, content.querySelector('#purchase-feedback'));
+}
+
+function renderLotteriesPurchase() {
+  const lotteries = shopCatalog?.lotteries || [];
+  renderPurchaseShell('Lotarias', 'Escolhe o bilhete que queres comprar.', `
+    <div class="purchase-form lottery-options">${lotteries.map(lottery => `
+      <button class="purchase-lottery" data-lottery="${escapeHtml(lottery.id)}" type="button"><span>${escapeHtml(lottery.label)}</span><strong>${shopPrice(lottery.price)}</strong><small>Comprar bilhete</small></button>`).join('')}
+      <p id="purchase-feedback" class="purchase-feedback"></p>
+    </div>`);
+  const feedback = content.querySelector('#purchase-feedback');
+  content.querySelectorAll('[data-lottery]').forEach(button => {
+    button.onclick = () => requestPurchase('purchaseLottery', { gameId: button.dataset.lottery }, button, feedback);
+  });
+}
+
+function openPurchase(gameId) {
+  const views = {
+    scratch: renderScratchPurchase,
+    euromillions: renderEuromillionsPurchase,
+    totoloto: renderTotolotoPurchase,
+    eurodreams: renderEuroDreamsPurchase,
+    joker: renderJokerPurchase,
+    lotteries: renderLotteriesPurchase
+  };
+  if (views[gameId]) views[gameId]();
+}
+
+async function renderClaimableTickets() {
+  content.innerHTML = '<p class="status">A carregar prémios disponíveis…</p>';
+  const response = await post('loadClaimableTickets');
+  const tickets = await response.json();
+  content.innerHTML = `
+    <section class="purchase-panel">
+      <button id="purchase-back" class="purchase-back" type="button">← Voltar aos jogos</button>
+      <p class="eyebrow">LEVANTAMENTO DE PRÉMIOS</p>
+      <h2>Bilhetes prontos a validar</h2>
+      <p class="purchase-description">Apresenta o bilhete no balcão para receberes o prémio.</p>
+      <div class="purchase-form lottery-options">${(tickets || []).map(ticket => `
+        <button class="purchase-lottery" data-claim-ticket="${escapeHtml(ticket.ticketId)}" data-claim-game="${escapeHtml(ticket.game)}" type="button"><span>${escapeHtml(ticket.label)}</span><strong>#${escapeHtml(String(ticket.ticketId).slice(0, 8))}</strong><small>Validar bilhete</small></button>`).join('') || '<p class="status">Não tens bilhetes prontos para levantamento.</p>'}
+        <p id="purchase-feedback" class="purchase-feedback"></p>
+      </div>
+    </section>`;
+  content.querySelector('#purchase-back').onclick = () => renderShop();
+  const feedback = content.querySelector('#purchase-feedback');
+  content.querySelectorAll('[data-claim-ticket]').forEach(button => {
+    button.onclick = () => requestPurchase('claimPrizeTicket', { ticketId: button.dataset.claimTicket, game: button.dataset.claimGame }, button, feedback);
+  });
+}
+
+async function renderShop() {
+  content.innerHTML = '<p class="status">A carregar jogos…</p>';
+  const response = await post('loadShopCatalog');
+  shopCatalog = await response.json();
+  content.innerHTML = `
+    <section class="shop-hero">
+      <div><p class="eyebrow">PONTO DE VENDA OFICIAL</p><h2>Escolhe o teu próximo jogo</h2><p>Todos os bilhetes ficam guardados no teu inventário para consultares quando quiseres.</p><button id="open-prize-claims" class="shop-claim-button" type="button">Levantar prémios</button></div>
+      <div class="shop-hero-mark">CJ</div>
+    </section>
+    <div class="shop-catalog">${shopProducts.map(product => `
+      <button class="shop-card ${product.tone}" data-game="${product.id}" type="button">
+        <span class="shop-icon">${product.icon}</span>
+        <span class="shop-category">${product.category}</span>
+        <strong>${product.title}</strong>
+        <small>${product.text}</small>
+        <span class="shop-action">Comprar <b>→</b></span>
+      </button>`).join('')}</div>`;
+  content.querySelectorAll('[data-game]').forEach(button => button.onclick = () => openPurchase(button.dataset.game));
+  content.querySelector('#open-prize-claims').onclick = renderClaimableTickets;
+}
+
 function analyticsRows(rows, emptyText, format) {
   if (!rows || !rows.length) return `<p class="status">${emptyText}</p>`;
   return rows.map(format).join('');
@@ -383,20 +591,7 @@ async function loadOwnerAnalytics() {
 async function showTab(tab) {
   document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
   if (tab === 'buy') {
-    content.innerHTML = `
-      <section class="shop-hero">
-        <div><p class="eyebrow">PONTO DE VENDA OFICIAL</p><h2>Escolhe o teu próximo jogo</h2><p>Todos os bilhetes ficam guardados no teu inventário para consultares quando quiseres.</p></div>
-        <div class="shop-hero-mark">CJ</div>
-      </section>
-      <div class="shop-catalog">${shopProducts.map(product => `
-        <button class="shop-card ${product.tone}" data-game="${product.id}" type="button">
-          <span class="shop-icon">${product.icon}</span>
-          <span class="shop-category">${product.category}</span>
-          <strong>${product.title}</strong>
-          <small>${product.text}</small>
-          <span class="shop-action">Comprar <b>→</b></span>
-        </button>`).join('')}</div>`;
-    content.querySelectorAll('[data-game]').forEach(button => button.onclick = () => post('buyGame', { game: button.dataset.game }));
+    await renderShop();
     return;
   }
   content.innerHTML = '<p class="status">A carregar…</p>';

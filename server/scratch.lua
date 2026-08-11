@@ -19,7 +19,7 @@ local function selectPrize(card)
     return 0
 end
 
-CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
+CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId, requestedQuantity)
     if not CJ.Company.IsOpen() then
         CJ.Framework.Notify(source, ('O %s está fechado neste momento.'):format(Config.CompanyName), 'error')
         return
@@ -35,49 +35,68 @@ CJ.Security.RegisterEvent('cj:server:purchaseScratch', function(source, cardId)
         return
     end
 
-    if CJ.Stock.Get(cardId) < 1 then
-        CJ.Framework.Notify(source, 'Esta raspadinha está esgotada. Volta mais tarde.', 'error')
+    local quantity = tonumber(requestedQuantity) or 1
+    if quantity ~= math.floor(quantity) or quantity < 1 or quantity > Config.MaxScratchPurchaseQuantity then
+        CJ.Security.Reject(source, 'cj:server:purchaseScratch', 'quantidade inválida')
         return
     end
 
-    if CJ.Framework.GetMoney(source) < card.price then
+    if CJ.Stock.Get(cardId) < quantity then
+        CJ.Framework.Notify(source, 'Não há stock suficiente desta raspadinha. Volta mais tarde.', 'error')
+        return
+    end
+
+    local total = card.price * quantity
+    if CJ.Framework.GetMoney(source) < total then
         CJ.Framework.Notify(source, CJ.T('games.insufficient_funds'), 'error')
         return
     end
 
-    if not CJ.Stock.Take(cardId, 1) then
-        CJ.Framework.Notify(source, 'Esta raspadinha acabou de esgotar. Volta mais tarde.', 'error')
-        return
-    end
-
-    if not CJ.Framework.RemoveMoney(source, card.price, 'centrojogos-scratch-purchase') then
-        CJ.Stock.Add(cardId, 1)
-        return
-    end
-
     local citizenId = CJ.Framework.GetCitizenId(source)
-    if not CJ.Finance.Credit(card.price, citizenId, 'scratch_purchase', sellerMetadata) then
-        CJ.Stock.Add(cardId, 1)
-        CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
+    local purchased = 0
+    for _ = 1, quantity do
+        if not CJ.Stock.Take(cardId, 1) then
+            break
+        end
+        if not CJ.Framework.RemoveMoney(source, card.price, 'centrojogos-scratch-purchase') then
+            CJ.Stock.Add(cardId, 1)
+            break
+        end
+
+        if not CJ.Finance.Credit(card.price, citizenId, 'scratch_purchase', sellerMetadata) then
+            CJ.Stock.Add(cardId, 1)
+            CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
+            break
+        end
+
+        local ticket = CJ.Tickets.Issue(source, 'scratch', {
+            cardId = cardId,
+            prize = selectPrize(card)
+        })
+
+        if not ticket then
+            CJ.Stock.Add(cardId, 1)
+            CJ.Finance.Debit(card.price, citizenId, 'scratch_issue_reversal')
+            CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
+            break
+        end
+
+        purchased = purchased + 1
+    end
+
+    if purchased == 0 then
         CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
         return
     end
 
-    local ticket = CJ.Tickets.Issue(source, 'scratch', {
-        cardId = cardId,
-        prize = selectPrize(card)
-    })
-
-    if not ticket then
-        CJ.Stock.Add(cardId, 1)
-        CJ.Finance.Debit(card.price, citizenId, 'scratch_issue_reversal')
-        CJ.Framework.AddMoney(source, card.price, 'centrojogos-scratch-refund')
-        CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
-        return
+    local paid = card.price * purchased
+    local message = purchased == 1 and ('Compraste uma %s.'):format(card.label)
+        or ('Compraste %s %s.'):format(purchased, card.label)
+    if purchased < quantity then
+        message = message .. ' Não foi possível concluir a quantidade total.'
     end
-
-    CJ.Framework.Notify(source, ('Compraste uma %s.'):format(card.label), 'success')
-    CJ.Log.Discord('purchases', 'Compra de raspadinha', ('%s comprou %s por €%s.'):format(GetPlayerName(source), card.label, card.price))
+    CJ.Framework.Notify(source, message, 'success')
+    CJ.Log.Discord('purchases', 'Compra de raspadinhas', ('%s comprou %s x %s por €%s.'):format(GetPlayerName(source), purchased, card.label, paid))
 end)
 
 CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)

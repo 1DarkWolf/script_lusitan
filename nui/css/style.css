@@ -64,6 +64,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .shop-hero { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 22px; border: 1px solid rgba(243, 190, 48, .45); border-radius: 15px; background: linear-gradient(120deg, #1b3158, #101c34 62%, #27213e); }
 .shop-hero h2 { margin: 7px 0; color: #fff; font-size: 25px; }
 .shop-hero p:not(.eyebrow) { max-width: 510px; margin: 0; color: #b8c7e1; line-height: 1.45; }
+.shop-claim-button { margin-top: 15px; border: 1px solid #ffd75c; border-radius: 8px; padding: 9px 12px; background: rgba(13, 29, 54, .45); color: #ffd75c; font-weight: 800; cursor: pointer; }
 .shop-hero-mark { display: grid; flex: 0 0 68px; width: 68px; height: 68px; place-items: center; border: 2px solid #ffd75c; border-radius: 20px; color: #ffd75c; font-size: 22px; font-weight: 900; letter-spacing: .08em; transform: rotate(8deg); }
 .shop-catalog { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
 .shop-card { position: relative; min-height: 162px; overflow: hidden; display: grid; grid-template-columns: 50px 1fr; grid-template-rows: auto auto 1fr auto; gap: 3px 12px; padding: 17px; border: 1px solid #28466f; border-radius: 13px; background: #12213d; color: #eaf1ff; text-align: left; cursor: pointer; transition: transform .15s ease, border-color .15s ease, background .15s ease; }
@@ -76,6 +77,29 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .shop-action { color: #ffd75c; font-size: 13px; font-weight: 800; }
 .shop-action b { margin-left: 6px; font-size: 16px; }
 .shop-card.blue { color: #61b5ff; }.shop-card.violet { color: #be92ff; }.shop-card.purple { color: #df91f7; }.shop-card.red { color: #ff8d8d; }.shop-card.green { color: #79daaf; }.shop-card.gold { color: #ffd75c; }
+.purchase-panel { padding: 22px; border: 1px solid #294d80; border-radius: 16px; background: linear-gradient(145deg, #142747, #0d172a 72%); }
+.purchase-panel h2 { margin: 8px 0; color: #fff; font-size: 25px; }
+.purchase-back { margin-bottom: 18px; border: 0; background: transparent; color: #ffd75c; font-weight: 800; cursor: pointer; }
+.purchase-description { margin: 0 0 20px; color: #bfcee6; line-height: 1.45; }
+.purchase-form { display: grid; gap: 10px; max-width: 560px; }
+.purchase-form label { color: #dce7f8; font-size: 13px; font-weight: 800; }
+.purchase-form input, .purchase-form select { width: 100%; box-sizing: border-box; border: 1px solid #365888; border-radius: 8px; padding: 12px; background: #09162b; color: #eef4ff; outline: none; }
+.purchase-form input:focus, .purchase-form select:focus { border-color: #ffd75c; }
+.purchase-summary { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 8px; background: rgba(8, 18, 37, .72); color: #b8cae6; }
+.purchase-summary strong { color: #ffd75c; font-size: 20px; }
+.purchase-confirm, .purchase-secondary { border: 0; border-radius: 8px; padding: 12px; font-weight: 800; cursor: pointer; }
+.purchase-confirm { background: #f3be30; color: #111a2b; }
+.purchase-secondary { border: 1px solid #496fa6; background: #142b50; color: #eef4ff; }
+.purchase-confirm:disabled, .purchase-secondary:disabled, .purchase-lottery:disabled { opacity: .55; cursor: wait; }
+.purchase-feedback { min-height: 18px; margin: 3px 0 0; color: #b8cae6; font-size: 13px; }
+.purchase-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0; color: #8fa6cc; font-size: 12px; }
+.purchase-divider::before, .purchase-divider::after { content: ''; flex: 1; height: 1px; background: #2c4b78; }
+.lottery-options { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-width: none; }
+.purchase-lottery { display: grid; gap: 7px; min-height: 116px; padding: 15px; border: 1px solid #365888; border-radius: 10px; background: #10213b; color: #edf3ff; text-align: left; cursor: pointer; }
+.purchase-lottery:hover { border-color: #ffd75c; background: #172c4d; }
+.purchase-lottery span { color: #fff; font-weight: 800; }
+.purchase-lottery strong { color: #ffd75c; font-size: 19px; }
+.purchase-lottery small { color: #b9c9e1; }
 .record { padding: 13px; border-radius: 9px; background: #14213a; color: #c9d5ec; }
 .record strong { display: block; color: #fff; margin-bottom: 5px; }
 .ticket-shell { position: relative; width: min(560px, 92vw, 72vh); padding: 12px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 20px; background: linear-gradient(135deg, #142647, #0a1020); box-shadow: 0 20px 60px rgba(0,0,0,.48); text-align: center; }

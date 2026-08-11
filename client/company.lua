@@ -32,65 +32,7 @@ local function openCompanyTerminal()
         notifyClosed()
         return
     end
-
-    exports['qb-menu']:openMenu({
-        {
-            header = Config.CompanyName,
-            isMenuHeader = true
-        },
-        {
-            header = 'Abrir painel de apostas',
-            txt = 'Comprar jogos, consultar bilhetes e resultados.',
-            icon = 'fas fa-display',
-            params = { event = 'cj:client:openDashboard' }
-        },
-        {
-            header = 'Raspadinhas',
-            txt = 'Compra uma raspadinha e descobre o teu prémio.',
-            icon = 'fas fa-ticket',
-            params = { event = 'cj:client:openScratchMenu' }
-        },
-        {
-            header = 'Euromilhões',
-            txt = 'Escolhe a tua chave ou usa Quick Pick.',
-            icon = 'fas fa-star',
-            params = { event = 'cj:client:openEuromillionsMenu' }
-        },
-        {
-            header = 'Totoloto',
-            txt = 'Escolhe cinco números e o número da sorte.',
-            icon = 'fas fa-circle-dot',
-            params = { event = 'cj:client:openTotolotoMenu' }
-        },
-        {
-            header = 'EuroDreams',
-            txt = 'Escolhe seis números e o número Dream.',
-            icon = 'fas fa-moon',
-            params = { event = 'cj:client:openEuroDreamsMenu' }
-        },
-        {
-            header = 'Joker',
-            txt = 'Compra um código Joker para o próximo sorteio.',
-            icon = 'fas fa-hashtag',
-            params = { event = 'cj:client:buyJoker' }
-        },
-        {
-            header = 'Lotarias',
-            txt = 'Lotaria Clássica, Popular e Instantânea.',
-            icon = 'fas fa-clover',
-            params = { event = 'cj:client:openLotteriesMenu' }
-        },
-        {
-            header = 'Levantar prémios',
-            txt = 'Apresenta no balcão os bilhetes de sorteios já realizados.',
-            icon = 'fas fa-money-bill-wave',
-            params = { event = 'cj:client:openPrizeClaimMenu' }
-        },
-        {
-            header = 'Fechar',
-            params = { event = 'qb-menu:client:closeMenu' }
-        }
-    })
+    TriggerEvent('cj:client:openDashboard')
 end
 
 local claimEvents = {

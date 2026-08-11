@@ -23,15 +23,49 @@ RegisterNUICallback('loadDashboard', function(data, callback)
 end)
 
 RegisterNUICallback('buyGame', function(data, callback)
-    SetNuiFocus(false, false)
-    dashboardOpen = false
-    SendNUIMessage({ action = 'closeDashboard' })
-    local events = {
-        scratch = 'cj:client:openScratchMenu', euromillions = 'cj:client:openEuromillionsMenu',
-        totoloto = 'cj:client:openTotolotoMenu', eurodreams = 'cj:client:openEuroDreamsMenu',
-        joker = 'cj:client:buyJoker', lotteries = 'cj:client:openLotteriesMenu'
-    }
-    if events[data.game] then TriggerEvent(events[data.game]) end
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('loadShopCatalog', function(_, callback)
+    callback(CJ.Callbacks.Await('cj:server:getShopCatalog'))
+end)
+
+RegisterNUICallback('purchaseScratch', function(data, callback)
+    TriggerServerEvent('cj:server:purchaseScratch', data.cardId, tonumber(data.quantity))
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('purchaseEuromillions', function(data, callback)
+    TriggerServerEvent('cj:server:purchaseEuromillions', data.selection or {})
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('purchaseTotoloto', function(data, callback)
+    TriggerServerEvent('cj:server:purchaseTotoloto', data.selection or {})
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('purchaseEuroDreams', function(data, callback)
+    TriggerServerEvent('cj:server:purchaseEuroDreams', data.selection or {})
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('purchaseJoker', function(_, callback)
+    TriggerServerEvent('cj:server:purchaseJoker')
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('purchaseLottery', function(data, callback)
+    TriggerServerEvent('cj:server:purchaseLottery', data.gameId)
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('loadClaimableTickets', function(_, callback)
+    callback(CJ.Callbacks.Await('cj:server:getClaimableTickets'))
+end)
+
+RegisterNUICallback('claimPrizeTicket', function(data, callback)
+    TriggerEvent('cj:client:claimPrizeTicket', { game = data.game, ticketId = data.ticketId })
     callback({ ok = true })
 end)
 

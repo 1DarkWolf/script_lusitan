@@ -23,6 +23,37 @@ CJ.Callbacks.Register('cj:server:getRecentResults', function()
     return rows
 end)
 
+CJ.Callbacks.Register('cj:server:getShopCatalog', function()
+    local scratchCards = {}
+    for cardId, card in pairs(Config.ScratchCards) do
+        scratchCards[#scratchCards + 1] = {
+            id = cardId,
+            label = card.label,
+            price = card.price,
+            stock = CJ.Stock.Get(cardId)
+        }
+    end
+    table.sort(scratchCards, function(left, right) return left.price < right.price end)
+
+    local lotteries = {}
+    for gameId, lottery in pairs(Config.Lotteries) do
+        lotteries[#lotteries + 1] = { id = gameId, label = lottery.label, price = lottery.price }
+    end
+    table.sort(lotteries, function(left, right) return left.price < right.price end)
+
+    return {
+        scratchCards = scratchCards,
+        maxScratchQuantity = Config.MaxScratchPurchaseQuantity,
+        games = {
+            euromillions = { label = Config.Euromillions.label, price = Config.Euromillions.price },
+            totoloto = { label = Config.Totoloto.label, price = Config.Totoloto.price },
+            eurodreams = { label = Config.EuroDreams.label, price = Config.EuroDreams.price },
+            joker = { label = Config.Joker.label, price = Config.Joker.price }
+        },
+        lotteries = lotteries
+    }
+end)
+
 CJ.Callbacks.Register('cj:server:getCompanyDashboard', function(source)
     if not CJ.Employees.HasPermission(source, 'view_sales') and not CJ.Employees.HasPermission(source, 'validate_prizes') and not CJ.Company.IsBoss(source) then
         return nil

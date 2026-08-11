@@ -219,6 +219,10 @@ Config.ScratchCards = {
 -- o dono escolhe qual tipo de raspadinha pretende reabastecer.
 Config.ScratchStockItem = 'scratch_blank'
 
+-- Limite por compra no painel de apostas. Evita pedidos excessivos e mantém
+-- o jogador livre para comprar vários bilhetes de uma só vez.
+Config.MaxScratchPurchaseQuantity = 20
+
 Config.Euromillions = {
     label = 'Euromilhões',
     price = 3,
