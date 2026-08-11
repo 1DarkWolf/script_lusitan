@@ -262,6 +262,152 @@ const shopProducts = [
 
 let shopCatalog;
 
+const weekDays = Object.freeze({ 1: 'domingo', 2: 'segunda-feira', 3: 'terça-feira', 4: 'quarta-feira', 5: 'quinta-feira', 6: 'sexta-feira', 7: 'sábado' });
+
+function drawScheduleText(schedule, immediate = false) {
+  if (immediate) return 'Resultado imediato';
+  if (!schedule) return 'Sorteio agendado';
+  const hour = String(Number(schedule.hour || 0)).padStart(2, '0');
+  const minute = String(Number(schedule.minute || 0)).padStart(2, '0');
+  if (!Array.isArray(schedule.days) || !schedule.days.length) return `Todos os dias às ${hour}:${minute}`;
+  const days = schedule.days.map(day => weekDays[day] || '').filter(Boolean).join(' e ');
+  return `${days.charAt(0).toUpperCase()}${days.slice(1)} às ${hour}:${minute}`;
+}
+
+function informationEntries() {
+  const scratchCards = (shopCatalog?.scratchCards || []).map(card => ({
+    id: `scratch-${card.id}`,
+    category: 'RASPADINHA',
+    title: card.label,
+    icon: '*',
+    tone: 'gold',
+    price: card.price,
+    maximumPrize: card.maximumPrize,
+    schedule: drawScheduleText(null, true),
+    howToPlay: 'Compra a raspadinha pretendida, usa o item no inventário e raspa toda a zona indicada para revelar o resultado.',
+    resultInfo: 'O prémio é definido pelo servidor no momento da compra. Não precisas de esperar por um sorteio.',
+    claimInfo: Number(card.maximumPrize || 0) > Number(shopCatalog?.autoPayLimit || 0)
+      ? `Prémios até ${shopPrice(shopCatalog?.autoPayLimit)} são pagos automaticamente. Valores superiores podem gerar um recibo para validação por um funcionário.`
+      : 'O prémio é pago automaticamente depois de raspares o cartão.'
+  }));
+
+  const games = shopCatalog?.games || {};
+  const draws = [
+    {
+      id: 'euromillions', category: 'SORTEIO', title: games.euromillions?.label || 'Euromilhões', icon: '*', tone: 'blue',
+      price: games.euromillions?.price, maximumPrize: games.euromillions?.maximumPrize, schedule: drawScheduleText(games.euromillions?.schedule),
+      howToPlay: 'Escolhe 5 números de 1 a 50 e 2 estrelas de 1 a 12, ou usa Quick Pick para gerar uma chave aleatória.',
+      resultInfo: 'O prémio depende da combinação de números e estrelas acertados no resultado do sorteio.',
+      claimInfo: 'Guarda o bilhete no inventário, consulta os resultados na aplicação do telefone e apresenta-o num balcão para levantar um eventual prémio.'
+    },
+    {
+      id: 'totoloto', category: 'SORTEIO', title: games.totoloto?.label || 'Totoloto', icon: 'o', tone: 'violet',
+      price: games.totoloto?.price, maximumPrize: games.totoloto?.maximumPrize, schedule: drawScheduleText(games.totoloto?.schedule),
+      howToPlay: 'Escolhe 5 números de 1 a 49 e 1 número da sorte de 1 a 13, ou usa Quick Pick.',
+      resultInfo: 'O valor do prémio varia de acordo com os números e o número da sorte acertados.',
+      claimInfo: 'Guarda o bilhete no inventário, consulta os resultados na aplicação do telefone e apresenta-o num balcão para levantar um eventual prémio.'
+    },
+    {
+      id: 'eurodreams', category: 'SORTEIO', title: games.eurodreams?.label || 'EuroDreams', icon: 'D', tone: 'purple',
+      price: games.eurodreams?.price, maximumPrize: games.eurodreams?.maximumPrize, schedule: drawScheduleText(games.eurodreams?.schedule),
+      howToPlay: 'Escolhe 6 números de 1 a 40 e 1 Dream Number de 1 a 5, ou deixa a escolha para o Quick Pick.',
+      resultInfo: 'O prémio depende da quantidade de números e do Dream Number acertados.',
+      claimInfo: 'Guarda o bilhete no inventário, consulta os resultados na aplicação do telefone e apresenta-o num balcão para levantar um eventual prémio.'
+    },
+    {
+      id: 'joker', category: 'SORTEIO', title: games.joker?.label || 'Joker', icon: '#', tone: 'red',
+      price: games.joker?.price, maximumPrize: games.joker?.maximumPrize, schedule: drawScheduleText(games.joker?.schedule),
+      howToPlay: 'Ao comprares, recebes automaticamente um código de 6 dígitos único.',
+      resultInfo: 'No sorteio é gerado um código vencedor. O prémio depende da quantidade de posições do teu código que coincidem com ele.',
+      claimInfo: 'Guarda o bilhete no inventário, consulta os resultados na aplicação do telefone e apresenta-o num balcão para levantar um eventual prémio.'
+    }
+  ];
+
+  const lotteryInfo = {
+    classic: {
+      icon: 'C', tone: 'green', howToPlay: 'Recebes um número de bilhete aleatório entre 1 e 100.000.',
+      resultInfo: 'É sorteado um único número vencedor. Apenas o bilhete com esse número recebe o prémio máximo.'
+    },
+    popular: {
+      icon: 'P', tone: 'green', howToPlay: 'Recebes um número de bilhete aleatório entre 1 e 50.000.',
+      resultInfo: 'É sorteado um único número vencedor. Apenas o bilhete com esse número recebe o prémio máximo.'
+    },
+    instant: {
+      icon: '!', tone: 'gold', howToPlay: 'Compra o bilhete e recebe um número de prémio definido pelo servidor.',
+      resultInfo: 'Não existe espera por sorteio: podes apresentar o bilhete no balcão logo após a compra para confirmar o resultado.'
+    }
+  };
+  const lotteries = (shopCatalog?.lotteries || []).map(lottery => {
+    const definition = lotteryInfo[lottery.id] || {};
+    return {
+      id: `lottery-${lottery.id}`,
+      category: 'LOTARIA',
+      title: lottery.label,
+      icon: definition.icon || '?',
+      tone: definition.tone || 'green',
+      price: lottery.price,
+      maximumPrize: lottery.maximumPrize,
+      schedule: drawScheduleText(lottery.schedule, lottery.id === 'instant'),
+      howToPlay: definition.howToPlay || 'Compra um bilhete no balcão.',
+      resultInfo: definition.resultInfo || 'Consulta o resultado divulgado antes de validar o bilhete.',
+      claimInfo: 'Guarda o bilhete no inventário, consulta os resultados na aplicação do telefone e apresenta-o num balcão para levantar um eventual prémio.'
+    };
+  });
+
+  return [...scratchCards, ...draws, ...lotteries];
+}
+
+function renderInformationDetail(entryId) {
+  const entry = informationEntries().find(item => item.id === entryId);
+  if (!entry) return renderInformation();
+  content.innerHTML = `
+    <section class="information-detail">
+      <button id="information-back" class="purchase-back" type="button">&larr; Voltar às informações</button>
+      <p class="eyebrow">${escapeHtml(entry.category)}</p>
+      <div class="information-title"><span class="information-icon ${escapeHtml(entry.tone)}">${escapeHtml(entry.icon)}</span><div><h2>${escapeHtml(entry.title)}</h2><p>Consulta as regras antes de jogares.</p></div></div>
+      <div class="information-facts">
+        <article><span>Preço</span><strong>${shopPrice(entry.price)}</strong></article>
+        <article><span>Prémio máximo</span><strong>${shopPrice(entry.maximumPrize)}</strong></article>
+        <article><span>Sorteio / resultado</span><strong>${escapeHtml(entry.schedule)}</strong></article>
+      </div>
+      <div class="information-sections">
+        <article><h3>Como jogar</h3><p>${escapeHtml(entry.howToPlay)}</p></article>
+        <article><h3>Como é atribuído o prémio</h3><p>${escapeHtml(entry.resultInfo)}</p></article>
+        <article><h3>Depois da compra</h3><p>${escapeHtml(entry.claimInfo)}</p></article>
+      </div>
+    </section>`;
+  content.querySelector('#information-back').onclick = renderInformation;
+}
+
+async function renderInformation() {
+  content.innerHTML = '<p class="status">A carregar informações...</p>';
+  try {
+    const response = await post('loadShopCatalog');
+    shopCatalog = await response.json();
+  } catch (_) {
+    content.innerHTML = '<p class="status">Não foi possível carregar as informações dos jogos.</p>';
+    return;
+  }
+  const entries = informationEntries();
+  content.innerHTML = `
+    <section class="information-hero">
+      <p class="eyebrow">GUIA DO JOGADOR</p>
+      <h2>Informações dos jogos</h2>
+      <p>Escolhe um jogo para veres o preço, prémio máximo, horário e regras principais.</p>
+    </section>
+    <div class="information-grid">${entries.map(entry => `
+      <button class="information-card ${escapeHtml(entry.tone)}" data-information="${escapeHtml(entry.id)}" type="button">
+        <span class="information-icon">${escapeHtml(entry.icon)}</span>
+        <span class="information-category">${escapeHtml(entry.category)}</span>
+        <strong>${escapeHtml(entry.title)}</strong>
+        <small>${shopPrice(entry.price)} - até ${shopPrice(entry.maximumPrize)}</small>
+        <span class="information-action">Ver informações <b>&rarr;</b></span>
+      </button>`).join('')}</div>`;
+  content.querySelectorAll('[data-information]').forEach(button => {
+    button.onclick = () => renderInformationDetail(button.dataset.information);
+  });
+}
+
 const parseNumberList = value => (String(value || '').match(/\d+/g) || []).map(Number);
 const shopPrice = value => `€${Number(value || 0).toLocaleString('pt-PT')}`;
 
@@ -607,6 +753,10 @@ async function showTab(tab) {
   document.querySelectorAll('.tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === tab));
   if (tab === 'buy') {
     await renderShop();
+    return;
+  }
+  if (tab === 'information') {
+    await renderInformation();
     return;
   }
   content.innerHTML = '<p class="status">A carregar…</p>';

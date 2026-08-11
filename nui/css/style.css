@@ -96,7 +96,35 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .purchase-feedback { min-height: 18px; margin: 3px 0 0; color: #b8cae6; font-size: 13px; }
 .purchase-divider { display: flex; align-items: center; gap: 10px; margin: 4px 0; color: #8fa6cc; font-size: 12px; }
 .purchase-divider::before, .purchase-divider::after { content: ''; flex: 1; height: 1px; background: #2c4b78; }
+.information-hero { margin-bottom: 14px; padding: 22px; border: 1px solid rgba(243, 190, 48, .42); border-radius: 15px; background: linear-gradient(120deg, #1b3158, #101c34 62%, #27213e); }
+.information-hero h2 { margin: 7px 0; color: #fff; font-size: 25px; }
+.information-hero p:not(.eyebrow) { margin: 0; color: #b8c7e1; line-height: 1.45; }
+.information-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.information-card { position: relative; display: grid; min-height: 142px; grid-template-columns: 47px 1fr; grid-template-rows: auto auto 1fr auto; gap: 3px 12px; overflow: hidden; padding: 16px; border: 1px solid #28466f; border-radius: 13px; background: #12213d; color: #eaf1ff; text-align: left; cursor: pointer; transition: transform .15s ease, border-color .15s ease, background .15s ease; }
+.information-card:hover { transform: translateY(-3px); border-color: #ffd75c; background: #172a4a; }
+.information-card::after { content: ''; position: absolute; right: -35px; bottom: -54px; width: 130px; height: 130px; border-radius: 50%; background: currentColor; opacity: .08; }
+.information-icon { display: grid; width: 47px; height: 47px; place-items: center; border-radius: 13px; background: rgba(255,255,255,.09); color: #ffd75c; font-size: 23px; font-weight: 900; }
+.information-card .information-icon { grid-row: span 4; }
+.information-category { color: #9db0d1; font-size: 10px; font-weight: 800; letter-spacing: .12em; }
+.information-card strong { color: #fff; font-size: 18px; }
+.information-card small { color: #c0cce0; line-height: 1.35; }
+.information-action { color: #ffd75c; font-size: 13px; font-weight: 800; }
+.information-action b { margin-left: 6px; font-size: 16px; }
+.information-card.blue, .information-card.blue .information-icon, .information-icon.blue { color: #61b5ff; }.information-card.violet, .information-card.violet .information-icon, .information-icon.violet { color: #be92ff; }.information-card.purple, .information-card.purple .information-icon, .information-icon.purple { color: #df91f7; }.information-card.red, .information-card.red .information-icon, .information-icon.red { color: #ff8d8d; }.information-card.green, .information-card.green .information-icon, .information-icon.green { color: #79daaf; }.information-card.gold, .information-card.gold .information-icon, .information-icon.gold { color: #ffd75c; }
+.information-detail { padding: 22px; border: 1px solid #294d80; border-radius: 16px; background: linear-gradient(145deg, #142747, #0d172a 72%); }
+.information-title { display: flex; align-items: center; gap: 14px; }
+.information-title h2 { margin: 0; color: #fff; font-size: 25px; }
+.information-title p { margin: 5px 0 0; color: #b8c7e1; }
+.information-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
+.information-facts article { padding: 14px; border: 1px solid #294d80; border-radius: 10px; background: rgba(8, 19, 38, .62); }
+.information-facts span { display: block; color: #9fb3d4; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.information-facts strong { display: block; margin-top: 7px; color: #ffd75c; font-size: 16px; line-height: 1.3; }
+.information-sections { display: grid; gap: 10px; }
+.information-sections article { padding: 15px; border-left: 3px solid #f3be30; border-radius: 8px; background: rgba(13, 29, 54, .72); }
+.information-sections h3 { margin: 0 0 6px; color: #fff; font-size: 15px; }
+.information-sections p { margin: 0; color: #c2d0e7; line-height: 1.45; }
 .lottery-options { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); max-width: none; }
+@media (max-width: 620px) { .information-grid, .information-facts { grid-template-columns: 1fr; } }
 .purchase-lottery { display: grid; gap: 7px; min-height: 116px; padding: 15px; border: 1px solid #365888; border-radius: 10px; background: #10213b; color: #edf3ff; text-align: left; cursor: pointer; }
 .purchase-lottery:hover { border-color: #ffd75c; background: #172c4d; }
 .purchase-lottery span { color: #fff; font-weight: 800; }

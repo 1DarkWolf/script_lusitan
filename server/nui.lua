@@ -1,5 +1,17 @@
 CJ = CJ or {}
 
+local function maximumPrize(prizes)
+    local maximum = 0
+    for _, prize in pairs(prizes or {}) do
+        local amount = type(prize) == 'table' and prize.amount or prize
+        amount = tonumber(amount) or 0
+        if amount > maximum then
+            maximum = amount
+        end
+    end
+    return maximum
+end
+
 CJ.Callbacks.Register('cj:server:getPlayerTickets', function(source)
     if not CJ.Company.IsEmployee(source) then
         return {}
@@ -34,25 +46,34 @@ CJ.Callbacks.Register('cj:server:getShopCatalog', function()
             id = cardId,
             label = card.label,
             price = card.price,
-            stock = CJ.Stock.Get(cardId)
+            stock = CJ.Stock.Get(cardId),
+            maximumPrize = maximumPrize(card.prizes)
         }
     end
     table.sort(scratchCards, function(left, right) return left.price < right.price end)
 
     local lotteries = {}
     for gameId, lottery in pairs(Config.Lotteries) do
-        lotteries[#lotteries + 1] = { id = gameId, label = lottery.label, price = lottery.price }
+        lotteries[#lotteries + 1] = {
+            id = gameId,
+            label = lottery.label,
+            price = lottery.price,
+            maximumPrize = lottery.prize or maximumPrize(lottery.prizes),
+            maximumNumber = lottery.maximumNumber,
+            schedule = lottery.schedule
+        }
     end
     table.sort(lotteries, function(left, right) return left.price < right.price end)
 
     return {
         scratchCards = scratchCards,
         maxScratchQuantity = Config.MaxScratchPurchaseQuantity,
+        autoPayLimit = Config.AutoPayLimit,
         games = {
-            euromillions = { label = Config.Euromillions.label, price = Config.Euromillions.price },
-            totoloto = { label = Config.Totoloto.label, price = Config.Totoloto.price },
-            eurodreams = { label = Config.EuroDreams.label, price = Config.EuroDreams.price },
-            joker = { label = Config.Joker.label, price = Config.Joker.price }
+            euromillions = { label = Config.Euromillions.label, price = Config.Euromillions.price, maximumPrize = maximumPrize(Config.Euromillions.prizes), schedule = Config.Euromillions.schedule },
+            totoloto = { label = Config.Totoloto.label, price = Config.Totoloto.price, maximumPrize = maximumPrize(Config.Totoloto.prizes), schedule = Config.Totoloto.schedule },
+            eurodreams = { label = Config.EuroDreams.label, price = Config.EuroDreams.price, maximumPrize = maximumPrize(Config.EuroDreams.prizes), schedule = Config.EuroDreams.schedule },
+            joker = { label = Config.Joker.label, price = Config.Joker.price, maximumPrize = maximumPrize(Config.Joker.prizes), schedule = Config.Joker.schedule }
         },
         lotteries = lotteries
     }
