@@ -166,7 +166,10 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
                     pendingApproval = true
                 })
             end
-            CJ.Log.Write('error', ('Falha ao entregar recibo do prémio pendente da raspadinha %s.'):format(ticketId))
+            CJ.Log.Write('error', ('Falha ao entregar recibo do prémio pendente da raspadinha %s (motivo: %s).'):format(
+                ticketId,
+                tostring(receiptFailure or 'desconhecido')
+            ))
             return
         end
         CJ.Framework.Notify(source, 'Recebeste um recibo de prémio no inventário.', 'success')
