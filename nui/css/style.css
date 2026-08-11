@@ -17,7 +17,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 #owner-dashboard { display: grid; min-height: 100vh; place-items: center; background: rgba(7, 11, 20, .78); }
 #ticket-card { display: grid; min-height: 100vh; place-items: center; background: rgba(7, 11, 20, .78); }
 .dashboard-shell { position: relative; width: min(820px, 92vw); max-height: 82vh; overflow: auto; padding: 28px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 20px; background: #0d172a; box-shadow: 0 20px 60px rgba(0,0,0,.48); }
-.owner-shell { position: relative; width: min(1050px, 94vw); max-height: 85vh; overflow: auto; padding: 28px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 20px; background: #0d172a; box-shadow: 0 20px 60px rgba(0,0,0,.48); }
+.owner-shell { position: relative; width: min(1120px, 94vw); max-height: 85vh; overflow: auto; padding: 30px; border: 1px solid rgba(255, 205, 82, .72); border-radius: 22px; background: radial-gradient(circle at top right, #1c3768 0, #0d172a 42%, #08101f 100%); box-shadow: 0 20px 60px rgba(0,0,0,.55); }
 .owner-heading { display: flex; align-items: start; justify-content: space-between; gap: 18px; margin-right: 38px; }
 #owner-close { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: #fff; font-size: 28px; cursor: pointer; }
 .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(170px, 1fr)); gap: 12px; margin: 22px 0; }
@@ -31,7 +31,29 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .analytics-row:first-of-type { border-top: 0; }
 .analytics-row strong { color: #ffd75c; font-weight: 700; text-align: right; }
 .analytics-wide { grid-column: 1 / -1; }
+.owner-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 8px; padding: 7px; border: 1px solid rgba(111, 148, 210, .28); border-radius: 13px; background: rgba(5, 12, 25, .46); }
+.owner-tabs button { border: 0; border-radius: 9px; padding: 10px 14px; background: transparent; color: #aebed8; cursor: pointer; font-weight: 700; }
+.owner-tabs button.active, .owner-tabs button:hover { background: #f3be30; color: #131a27; }
+.owner-view { display: none; padding-top: 8px; }
+.owner-view.active { display: block; }
+.owner-metrics { grid-template-columns: repeat(4, minmax(150px, 1fr)); }
+.metric-card { background: linear-gradient(145deg, rgba(27, 52, 95, .9), rgba(13, 27, 52, .95)); }
+.metric-card small { display: block; margin-top: 6px; color: #8fa3c3; }
+.owner-grid { display: grid; grid-template-columns: repeat(2, minmax(280px, 1fr)); gap: 14px; margin-top: 14px; }
+.owner-action-panel { display: grid; align-content: start; gap: 9px; }
+.owner-label { margin: 0; color: #ffd75c; font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+.owner-description { margin: 0 0 8px; color: #aebed8; line-height: 1.45; }
+.owner-action-panel label { color: #c9d5ec; font-size: 13px; font-weight: 700; }
+.owner-action-panel select, .owner-action-panel input { width: 100%; box-sizing: border-box; border: 1px solid #365888; border-radius: 8px; padding: 11px; background: #09162b; color: #eef4ff; outline: none; }
+.owner-action-panel select:focus, .owner-action-panel input:focus { border-color: #ffd75c; }
+.owner-primary { border: 0; border-radius: 8px; padding: 12px; background: #f3be30; color: #111a2b; font-weight: 800; cursor: pointer; }
+.owner-primary:disabled { opacity: .55; cursor: wait; }
+.owner-secondary { border: 1px solid #496fa6; border-radius: 8px; padding: 12px; background: #142b50; color: #eef4ff; font-weight: 800; cursor: pointer; }
+.owner-action-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+.owner-action-buttons button:disabled { opacity: .55; cursor: wait; }
+.owner-feedback { min-height: 18px; margin: 3px 0 0; color: #b8cae6; font-size: 13px; }
 @media (max-width: 700px) { .metric-grid, .analytics-grid { grid-template-columns: 1fr; } }
+@media (max-width: 850px) { .owner-metrics, .owner-grid { grid-template-columns: 1fr; } }
 .dashboard-shell h1 { margin-top: 7px; }
 #dashboard-close { position: absolute; right: 16px; top: 12px; border: 0; background: transparent; color: #fff; font-size: 28px; cursor: pointer; }
 .tabs { display: flex; gap: 8px; margin: 20px 0; }

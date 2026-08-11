@@ -50,6 +50,15 @@ RegisterNUICallback('loadOwnerAnalytics', function(_, callback)
     callback(CJ.Callbacks.Await('cj:server:getOwnerAnalytics'))
 end)
 
+RegisterNUICallback('restockScratch', function(data, callback)
+    TriggerServerEvent('cj:server:restockScratch', data.cardId, tonumber(data.amount))
+    callback({ ok = true })
+end)
+
+RegisterNUICallback('ownerFinance', function(data, callback)
+    callback(CJ.Callbacks.Await('cj:server:ownerFinanceOperation', data.action, tonumber(data.amount)))
+end)
+
 RegisterNUICallback('closeOwnerDashboard', function(_, callback)
     SetNuiFocus(false, false)
     callback({ ok = true })

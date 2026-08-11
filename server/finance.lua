@@ -6,6 +6,14 @@ local function isValidAmount(amount)
     return amount and amount > 0 and amount == math.floor(amount) and amount <= Config.Company.Finance.maxTransaction and amount or nil
 end
 
+local function isNearOwnerDashboard(source)
+    local ped = GetPlayerPed(source)
+    if not ped or ped <= 0 then return false end
+
+    local npc = Config.OwnerDashboard.Npc
+    return #(GetEntityCoords(ped) - vector3(npc.coords.x, npc.coords.y, npc.coords.z)) <= (Config.OwnerDashboard.distance + 1.5)
+end
+
 ---@param amount number
 ---@param citizenId? string
 ---@param transactionType? string
@@ -69,6 +77,36 @@ CJ.Callbacks.Register('cj:server:getCompanyBalance', function(source)
     end
 
     return CJ.Company.GetBalance()
+end)
+
+CJ.Callbacks.Register('cj:server:ownerFinanceOperation', function(source, action, requestedAmount)
+    local amount = isValidAmount(requestedAmount)
+    if not CJ.Company.IsBoss(source) or not isNearOwnerDashboard(source) or (action ~= 'deposit' and action ~= 'withdraw') or not amount then
+        return { ok = false, message = 'Operação inválida.' }
+    end
+
+    local citizenId = CJ.Framework.GetCitizenId(source)
+    if action == 'deposit' then
+        if CJ.Framework.GetMoney(source) < amount or not CJ.Framework.RemoveMoney(source, amount, 'centrojogos-company-deposit') then
+            return { ok = false, message = 'Não tens dinheiro suficiente.' }
+        end
+        if not CJ.Finance.Credit(amount, citizenId, 'boss_deposit') then
+            CJ.Framework.AddMoney(source, amount, 'centrojogos-company-deposit-refund')
+            return { ok = false, message = CJ.T('general.system_error') }
+        end
+        CJ.Log.Discord('employees', 'Depósito na empresa', ('%s depositou €%s.'):format(GetPlayerName(source), amount))
+        return { ok = true, message = ('Depositaste €%s na empresa.'):format(amount), balance = CJ.Company.GetBalance() }
+    end
+
+    if not CJ.Finance.Debit(amount, citizenId, 'boss_withdrawal') then
+        return { ok = false, message = 'A empresa não tem saldo suficiente.' }
+    end
+    if not CJ.Framework.AddMoney(source, amount, 'centrojogos-company-withdrawal') then
+        CJ.Finance.Credit(amount, citizenId, 'withdrawal_reversal')
+        return { ok = false, message = CJ.T('general.system_error') }
+    end
+    CJ.Log.Discord('employees', 'Levantamento da empresa', ('%s levantou €%s.'):format(GetPlayerName(source), amount))
+    return { ok = true, message = ('Levantaste €%s da empresa.'):format(amount), balance = CJ.Company.GetBalance() }
 end)
 
 CJ.Security.RegisterEvent('cj:server:depositCompanyFunds', function(source, requestedAmount)

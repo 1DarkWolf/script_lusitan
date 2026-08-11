@@ -31,7 +31,7 @@ Config.Company = {
         label = 'Centro de Jogos'
     },
     OpeningHours = {
-        open = 8,
+        open = 0,
         close = 23
     },
     BossMenu = {
@@ -186,14 +186,9 @@ Config.ScratchCards = {
     }
 }
 
--- Estes são cartões em branco. O futuro sistema de crafting deve criar estes itens;
--- o dono entrega-os ao stock da loja no NPC de gestão.
-Config.ScratchStockItems = {
-    bronze = 'scratch_bronze_stock',
-    silver = 'scratch_silver_stock',
-    gold = 'scratch_gold_stock',
-    diamond = 'scratch_diamond_stock'
-}
+-- O futuro sistema de crafting cria apenas este item. No painel de gestão,
+-- o dono escolhe qual tipo de raspadinha pretende reabastecer.
+Config.ScratchStockItem = 'scratch_blank'
 
 Config.Euromillions = {
     label = 'Euromilhões',

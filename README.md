@@ -47,9 +47,9 @@ As raspadinhas são configuradas em `Config.ScratchCards`. Os pesos de prémio d
 
 ## Stock e painel de gestão
 
-As raspadinhas só podem ser vendidas quando existir stock na loja. O stock começa a zero; o dono da empresa deve ter no inventário os itens `scratch_bronze_stock`, `scratch_silver_stock`, `scratch_gold_stock` ou `scratch_diamond_stock` e entregá-los no NPC de gestão. Estes são cartões em branco preparados para o futuro sistema de crafting; este recurso ainda não cria os itens.
+As raspadinhas só podem ser vendidas quando existir stock na loja. O stock começa a zero; o dono da empresa deve ter no inventário o item `scratch_blank` e, no painel de gestão, escolher qual tipo de raspadinha pretende repor. Cada unidade entregue consome uma raspadinha em branco. Este é o único item preparado para o futuro sistema de crafting.
 
-O NPC de gestão é configurado em `Config.OwnerDashboard.Npc`. Apenas o cargo QBCore da empresa com `isboss = true` consegue reabastecer a loja e abrir o dashboard. O painel mostra saldo da empresa, unidades e receita de raspadinhas, stock por tipo, jackpots, vendas por jogo, vendas dos últimos sete dias, movimentos recentes e a faturação semanal de cada NPC configurado. Importe novamente `sql.sql` após atualizar para criar a tabela `cj_store_stock`.
+O NPC de gestão é configurado em `Config.OwnerDashboard.Npc`. Apenas o cargo QBCore da empresa com `isboss = true` consegue abrir a central de gestão. O painel tem separadores para consultar métricas, gerir o stock diretamente com `scratch_blank`, ver vendas e lojas, e depositar ou levantar dinheiro da conta da empresa. O painel mostra saldo da empresa, unidades e receita de raspadinhas, stock por tipo, jackpots, vendas por jogo, vendas dos últimos sete dias, movimentos recentes e a faturação semanal de cada NPC configurado. Importe novamente `sql.sql` após atualizar para criar a tabela `cj_store_stock`.
 
 ## Euromilhões
 

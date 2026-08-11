@@ -81,10 +81,10 @@ end
 
 CJ.Security.RegisterEvent('cj:server:restockScratch', function(source, cardId, requestedAmount)
     local amount = validAmount(requestedAmount)
-    local itemName = Config.ScratchStockItems[cardId]
+    local itemName = Config.ScratchStockItem
     local player = CJ.Framework.GetPlayer(source)
 
-    if not CJ.Company.IsBoss(source) or not isNearOwnerDashboard(source) or not amount or not itemName or not player then
+    if not CJ.Company.IsBoss(source) or not isNearOwnerDashboard(source) or not Config.ScratchCards[cardId] or not amount or not itemName or not player then
         CJ.Security.Reject(source, 'cj:server:restockScratch', 'pedido de reposição inválido')
         return
     end

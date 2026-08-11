@@ -177,22 +177,108 @@ function renderOwnerAnalytics(data) {
     <div class="analytics-row"><span>${esc(row.label)}</span><strong>${Number(row.sales || 0)} / ${money(row.revenue)}</strong></div>`);
   const transactions = analyticsRows(data.recentTransactions, 'Ainda não existem movimentos.', row => `
     <div class="analytics-row"><span>${esc(String(row.type || '').replace(/_/g, ' '))}</span><strong>${money(row.amount)}</strong></div>`);
+  const stockOptions = (data.scratch?.stock || []).map(row => `<option value="${esc(row.cardId)}">${esc(row.label)} — stock atual: ${Number(row.quantity || 0)}</option>`).join('');
 
   ownerContent.innerHTML = `
-    <div class="metric-grid">
-      <article class="metric-card"><span>Saldo da empresa</span><strong>${money(data.balance)}</strong></article>
-      <article class="metric-card"><span>Raspadinhas vendidas</span><strong>${Number(data.scratch?.sold || 0)}</strong></article>
-      <article class="metric-card"><span>Receita de raspadinhas</span><strong>${money(data.scratch?.revenue)}</strong></article>
-      <article class="metric-card"><span>Vendas totais</span><strong>${Number(data.totals?.sales || 0)}</strong></article>
-    </div>
-    <div class="analytics-grid">
-      <section class="analytics-panel"><h3>Stock da loja</h3>${stock}</section>
-      <section class="analytics-panel"><h3>Jackpots por sorteio</h3>${jackpots}</section>
-      <section class="analytics-panel"><h3>Vendas por jogo</h3>${games}</section>
-      <section class="analytics-panel"><h3>Últimos 7 dias</h3>${daily}</section>
-      <section class="analytics-panel analytics-wide"><h3>Faturação semanal por NPC</h3>${sellers}</section>
-      <section class="analytics-panel analytics-wide"><h3>Movimentos recentes</h3>${transactions}</section>
-    </div>`;
+    <nav class="owner-tabs" aria-label="Secções de gestão">
+      <button class="active" data-owner-tab="overview" type="button">Visão geral</button>
+      <button data-owner-tab="stock" type="button">Stock</button>
+      <button data-owner-tab="sales" type="button">Vendas</button>
+      <button data-owner-tab="stores" type="button">Lojas</button>
+    </nav>
+    <section class="owner-view active" data-owner-view="overview">
+      <div class="metric-grid owner-metrics">
+        <article class="metric-card"><span>Saldo da empresa</span><strong>${money(data.balance)}</strong><small>Disponível na conta</small></article>
+        <article class="metric-card"><span>Raspadinhas vendidas</span><strong>${Number(data.scratch?.sold || 0)}</strong><small>Desde o início</small></article>
+        <article class="metric-card"><span>Receita de raspadinhas</span><strong>${money(data.scratch?.revenue)}</strong><small>Total acumulado</small></article>
+        <article class="metric-card"><span>Vendas totais</span><strong>${Number(data.totals?.sales || 0)}</strong><small>Todos os jogos</small></article>
+      </div>
+      <div class="owner-grid">
+        <section class="analytics-panel"><h3>Últimos 7 dias</h3>${daily}</section>
+        <section class="analytics-panel"><h3>Jackpots por sorteio</h3>${jackpots}</section>
+        <section class="analytics-panel owner-action-panel analytics-wide">
+          <p class="owner-label">CONTA DA EMPRESA</p>
+          <h3>Operações rápidas</h3>
+          <p class="owner-description">Deposita ou levanta dinheiro sem sair da central de gestão.</p>
+          <label for="owner-finance-amount">Valor</label>
+          <input id="owner-finance-amount" type="number" min="1" step="1" placeholder="Ex.: 500">
+          <div class="owner-action-buttons">
+            <button class="owner-secondary" data-owner-finance="deposit" type="button">Depositar</button>
+            <button class="owner-primary" data-owner-finance="withdraw" type="button">Levantar</button>
+          </div>
+          <p id="owner-finance-feedback" class="owner-feedback"></p>
+        </section>
+      </div>
+    </section>
+    <section class="owner-view" data-owner-view="stock">
+      <div class="owner-grid">
+        <section class="analytics-panel owner-action-panel">
+          <p class="owner-label">REPOSIÇÃO DE STOCK</p>
+          <h3>Usar raspadinhas em branco</h3>
+          <p class="owner-description">Escolhe qual tipo de raspadinha queres produzir. Cada unidade usa uma raspadinha em branco do teu inventário.</p>
+          <label for="owner-restock-card">Tipo de raspadinha</label>
+          <select id="owner-restock-card">${stockOptions}</select>
+          <label for="owner-restock-amount">Quantidade</label>
+          <input id="owner-restock-amount" type="number" min="1" step="1" placeholder="Ex.: 10">
+          <button id="owner-restock" class="owner-primary" type="button">Repor stock</button>
+          <p id="owner-feedback" class="owner-feedback"></p>
+        </section>
+        <section class="analytics-panel"><p class="owner-label">STOCK ATUAL</p><h3>Raspadinhas disponíveis</h3>${stock}</section>
+      </div>
+    </section>
+    <section class="owner-view" data-owner-view="sales">
+      <div class="owner-grid">
+        <section class="analytics-panel"><h3>Vendas por jogo</h3>${games}</section>
+        <section class="analytics-panel"><h3>Movimentos recentes</h3>${transactions}</section>
+      </div>
+    </section>
+    <section class="owner-view" data-owner-view="stores">
+      <div class="owner-grid">
+        <section class="analytics-panel analytics-wide"><p class="owner-label">ÚLTIMOS 7 DIAS</p><h3>Faturação por estabelecimento</h3>${sellers}</section>
+      </div>
+    </section>`;
+
+  ownerContent.querySelectorAll('[data-owner-tab]').forEach(button => {
+    button.onclick = () => {
+      ownerContent.querySelectorAll('[data-owner-tab]').forEach(item => item.classList.toggle('active', item === button));
+      ownerContent.querySelectorAll('[data-owner-view]').forEach(view => view.classList.toggle('active', view.dataset.ownerView === button.dataset.ownerTab));
+    };
+  });
+
+  const restockButton = ownerContent.querySelector('#owner-restock');
+  if (restockButton) {
+    restockButton.onclick = async () => {
+      const cardId = ownerContent.querySelector('#owner-restock-card').value;
+      const amount = Number(ownerContent.querySelector('#owner-restock-amount').value);
+      const feedback = ownerContent.querySelector('#owner-feedback');
+      if (!Number.isInteger(amount) || amount < 1) {
+        feedback.textContent = 'Indica uma quantidade válida.';
+        return;
+      }
+      restockButton.disabled = true;
+      const response = await post('restockScratch', { cardId, amount });
+      const result = await response.json();
+      feedback.textContent = result.ok ? 'Pedido enviado. Confirma a notificação do servidor.' : 'Não foi possível enviar o pedido.';
+      setTimeout(loadOwnerAnalytics, 500);
+    };
+  }
+
+  ownerContent.querySelectorAll('[data-owner-finance]').forEach(button => {
+    button.onclick = async () => {
+      const amount = Number(ownerContent.querySelector('#owner-finance-amount').value);
+      const feedback = ownerContent.querySelector('#owner-finance-feedback');
+      if (!Number.isInteger(amount) || amount < 1) {
+        feedback.textContent = 'Indica um valor válido.';
+        return;
+      }
+      button.disabled = true;
+      const response = await post('ownerFinance', { action: button.dataset.ownerFinance, amount });
+      const result = await response.json();
+      feedback.textContent = result.message || 'Não foi possível concluir a operação.';
+      if (result.ok) setTimeout(loadOwnerAnalytics, 350);
+      button.disabled = false;
+    };
+  });
 }
 
 async function loadOwnerAnalytics() {
