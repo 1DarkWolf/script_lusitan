@@ -113,6 +113,12 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         return
     end
 
+    local card = Config.ScratchCards[payload.cardId]
+    if not card then
+        CJ.Security.Reject(source, 'cj:server:redeemScratch', 'categoria de raspadinha inválida')
+        return
+    end
+
     local consumed = CJ.Tickets.Consume(source, ticketId)
     if not consumed then
         CJ.Security.Reject(source, 'cj:server:redeemScratch', 'bilhete já utilizado')
