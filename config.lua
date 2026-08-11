@@ -218,6 +218,7 @@ Config.ScratchCards = {
 -- O futuro sistema de crafting cria apenas este item. No painel de gestão,
 -- o dono escolhe qual tipo de raspadinha pretende reabastecer.
 Config.ScratchStockItem = 'scratch_blank'
+Config.ScratchPrizeReceiptItem = 'scratch_prize_receipt'
 
 -- Limite por compra no painel de apostas. Evita pedidos excessivos e mantém
 -- o jogador livre para comprar vários bilhetes de uma só vez.

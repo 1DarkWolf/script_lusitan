@@ -119,8 +119,9 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
         return
     end
 
+    local citizenId = CJ.Framework.GetCitizenId(source)
+
     if prize > 0 and prize <= Config.AutoPayLimit then
-        local citizenId = CJ.Framework.GetCitizenId(source)
         if not CJ.Finance.Debit(prize, citizenId, 'scratch_prize', Config.Company.Finance.maxPrizeTransaction) then
             CJ.Tickets.Restore(source, consumed)
             CJ.Framework.Notify(source, 'A empresa não tem saldo disponível para este prémio.', 'error')
@@ -134,12 +135,27 @@ CJ.Security.RegisterEvent('cj:server:redeemScratch', function(source, ticketId)
             CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
             return
         end
-    elseif prize > 0 and not CJ.Framework.AddMoney(source, prize, 'centrojogos-scratch-prize') then
+    elseif prize > 0 then
         -- Prémios altos são colocados em cj_prize_claims e descontados da empresa na aprovação.
-        CJ.Tickets.Restore(source, consumed)
-        CJ.Log.Write('error', ('Falha ao registar prémio pendente da raspadinha %s.'):format(ticketId))
-        CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
-        return
+        local claimId = CJ.Framework.AddMoney(source, prize, 'centrojogos-scratch-prize')
+        if not claimId then
+            CJ.Tickets.Restore(source, consumed)
+            CJ.Log.Write('error', ('Falha ao registar prémio pendente da raspadinha %s.'):format(ticketId))
+            CJ.Framework.Notify(source, CJ.T('general.system_error'), 'error')
+            return
+        end
+
+        if not CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, prize) then
+            if CJ.Prizes.CancelPending(claimId, citizenId) then
+                CJ.Tickets.Restore(source, consumed)
+                CJ.Framework.Notify(source, 'Não foi possível entregar o recibo. Liberta espaço no inventário e tenta novamente.', 'error')
+            else
+                CJ.Framework.Notify(source, 'O prémio ficou pendente, mas não foi possível entregar o recibo. Contacta um trabalhador.', 'error')
+            end
+            CJ.Log.Write('error', ('Falha ao entregar recibo do prémio pendente da raspadinha %s.'):format(ticketId))
+            return
+        end
+        CJ.Framework.Notify(source, 'Recebeste um recibo de prémio no inventário.', 'success')
     end
 
     if prize > 0 then

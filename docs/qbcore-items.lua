@@ -8,6 +8,7 @@ scratch_diamond_ticket = { name = 'scratch_diamond_ticket', label = 'Raspadinha 
 
 -- Cartão sem prémio. Será o resultado do futuro crafting e o dono escolhe no painel qual stock quer repor.
 scratch_blank = { name = 'scratch_blank', label = 'Raspadinha em branco', weight = 0, type = 'item', image = 'scratch_blank.png', unique = false, useable = false, shouldClose = true, description = 'Cartão em branco para reabastecer o stock do Centro de Jogos.' },
+scratch_prize_receipt = { name = 'scratch_prize_receipt', label = 'Recibo de prémio', weight = 0, type = 'item', image = 'scratch_prize_receipt.png', unique = true, useable = false, shouldClose = true, description = 'Comprovativo de um prémio de raspadinha pendente de aprovação.' },
 euromillions_ticket = { name = 'euromillions_ticket', label = 'Bilhete Euromilhões', weight = 0, type = 'item', image = 'euromillions_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de Euromilhões do Centro de Jogos.' },
 totoloto_ticket = { name = 'totoloto_ticket', label = 'Bilhete Totoloto', weight = 0, type = 'item', image = 'totoloto_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de Totoloto do Centro de Jogos.' },
 eurodreams_ticket = { name = 'eurodreams_ticket', label = 'Bilhete EuroDreams', weight = 0, type = 'item', image = 'eurodreams_ticket.png', unique = true, useable = true, shouldClose = true, description = 'Um bilhete de EuroDreams do Centro de Jogos.' },

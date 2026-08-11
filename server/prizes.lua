@@ -4,10 +4,43 @@ CJ.Prizes = CJ.Prizes or {}
 ---@param citizenId string
 ---@param amount number
 ---@param reason string
----@return boolean
+---@return number|false
 function CJ.Prizes.Queue(citizenId, amount, reason)
-    return MySQL.insert.await([[INSERT INTO `cj_prize_claims` (`citizenid`, `amount`, `reason`)
-        VALUES (?, ?, ?)]], { citizenId, amount, reason }) ~= nil
+    local claimId = MySQL.insert.await([[INSERT INTO `cj_prize_claims` (`citizenid`, `amount`, `reason`)
+        VALUES (?, ?, ?)]], { citizenId, amount, reason })
+    return claimId or false
+end
+
+---@param claimId number
+---@param citizenId string
+---@return boolean
+function CJ.Prizes.CancelPending(claimId, citizenId)
+    return MySQL.update.await([[DELETE FROM `cj_prize_claims`
+        WHERE `id` = ? AND `citizenid` = ? AND `status` = 'pending']], { claimId, citizenId }) == 1
+end
+
+---@param source number
+---@param claimId number
+---@param ticket table
+---@param card table
+---@param amount number
+---@return boolean
+function CJ.Prizes.IssueScratchReceipt(source, claimId, ticket, card, amount)
+    local player = CJ.Framework.GetPlayer(source)
+    if not player or not ticket or not card or not Config.ScratchPrizeReceiptItem then
+        return false
+    end
+
+    local ticketId = ticket.ticket_id or 'N/D'
+    local metadata = {
+        claim_id = claimId,
+        ['Valor ganho'] = ('€%s'):format(amount),
+        ['Tipo de raspadinha'] = card.label or 'Raspadinha',
+        ['ID da raspadinha'] = ticketId,
+        description = ('Prémio pendente de €%s — %s #%s'):format(amount, card.label or 'Raspadinha', ticketId:sub(1, 8))
+    }
+
+    return player.Functions.AddItem(Config.ScratchPrizeReceiptItem, 1, false, metadata, 'centrojogos-scratch-prize-receipt') == true
 end
 
 ---@param source number
