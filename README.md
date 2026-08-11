@@ -31,7 +31,7 @@ Copie a definição de emprego em `docs/qbcore-job.lua` para `qb-core/shared/job
 
 ## Bilhetes
 
-Copie os itens em `docs/qbcore-items.lua` para `qb-core/shared/items.lua` e adicione as respetivas imagens ao inventário. Cada bilhete é um item único e contém apenas metadados de identificação; a propriedade, a validade e a utilização única são sempre confirmadas contra `cj_tickets` no servidor.
+Copie os itens em `docs/qbcore-items.lua` para `qb-core/shared/items.lua` e copie os PNGs de `docs/item-images/` para a pasta `html/images/` do seu inventário QBCore. Cada bilhete é um item único e contém apenas metadados de identificação; a propriedade, a validade e a utilização única são sempre confirmadas contra `cj_tickets` no servidor.
 
 ## Sorteios
 
